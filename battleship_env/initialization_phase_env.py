@@ -106,6 +106,7 @@ class BattleshipInitializationEnv(gym.Env):
     def _calculate_reward(self):
         """
         Simulates a game using the active phase environment and calculates the reward.
+        Reward is the ratio of unhit ship cells to total ship cells (0 to 1).
         """
         if self.active_env is None:
             raise Exception("Active phase environment is not provided.")
@@ -114,14 +115,18 @@ class BattleshipInitializationEnv(gym.Env):
         self.active_env.agent_board = self.board.copy()
         self.active_env.reset()
         
+        # Get total number of ship cells before simulation
+        total_ship_cells = np.sum(self.board == 1)
+        
         # Simulate the game
         done = False
         while not done:
             action = self.active_env.action_space.sample()  # Random opponent moves
             _, _, done, _ = self.active_env.step(action)
         
-        # Calculate reward: number of unhit ship cells
-        reward = np.sum(self.active_env.agent_board == 1)
+        # Calculate reward: ratio of unhit ship cells to total ship cells
+        unhit_cells = np.sum(self.active_env.agent_board == 1)
+        reward = unhit_cells / total_ship_cells if total_ship_cells > 0 else 0
         return reward
 
     def close(self):
