@@ -89,41 +89,31 @@ class BattleshipPlacementEnv(gym.Env):
 class StandardBattleshipStrategy:
     def __init__(self, board_size=10):
         self.board_size = board_size
-        self.last_hit = None
         self.hits_to_investigate = []  # Stack of hits we need to check around
         self.direction = None  # Once we find two hits, we know ship direction
         self.tried_positions = set()
-        self.current_ship_hits = []  # Track hits on current ship
-        self.sunk_ships = []  # Track positions of sunk ships
 
     def get_next_position_in_direction(self, hit_pos, direction, board_state):
+        """Get next position to try in current direction"""
         x, y = hit_pos
         if direction == 'horizontal':
+            # Only try left/right
             next_pos = [(x, y + 1), (x, y - 1)]
         else:  # vertical
+            # Only try up/down
             next_pos = [(x + 1, y), (x - 1, y)]
             
-        # Filter valid positions not yet tried
+        # Filter valid positions not yet tried and not containing our own ships
         valid_next = [(x, y) for x, y in next_pos 
-                      if self.is_valid_position(x, y, board_state)]
+                     if self.is_valid_position(x, y, board_state) and board_state[x, y] != 1]
         
         return valid_next[0] if valid_next else None
-
-    def get_opposite_direction(self):
-        return 'vertical' if self.direction == 'horizontal' else 'horizontal'
-
-    def handle_ship_sunk(self):
-        """Reset tracking when a ship is sunk"""
-        self.sunk_ships.append(self.current_ship_hits)
-        self.current_ship_hits = []
-        self.hits_to_investigate = []
-        self.direction = None
 
     def choose_action(self, board_state):
         if board_state is None:
             return random.randint(0, self.board_size * self.board_size - 1)
         
-        # If we have hits to investigate, prioritize checking around them
+        # If we have hits to investigate, use hunt mode
         if self.hits_to_investigate:
             hit_pos = self.hits_to_investigate[-1]
             
@@ -134,30 +124,42 @@ class StandardBattleshipStrategy:
                     x, y = next_pos
                     return x * self.board_size + y
                 else:
-                    # Hit end of ship, try other direction
-                    self.direction = self.get_opposite_direction()
-                    self.hits_to_investigate.pop()
-                    return self.choose_action(board_state)
+                    # Hit end of ship, try other direction from first hit
+                    self.direction = 'vertical' if self.direction == 'horizontal' else 'horizontal'
+                    first_hit = self.hits_to_investigate[0]
+                    next_pos = self.get_next_position_in_direction(first_hit, self.direction, board_state)
+                    if next_pos:
+                        x, y = next_pos
+                        return x * self.board_size + y
+                    else:
+                        # No more positions to try, reset hunt
+                        self.hits_to_investigate = []
+                        self.direction = None
+                        return self.choose_action(board_state)
             
-            # Try adjacent positions
-            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
+            # No direction yet, try cardinal directions only
+            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:  # Try cardinal directions
                 new_x = hit_pos[0] + dx
                 new_y = hit_pos[1] + dy
-                action = new_x * self.board_size + new_y
                 
-                if self.is_valid_position(new_x, new_y, board_state):
-                    return action
+                if self.is_valid_position(new_x, new_y, board_state) and board_state[new_x, new_y] != 1:
+                    return new_x * self.board_size + new_y
             
-            # If no adjacent positions available, pop this hit and try next
+            # No valid adjacent positions, remove this hit
             self.hits_to_investigate.pop()
             return self.choose_action(board_state)
 
         # No hits to investigate, choose random untried position
-        action = self.random_untried_position(board_state)
-        if action is None:
-            # If no valid positions, return a random action
-            return random.randint(0, self.board_size * self.board_size - 1)
-        return action
+        valid_positions = [
+            (x, y) for x in range(self.board_size) 
+            for y in range(self.board_size) 
+            if self.is_valid_position(x, y, board_state) and board_state[x, y] != 1
+        ]
+        
+        if valid_positions:
+            x, y = random.choice(valid_positions)
+            return x * self.board_size + y
+        return None
 
     def update(self, action, hit, board_state):
         """
@@ -188,17 +190,6 @@ class StandardBattleshipStrategy:
                 0 <= y < self.board_size and 
                 (x, y) not in self.tried_positions and
                 board_state[x, y] == 0)  # Check if position hasn't been shot at
-
-    def random_untried_position(self, board_state):
-        valid_positions = [
-            (x, y) for x in range(self.board_size) 
-            for y in range(self.board_size) 
-            if self.is_valid_position(x, y, board_state)
-        ]
-        if valid_positions:
-            x, y = random.choice(valid_positions)
-            return x * self.board_size + y
-        return None
 
 # ImprovedBattleshipStrategy
 class ImprovedBattleshipStrategy:
