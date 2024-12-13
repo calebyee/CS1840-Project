@@ -200,7 +200,11 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
     
     for episode in range(outer_episodes):
         print(f"Starting episode {episode + 1}/{outer_episodes}")
-
+        
+        # Reset epsilon at the start of each episode
+        inner_agent.reset_epsilon()
+        outer_agent.reset_epsilon()
+        
         # Reset environments and tracking variables
         outer_state = init_env.reset()
         outer_done = False
@@ -224,7 +228,7 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
             if 'error' not in info:
                 next_state_tensor = torch.FloatTensor(next_state).unsqueeze(0)
                 outer_agent.update(state_tensor, action, reward, next_state_tensor, outer_done)
-                print(f"Valid placement: Ship {init_env.current_ship_index}, Position: ({row}, {col}), Orientation: {orientation}")
+                #print(f"Valid placement: Ship {init_env.current_ship_index}, Position: ({row}, {col}), Orientation: {orientation}")
             
             outer_state = next_state
 
@@ -253,9 +257,9 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
         
         active_env.opponent_board = previous_init_env.board.copy()
 
-        print(f"\nBattle Phase Setup - Episode {episode + 1}")
-        print(f"Agent's board (our ships):\n{active_env.agent_board}")
-        print(f"Opponent's board (their ships):\n{active_env.opponent_board}")
+        #print(f"\nBattle Phase Setup - Episode {episode + 1}")
+        #print(f"Agent's board (our ships):\n{active_env.agent_board}")
+        #print(f"Opponent's board (their ships):\n{active_env.opponent_board}")
 
         # Battle phase
         inner_state = inner_agent.get_state_representation(active_env.agent_shots)
@@ -263,6 +267,8 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
         agent_turns = 0
         opponent_turns = 0
         max_shots = init_env.board_size * init_env.board_size
+        
+        print(f"Starting epsilon: {inner_agent.epsilon:.4f}")
 
         while not inner_done and (agent_turns < max_shots and opponent_turns < max_shots):
             # Get valid actions
@@ -287,7 +293,7 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
                 
                 hit_status = "Hit!" if hit else "Miss"
                 agent_turns += 1
-                print(f"Turn {agent_turns + opponent_turns}: Agent shot at ({row}, {col}) - {hit_status}")
+                #print(f"Turn {agent_turns + opponent_turns}: Agent shot at ({row}, {col}) - {hit_status}")
                 
                 # Get next state representation
                 next_state_rep = inner_agent.get_state_representation(
@@ -322,7 +328,7 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
                         if 'error' not in opp_info:
                             hit_status = "Hit!" if opp_reward > 0 else "Miss"
                             opponent_turns += 1
-                            print(f"Turn {agent_turns + opponent_turns}: Opponent shot at ({opp_row}, {opp_col}) - {hit_status}")
+                            #print(f"Turn {agent_turns + opponent_turns}: Opponent shot at ({opp_row}, {opp_col}) - {hit_status}")
                             valid_opponent_move = True
                             
                             next_state_rep = inner_agent.get_state_representation(
@@ -335,20 +341,22 @@ def train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100
                                 print(f"Opponent wins! All agent ships sunk in {opponent_turns} shots!")
                                 inner_done = True
 
+        print(f"Ending epsilon: {inner_agent.epsilon:.4f}")
+        
         # Print final game state and statistics
         total_turns = agent_turns + opponent_turns
         turns_per_game.append(total_turns)
         print(f"\nEpisode {episode + 1} completed in {total_turns} total shots")
-        print(f"Agent shots: {agent_turns}, Opponent shots: {opponent_turns}")
-        print("\nFinal Game State:")
-        print("\nAgent's Board (our ships):")
-        print(active_env.agent_board)
-        print("\nOpponent's Board (their ships):")
-        print(active_env.opponent_board)
-        print("\nAgent's Shots (hits=1, misses=-1):")
-        print(active_env.agent_shots)
-        print("\nOpponent's Shots (hits=1, misses=-1):")
-        print(active_env.opponent_shots)
+        #print(f"Agent shots: {agent_turns}, Opponent shots: {opponent_turns}")
+        # print("\nFinal Game State:")
+        # print("\nAgent's Board (our ships):")
+        # print(active_env.agent_board)
+        # print("\nOpponent's Board (their ships):")
+        # print(active_env.opponent_board)
+        # print("\nAgent's Shots (hits=1, misses=-1):")
+        # print(active_env.agent_shots)
+        # print("\nOpponent's Shots (hits=1, misses=-1):")
+        # print(active_env.opponent_shots)
         print("\nFinal Score:")
         print(f"Agent hits: {np.sum(active_env.agent_shots == 1)}/{np.sum(active_env.opponent_board == 1)}")
         print(f"Opponent hits: {np.sum(active_env.opponent_shots == 1)}/{np.sum(active_env.agent_board == 1)}")
