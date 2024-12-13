@@ -312,27 +312,34 @@ class BattleshipAttackEnv(gym.Env):
     def __init__(self, board_size=10):
         super(BattleshipAttackEnv, self).__init__()
         self.board_size = board_size
-        self.ship_sizes = [5, 4, 3, 3, 2]
-        self.ship_positions = []  # List of (start_pos, orientation, size) for each ship
+        self.action_space = spaces.Discrete(board_size * board_size)
+        self.observation_space = spaces.Box(low=-1, high=1, shape=(board_size, board_size), dtype=np.int8)
+        
+        # Initialize tracking variables
+        self.last_hit_positions = []
+        self.current_ship_hits = []
         self.sunk_ships = set()  # Track which ships have been sunk
+        self.ship_positions = []  # List of (start_pos, orientation, size) for each ship
         
-        self.action_space = spaces.Discrete(self.board_size * self.board_size)
-        self.observation_space = spaces.Box(low=-1, high=1, shape=(self.board_size, self.board_size), dtype=np.int8)
-        self.opponent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
-        self.agent_ships_remaining = 17  # 5 + 4 + 3 + 3 + 2
-        self.opponent_ships_remaining = 17
-        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=board_size)
-        
+        self.ship_sizes = [5, 4, 3, 3, 2]
         self.reset()
-    
+
     def reset(self):
+        """Reset the environment to initial state"""
         self.agent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.opponent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.agent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.opponent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
-        self.agent_ships_remaining = 17
+        
+        # Reset tracking variables
+        self.last_hit_positions = []
+        self.current_ship_hits = []
+        self.sunk_ships = set()
+        self.ship_positions = []
+        
+        self.agent_ships_remaining = 17  # 5 + 4 + 3 + 3 + 2
         self.opponent_ships_remaining = 17
-        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=self.board_size)  # Reset opponent strategy
+        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=self.board_size)
         
         self._place_ships()  # Place opponent's ships
         self._place_agent_ships()  # Place agent's ships
@@ -423,7 +430,10 @@ class BattleshipAttackEnv(gym.Env):
         if action is None:
             return self.agent_shots, -1, True, {"error": "Invalid action"}
         
-        # Agent's turn
+        # Randomly decide who goes first each turn
+        agent_goes_first = random.choice([True, False])
+        
+        # Convert agent's action
         action = int(action)
         row = action // self.board_size
         col = action % self.board_size
@@ -431,52 +441,71 @@ class BattleshipAttackEnv(gym.Env):
         if self.agent_shots[row, col] != 0:
             return self.agent_shots, -1, True, {"error": "Invalid move - position already shot"}
         
-        # Process agent's shot
+        # Initialize variables
         agent_hit = False
-        if self.opponent_board[row, col] == 1:
-            self.agent_shots[row, col] = 1
-            self.opponent_ships_remaining -= 1
-            reward = 3.0
-            agent_hit = True
-            if self._check_ship_sunk(row, col):
-                reward = 5.0
-        else:
-            self.agent_shots[row, col] = -1
-            reward = -0.1
-
-        # Opponent's turn
-        opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
-        if opponent_action is None:  # If no valid moves, pick random unshot position
-            valid_positions = [(r, c) for r in range(self.board_size) 
-                             for c in range(self.board_size) 
-                             if self.opponent_shots[r, c] == 0]
-            if valid_positions:
-                opp_row, opp_col = random.choice(valid_positions)
-                opponent_action = opp_row * self.board_size + opp_col
-            else:
-                # No valid moves left, game should end
-                return self.agent_shots, reward, True, {
-                    "agent_ships_remaining": self.agent_ships_remaining,
-                    "opponent_ships_remaining": self.opponent_ships_remaining,
-                    "agent_hit": agent_hit,
-                    "opponent_hit": False,
-                    "winner": "agent" if self.opponent_ships_remaining <= 0 else "opponent" if self.agent_ships_remaining <= 0 else None
-                }
-
-        opp_row = opponent_action // self.board_size
-        opp_col = opponent_action % self.board_size
-        
         opponent_hit = False
-        if self.agent_board[opp_row, opp_col] == 1:
-            self.opponent_shots[opp_row, opp_col] = 1
-            self.agent_ships_remaining -= 1
-            opponent_hit = True
-        else:
-            self.opponent_shots[opp_row, opp_col] = -1
+        reward = 0
         
-        # Update opponent's strategy
-        self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
-
+        if agent_goes_first:
+            # Agent's turn
+            # Process agent's shot
+            if self.opponent_board[row, col] == 1:
+                self.agent_shots[row, col] = 1
+                self.opponent_ships_remaining -= 1
+                reward = 3.0
+                agent_hit = True
+                if self._check_ship_sunk(row, col):
+                    reward = 5.0
+            else:
+                self.agent_shots[row, col] = -1
+                reward = -0.1
+            
+            # Then opponent's turn
+            opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
+        else:
+            # Opponent goes first
+            opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
+            if opponent_action is not None:
+                opp_row = opponent_action // self.board_size
+                opp_col = opponent_action % self.board_size
+                
+                if self.agent_board[opp_row, opp_col] == 1:
+                    self.opponent_shots[opp_row, opp_col] = 1
+                    self.agent_ships_remaining -= 1
+                    opponent_hit = True
+                else:
+                    self.opponent_shots[opp_row, opp_col] = -1
+                
+                # Update opponent's strategy
+                self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
+            
+            # Then agent's turn
+            if self.opponent_board[row, col] == 1:
+                self.agent_shots[row, col] = 1
+                self.opponent_ships_remaining -= 1
+                reward = 3.0
+                agent_hit = True
+                if self._check_ship_sunk(row, col):
+                    reward = 5.0
+            else:
+                self.agent_shots[row, col] = -1
+                reward = -0.1
+        
+        # Process opponent's action if it wasn't processed yet
+        if opponent_action is not None and agent_goes_first:
+            opp_row = opponent_action // self.board_size
+            opp_col = opponent_action % self.board_size
+            
+            if self.agent_board[opp_row, opp_col] == 1:
+                self.opponent_shots[opp_row, opp_col] = 1
+                self.agent_ships_remaining -= 1
+                opponent_hit = True
+            else:
+                self.opponent_shots[opp_row, opp_col] = -1
+            
+            # Update opponent's strategy
+            self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
+        
         # Check if game is over
         done = (self.opponent_ships_remaining <= 0) or (self.agent_ships_remaining <= 0)
         
@@ -485,9 +514,11 @@ class BattleshipAttackEnv(gym.Env):
             "opponent_ships_remaining": self.opponent_ships_remaining,
             "agent_hit": agent_hit,
             "opponent_hit": opponent_hit,
+            "last_hit_positions": self.last_hit_positions,
+            "current_ship_hits": self.current_ship_hits,
             "winner": "agent" if self.opponent_ships_remaining <= 0 else "opponent" if self.agent_ships_remaining <= 0 else None
         }
-
+        
         return self.agent_shots, reward, done, info
 
     def render(self, mode='human'):
@@ -505,7 +536,7 @@ def get_valid_actions(env, shots):
     valid_actions = []
     for i in range(env.board_size):
         for j in range(env.board_size):
-            if shots[i, j] == 0:  # Position hasn't been shot at
+            if shots[i, j] == 0 and env.agent_board[i, j] == 0:
                 action = i * env.board_size + j
                 valid_actions.append(action)
     return valid_actions
@@ -568,6 +599,7 @@ def train_nested_mdp(init_env, active_env, num_episodes=100):
     # Track statistics
     wins = 0
     total_games = 0
+    episode_infos = []  # Store episode results
     
     for episode in range(num_episodes):
         print(f"\n{'='*25} Episode {episode+1}/{num_episodes} {'='*25}")
@@ -611,6 +643,7 @@ def train_nested_mdp(init_env, active_env, num_episodes=100):
         total_games += 1
         if info['winner'] == 'agent':
             wins += 1
+        episode_infos.append(info)  # Store episode info for plotting
         
         # Print episode summary
         winner = info['winner']
@@ -627,7 +660,7 @@ def train_nested_mdp(init_env, active_env, num_episodes=100):
     
     plt.figure(figsize=(15, 10))
     
-    # Plot rewards (now in 2x4 grid)
+    # Plot rewards (now in 2x4 grid with win rate)
     plt.subplot(2, 4, 1)
     num_completed_episodes = len(metrics['episode_rewards'])
     episodes = list(range(1, num_completed_episodes + 1))
@@ -636,6 +669,16 @@ def train_nested_mdp(init_env, active_env, num_episodes=100):
     plt.title('Episode Rewards')
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
+    
+    # Plot win rate
+    plt.subplot(2, 4, 7)
+    # Track actual wins from info['winner']
+    wins_cumulative = np.cumsum([1 if info.get('winner') == 'agent' else 0 for info in episode_infos])
+    episodes_completed = range(1, len(wins_cumulative) + 1)
+    plt.plot(episodes_completed, [wins_cumulative[i]/(i+1) for i in range(len(wins_cumulative))], '-o', markersize=2)
+    plt.title('Win Rate Over Time')
+    plt.xlabel('Episode')
+    plt.ylabel('Win Rate')
     
     # Plot hit rates
     plt.subplot(2, 4, 2)

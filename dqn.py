@@ -444,6 +444,16 @@ class DQNAgent:
         if self.consecutive_misses > 3:
             reward *= 0.8  # Penalty for too many consecutive misses
         
+        # Add strategic reward shaping
+        if hit:
+            # Check if this hit is adjacent to previous hits
+            if self._is_adjacent_to_hit(state, action):
+                reward *= 1.5  # Bonus for following up on hits
+        
+        # Penalize shooting far from known hits when hits exist
+        elif self._has_unfinished_ships(state) and not self._is_near_hits(state, action):
+            reward *= 0.5
+        
         # Update episode accumulators
         self.current_episode_rewards += reward
         self.current_episode_shots += 1
@@ -668,6 +678,66 @@ class DQNAgent:
     def update_beta(self):
         """Update beta value for importance sampling"""
         self.beta = min(self.beta_end, self.beta + self.beta_increment)
+
+    def _has_unfinished_ships(self, state):
+        """Check if there are any partially hit ships on the board"""
+        # Convert state tensor to numpy array if needed
+        if isinstance(state, torch.Tensor):
+            state = state.cpu().numpy().squeeze()
+        
+        # Look at hits channel (second channel)
+        hits = (state[1] == 1)
+        
+        # Check for hits that might be part of unfinished ships
+        for i in range(len(hits)):
+            for j in range(len(hits[0])):
+                if hits[i][j]:
+                    # Check adjacent positions for non-hit squares
+                    for di, dj in [(0,1), (1,0), (0,-1), (-1,0)]:
+                        ni, nj = i + di, j + dj
+                        if (0 <= ni < len(hits) and 
+                            0 <= nj < len(hits[0]) and 
+                            state[0][ni][nj] == 0):  # Unshot position
+                            return True
+        return False
+    
+    def _is_near_hits(self, state, action):
+        """Check if an action is adjacent to any hits"""
+        # Convert state tensor to numpy array if needed
+        if isinstance(state, torch.Tensor):
+            state = state.cpu().numpy().squeeze()
+        
+        # Convert action to coordinates
+        row = action // 10
+        col = action % 10
+        
+        # Check adjacent positions for hits
+        for dr, dc in [(0,1), (1,0), (0,-1), (-1,0)]:
+            r, c = row + dr, col + dc
+            if (0 <= r < state.shape[1] and 
+                0 <= c < state.shape[2] and 
+                state[1][r][c] == 1):  # Hit in hits channel
+                return True
+        return False
+
+    def _is_adjacent_to_hit(self, state, action):
+        """Check if an action is adjacent to any hits"""
+        # Convert state tensor to numpy array if needed
+        if isinstance(state, torch.Tensor):
+            state = state.cpu().numpy().squeeze()
+        
+        # Convert action to coordinates
+        row = action // 10
+        col = action % 10
+        
+        # Check adjacent positions for hits
+        for dr, dc in [(0,1), (1,0), (0,-1), (-1,0)]:
+            r, c = row + dr, col + dc
+            if (0 <= r < state.shape[1] and 
+                0 <= c < state.shape[2] and 
+                state[1][r][c] == 1):  # Hit in hits channel
+                return True
+        return False
 
 def train_nested_mdp(init_env, active_env, num_episodes=50):
     """Train the placement agent for the nested MDP.
