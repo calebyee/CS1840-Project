@@ -303,38 +303,33 @@ class BattleshipAttackEnv(gym.Env):
     def __init__(self, board_size=10):
         super(BattleshipAttackEnv, self).__init__()
         self.board_size = board_size
+        self.ship_sizes = [5, 4, 3, 3, 2]  # Add ship sizes
         self.action_space = spaces.Discrete(board_size * board_size)
         self.observation_space = spaces.Box(low=-1, high=1, shape=(board_size, board_size), dtype=np.int8)
         
-        # Initialize tracking variables
-        self.last_hit_positions = []
-        self.current_ship_hits = []
-        self.sunk_ships = set()  # Track which ships have been sunk
-        self.ship_positions = []  # List of (start_pos, orientation, size) for each ship
+        # Initialize boards
+        self.agent_board = np.zeros((board_size, board_size), dtype=np.int8)
+        self.opponent_board = np.zeros((board_size, board_size), dtype=np.int8)
+        self.agent_shots = np.zeros((board_size, board_size), dtype=np.int8)
+        self.opponent_shots = np.zeros((board_size, board_size), dtype=np.int8)
         
-        self.ship_sizes = [5, 4, 3, 3, 2]
-        self.reset()
+        self.agent_ships_remaining = 17  # 5 + 4 + 3 + 3 + 2
+        self.opponent_ships_remaining = 17
+        self.sunk_ships = []  # Track which ships have been sunk
+        
+        self._place_ships()  # Place opponent's ships
 
     def reset(self):
-        """Reset the environment to initial state"""
+        # Reset boards
         self.agent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.opponent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.agent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.opponent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         
-        # Reset tracking variables
-        self.last_hit_positions = []
-        self.current_ship_hits = []
-        self.sunk_ships = set()
-        self.ship_positions = []
-        
-        self.agent_ships_remaining = 17  # 5 + 4 + 3 + 3 + 2
+        self.agent_ships_remaining = 17
         self.opponent_ships_remaining = 17
-        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=self.board_size)
         
-        self._place_ships()  # Place opponent's ships
-        self._place_agent_ships()  # Place agent's ships
-        
+        self._place_ships()
         return self.agent_shots
 
     def _place_ships(self):
@@ -380,23 +375,36 @@ class BattleshipAttackEnv(gym.Env):
 
     def _check_ship_sunk(self, row, col):
         """Check if hitting this position sunk a ship"""
-        for ship_idx, ((start_row, start_col), orientation, size) in enumerate(self.ship_positions):
-            if ship_idx in self.sunk_ships:
-                continue
-                
-            # Check if hit position is part of this ship
-            ship_coords = []
-            if orientation == 0:  # horizontal
-                ship_coords = [(start_row, start_col + i) for i in range(size)]
-            else:  # vertical
-                ship_coords = [(start_row + i, start_col) for i in range(size)]
-                
-            if (row, col) in ship_coords:
-                # Check if all positions of this ship have been hit
-                all_hit = all(self.agent_shots[r, c] == 1 for r, c in ship_coords)
-                if all_hit:
-                    self.sunk_ships.add(ship_idx)
-                    return True
+        # Check horizontal ship
+        left = col
+        while left > 0 and self.opponent_board[row, left-1] == 1:
+            left -= 1
+        right = col
+        while right < self.board_size-1 and self.opponent_board[row, right+1] == 1:
+            right += 1
+            
+        # Check if all positions in horizontal ship are hit
+        ship_coords = [(row, c) for c in range(left, right+1)]
+        if all(self.agent_shots[r, c] == 1 for r, c in ship_coords):
+            if ship_coords not in self.sunk_ships:
+                self.sunk_ships.append(ship_coords)
+                return True
+            
+        # Check vertical ship
+        top = row
+        while top > 0 and self.opponent_board[top-1, col] == 1:
+            top -= 1
+        bottom = row
+        while bottom < self.board_size-1 and self.opponent_board[bottom+1, col] == 1:
+            bottom += 1
+            
+        # Check if all positions in vertical ship are hit
+        ship_coords = [(r, col) for r in range(top, bottom+1)]
+        if all(self.agent_shots[r, c] == 1 for r, c in ship_coords):
+            if ship_coords not in self.sunk_ships:
+                self.sunk_ships.append(ship_coords)
+                return True
+               
         return False
 
     def _place_agent_ships(self):
@@ -417,85 +425,53 @@ class BattleshipAttackEnv(gym.Env):
                         self.agent_board[row:row + ship_size, col] = 1
                     placed = True
 
+    def random_shot(self, board_state):
+        """Generate a random valid shot"""
+        valid_positions = []
+        for i in range(self.board_size):
+            for j in range(self.board_size):
+                if self.opponent_shots[i, j] == 0:  # Position hasn't been shot at
+                    valid_positions.append(i * self.board_size + j)
+        
+        if valid_positions:
+            return random.choice(valid_positions)
+        return None
+
     def step(self, action):
         if action is None:
-            return self.agent_shots, -1, True, {"error": "Invalid action"}
-        
-        # Randomly decide who goes first each turn
-        agent_goes_first = random.choice([True, False])
-        
-        # Convert agent's action
-        action = int(action)
+            return self.agent_shots, 0, True, {}
+            
+        # Agent's turn
         row = action // self.board_size
         col = action % self.board_size
         
-        if self.agent_shots[row, col] != 0:
-            return self.agent_shots, -1, True, {"error": "Invalid move - position already shot"}
-        
-        # Initialize variables
+        # Track hits/misses
         agent_hit = False
         opponent_hit = False
         reward = 0
         
-        if agent_goes_first:
-            # Agent's turn
-            # Process agent's shot
-            if self.opponent_board[row, col] == 1:
-                self.agent_shots[row, col] = 1
-                self.opponent_ships_remaining -= 1
-                reward = 3.0
-                agent_hit = True
-                if self._check_ship_sunk(row, col):
-                    reward = 5.0
-            else:
-                self.agent_shots[row, col] = -1
-                reward = -0.1
-            
-            # Then opponent's turn
-            opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
+        # Process agent's action
+        if self.opponent_board[row, col] == 1:
+            self.agent_shots[row, col] = 1
+            self.opponent_ships_remaining -= 1
+            reward = 3.0
+            agent_hit = True
+            if self._check_ship_sunk(row, col):
+                reward = 5.0
         else:
-            # Opponent goes first
-            opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
-            if opponent_action is not None:
-                opp_row = opponent_action // self.board_size
-                opp_col = opponent_action % self.board_size
-                
-                if self.agent_board[opp_row, opp_col] == 1:
-                    self.opponent_shots[opp_row, opp_col] = 1
-                    self.agent_ships_remaining -= 1
-                    opponent_hit = True
-                else:
-                    self.opponent_shots[opp_row, opp_col] = -1
-                
-                # Update opponent's strategy
-                self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
+            self.agent_shots[row, col] = -1
+            reward = -0.1
             
-            # Then agent's turn
-            if self.opponent_board[row, col] == 1:
-                self.agent_shots[row, col] = 1
-                self.opponent_ships_remaining -= 1
-                reward = 3.0
-                agent_hit = True
-                if self._check_ship_sunk(row, col):
-                    reward = 5.0
-            else:
-                self.agent_shots[row, col] = -1
-                reward = -0.1
-        
-        # Process opponent's action if it wasn't processed yet
-        if opponent_action is not None and agent_goes_first:
-            opp_row = opponent_action // self.board_size
-            opp_col = opponent_action % self.board_size
-            
+        # Opponent's turn (using test.py's random_shot)
+        opponent_action = self._random_shot()
+        if opponent_action is not None:
+            opp_row, opp_col = opponent_action
             if self.agent_board[opp_row, opp_col] == 1:
                 self.opponent_shots[opp_row, opp_col] = 1
                 self.agent_ships_remaining -= 1
                 opponent_hit = True
             else:
                 self.opponent_shots[opp_row, opp_col] = -1
-            
-            # Update opponent's strategy
-            self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
         
         # Check if game is over
         done = (self.opponent_ships_remaining <= 0) or (self.agent_ships_remaining <= 0)
@@ -505,12 +481,22 @@ class BattleshipAttackEnv(gym.Env):
             "opponent_ships_remaining": self.opponent_ships_remaining,
             "agent_hit": agent_hit,
             "opponent_hit": opponent_hit,
-            "last_hit_positions": self.last_hit_positions,
-            "current_ship_hits": self.current_ship_hits,
             "winner": "agent" if self.opponent_ships_remaining <= 0 else "opponent" if self.agent_ships_remaining <= 0 else None
         }
         
         return self.agent_shots, reward, done, info
+
+    def _random_shot(self):
+        """Generate a random valid shot (from test.py)"""
+        valid_positions = []
+        for i in range(self.board_size):
+            for j in range(self.board_size):
+                if self.opponent_shots[i, j] == 0:  # Position hasn't been shot at
+                    valid_positions.append((i, j))
+        
+        if valid_positions:
+            return random.choice(valid_positions)
+        return None
 
     def render(self, mode='human'):
         print("Agent's Board (our ships):")
