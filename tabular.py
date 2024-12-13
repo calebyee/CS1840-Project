@@ -3,6 +3,8 @@ from copy import deepcopy
 import gymnasium as gym
 from gymnasium import spaces
 import matplotlib.pyplot as plt
+import os
+import pickle
 
 # QLearningAgent
 class QLearningAgent:
@@ -359,6 +361,15 @@ def train_nested_mdp(init_env, active_env, outer_episodes=20, inner_episodes=100
         previous_outer_agent = deepcopy(outer_agent)
         previous_inner_agent = deepcopy(inner_agent)
 
+        if episode % 100 == 0:
+            # Create checkpoint directory if it doesn't exist
+            os.makedirs("checkpoints", exist_ok=True)
+            # Save agents
+            with open(f"checkpoints/placement_agent_{episode}.pkl", 'wb') as f:
+                pickle.dump(outer_agent, f)
+            with open(f"checkpoints/attack_agent_{episode}.pkl", 'wb') as f:
+                pickle.dump(inner_agent, f)
+
     # Plot the number of turns per game
     plt.plot(range(1, len(turns_per_game) + 1), turns_per_game)
     plt.xlabel('Episode')
@@ -368,9 +379,10 @@ def train_nested_mdp(init_env, active_env, outer_episodes=20, inner_episodes=100
 
     return outer_agent, inner_agent
 
-# Create instances of the environments
-init_env = BattleshipPlacementEnv()
-active_env = BattleshipAttackEnv()
+if __name__ == "__main__":
+    # Create instances of the environments
+    init_env = BattleshipPlacementEnv()
+    active_env = BattleshipAttackEnv()
 
-# Pass the instances to the training function with 50 episodes instead of 500
-train_nested_mdp(init_env, active_env, outer_episodes=50, inner_episodes=100)
+    # Pass the instances to the training function
+    train_nested_mdp(init_env, active_env, outer_episodes=1000, inner_episodes=100)
