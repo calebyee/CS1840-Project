@@ -1,559 +1,1328 @@
 Using device: cpu
 
 ========================= Episode 1/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
+Move 5: Reward=-0.10, Hit Rate=0.80, Epsilon=1.00
+Move 10: Reward=-0.10, Hit Rate=0.40, Epsilon=1.00
+Move 15: Reward=-0.10, Hit Rate=0.27, Epsilon=1.00
+Move 20: Reward=-0.10, Hit Rate=0.25, Epsilon=1.00
+Move 25: Reward=3.12, Hit Rate=0.28, Epsilon=1.00
+Move 30: Reward=-0.10, Hit Rate=0.27, Epsilon=1.00
+Move 35: Reward=-0.10, Hit Rate=0.23, Epsilon=1.00
+Move 40: Reward=-0.10, Hit Rate=0.23, Epsilon=1.00
+Move 45: Reward=-0.10, Hit Rate=0.22, Epsilon=1.00
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=1.00
+Move 55: Reward=-0.10, Hit Rate=0.20, Epsilon=1.00
+Move 60: Reward=-0.10, Hit Rate=0.20, Epsilon=1.00
+Move 65: Reward=3.16, Hit Rate=0.22, Epsilon=1.00
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=1.00
+Move 75: Reward=-0.10, Hit Rate=0.20, Epsilon=0.99
+Move 80: Reward=3.15, Hit Rate=0.20, Epsilon=0.99
+Move 85: Reward=-0.10, Hit Rate=0.20, Epsilon=0.99
+Move 90: Reward=-0.10, Hit Rate=0.21, Epsilon=0.99
 
 Episode Summary:
-Total Reward: 1.78
-Hit Rate: 0.14
-Moves Made: 14
-Epsilon: 1.00
-
-========================= Episode 2/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -2.95
-Hit Rate: 0.00
-Moves Made: 12
-Epsilon: 1.00
-
-========================= Episode 3/50 =========================
-Move 5: Reward=0.02, Hit Rate=0.80, Epsilon=1.00
-Move 10: Reward=-0.08, Hit Rate=0.50, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.33, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.25
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 4/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.69
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 1.00
-
-========================= Episode 5/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.99
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 1.71
-Hit Rate: 0.17
-Moves Made: 12
+Total Reward: 47.62
+Hit Rate: 0.21
+Total Shots: 92
 Epsilon: 0.99
 
-========================= Episode 6/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.98
-Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=0.97
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 2/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.98
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.98
+Move 15: Reward=3.07, Hit Rate=0.13, Epsilon=0.98
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.98
+Move 25: Reward=-0.10, Hit Rate=0.08, Epsilon=0.97
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.97
+Move 35: Reward=3.12, Hit Rate=0.14, Epsilon=0.97
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.97
+Move 45: Reward=-0.10, Hit Rate=0.16, Epsilon=0.96
+Move 50: Reward=-0.10, Hit Rate=0.16, Epsilon=0.96
+Move 55: Reward=-0.10, Hit Rate=0.16, Epsilon=0.96
+Move 60: Reward=-0.10, Hit Rate=0.15, Epsilon=0.96
+Move 65: Reward=-0.10, Hit Rate=0.14, Epsilon=0.95
+Move 70: Reward=3.14, Hit Rate=0.16, Epsilon=0.95
+Move 75: Reward=3.15, Hit Rate=0.16, Epsilon=0.95
+Move 80: Reward=-0.10, Hit Rate=0.19, Epsilon=0.95
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.94
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.94
+Move 95: Reward=-0.10, Hit Rate=0.17, Epsilon=0.94
 
 Episode Summary:
-Total Reward: 1.57
+Total Reward: 45.94
 Hit Rate: 0.17
-Moves Made: 12
-Epsilon: 0.97
-
-========================= Episode 7/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.96
-Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=0.95
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 1.56
-Hit Rate: 0.17
-Moves Made: 12
+Total Shots: 99
 Epsilon: 0.94
 
-========================= Episode 8/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.93
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.92
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 3/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.60, Epsilon=0.94
+Move 10: Reward=3.11, Hit Rate=0.40, Epsilon=0.93
+Move 15: Reward=-0.10, Hit Rate=0.47, Epsilon=0.93
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.93
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.93
+Move 30: Reward=-0.10, Hit Rate=0.27, Epsilon=0.92
+Move 35: Reward=-0.10, Hit Rate=0.23, Epsilon=0.92
+Move 40: Reward=-0.10, Hit Rate=0.23, Epsilon=0.92
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.92
+Move 50: Reward=-0.10, Hit Rate=0.22, Epsilon=0.91
+Move 55: Reward=-0.10, Hit Rate=0.22, Epsilon=0.91
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.91
+Move 65: Reward=-0.10, Hit Rate=0.20, Epsilon=0.91
+Move 70: Reward=-0.10, Hit Rate=0.19, Epsilon=0.91
+Move 75: Reward=-0.10, Hit Rate=0.19, Epsilon=0.90
+Move 80: Reward=-0.10, Hit Rate=0.20, Epsilon=0.90
+Move 85: Reward=3.15, Hit Rate=0.20, Epsilon=0.90
+Move 90: Reward=3.16, Hit Rate=0.20, Epsilon=0.90
+Move 95: Reward=-0.10, Hit Rate=0.20, Epsilon=0.89
 
 Episode Summary:
-Total Reward: -0.71
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.92
-
-========================= Episode 9/50 =========================
-Move 5: Reward=0.02, Hit Rate=1.00, Epsilon=0.91
-Move 10: Reward=-0.08, Hit Rate=0.60, Epsilon=0.90
-Move 15: Reward=-0.28, Hit Rate=0.40, Epsilon=0.89
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.46
-Hit Rate: 0.33
-Moves Made: 18
+Total Reward: 46.97
+Hit Rate: 0.20
+Total Shots: 97
 Epsilon: 0.89
 
-========================= Episode 10/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=0.88
-Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.87
-Move 15: Reward=-0.29, Hit Rate=0.20, Epsilon=0.86
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 4/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.89
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.89
+Move 15: Reward=-0.10, Hit Rate=0.07, Epsilon=0.89
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.88
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.88
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.88
+Move 35: Reward=-0.10, Hit Rate=0.14, Epsilon=0.88
+Move 40: Reward=3.18, Hit Rate=0.20, Epsilon=0.88
+Move 45: Reward=3.20, Hit Rate=0.22, Epsilon=0.87
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.87
+Move 55: Reward=-0.10, Hit Rate=0.22, Epsilon=0.87
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.87
+Move 65: Reward=-0.10, Hit Rate=0.22, Epsilon=0.86
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=0.86
+Move 75: Reward=-0.10, Hit Rate=0.19, Epsilon=0.86
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.86
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.86
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.85
+Move 95: Reward=-0.10, Hit Rate=0.17, Epsilon=0.85
+Move 100: Reward=3.16, Hit Rate=0.17, Epsilon=0.85
 
 Episode Summary:
-Total Reward: 3.19
+Total Reward: 45.43
+Hit Rate: 0.17
+Total Shots: 100
+Epsilon: 0.85
+
+========================= Episode 5/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.85
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.85
+Move 15: Reward=-0.10, Hit Rate=0.07, Epsilon=0.84
+Move 20: Reward=3.11, Hit Rate=0.15, Epsilon=0.84
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.84
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.84
+Move 35: Reward=-0.10, Hit Rate=0.17, Epsilon=0.84
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.83
+Move 45: Reward=-0.10, Hit Rate=0.18, Epsilon=0.83
+Move 50: Reward=3.16, Hit Rate=0.18, Epsilon=0.83
+Move 55: Reward=3.17, Hit Rate=0.18, Epsilon=0.83
+Move 60: Reward=3.17, Hit Rate=0.18, Epsilon=0.82
+Move 65: Reward=-0.10, Hit Rate=0.18, Epsilon=0.82
+Move 70: Reward=-0.10, Hit Rate=0.17, Epsilon=0.82
+Move 75: Reward=3.16, Hit Rate=0.17, Epsilon=0.82
+Move 80: Reward=-0.10, Hit Rate=0.19, Epsilon=0.82
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.81
+Move 90: Reward=-0.10, Hit Rate=0.17, Epsilon=0.81
+Move 95: Reward=-0.10, Hit Rate=0.17, Epsilon=0.81
+
+Episode Summary:
+Total Reward: 46.37
+Hit Rate: 0.17
+Total Shots: 97
+Epsilon: 0.81
+
+========================= Episode 6/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.81
+Move 10: Reward=3.11, Hit Rate=0.30, Epsilon=0.81
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.80
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.80
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.80
+Move 30: Reward=3.10, Hit Rate=0.17, Epsilon=0.80
+Move 35: Reward=-0.10, Hit Rate=0.14, Epsilon=0.80
+Move 40: Reward=3.13, Hit Rate=0.17, Epsilon=0.79
+Move 45: Reward=3.20, Hit Rate=0.24, Epsilon=0.79
+Move 50: Reward=-0.10, Hit Rate=0.22, Epsilon=0.79
+Move 55: Reward=3.19, Hit Rate=0.22, Epsilon=0.79
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.79
+Move 65: Reward=-0.10, Hit Rate=0.22, Epsilon=0.78
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=0.78
+Move 75: Reward=-0.10, Hit Rate=0.20, Epsilon=0.78
+Move 80: Reward=3.18, Hit Rate=0.20, Epsilon=0.78
+Move 85: Reward=-0.10, Hit Rate=0.19, Epsilon=0.78
+Move 90: Reward=-0.10, Hit Rate=0.19, Epsilon=0.77
+Move 95: Reward=-0.10, Hit Rate=0.18, Epsilon=0.77
+Move 100: Reward=0.76, Hit Rate=0.19, Epsilon=0.77
+
+Episode Summary:
+Total Reward: 46.27
 Hit Rate: 0.19
-Moves Made: 16
-Epsilon: 0.86
+Total Shots: 100
+Epsilon: 0.77
 
-========================= Episode 11/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.85
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.84
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.69
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.84
-
-========================= Episode 12/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.83
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.82
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.72
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.82
-
-========================= Episode 13/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.81
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.80
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 7/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.80, Epsilon=0.77
+Move 10: Reward=-0.10, Hit Rate=0.40, Epsilon=0.77
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.76
+Move 20: Reward=-0.10, Hit Rate=0.30, Epsilon=0.76
+Move 25: Reward=3.17, Hit Rate=0.32, Epsilon=0.76
+Move 30: Reward=3.21, Hit Rate=0.33, Epsilon=0.76
+Move 35: Reward=-0.10, Hit Rate=0.29, Epsilon=0.76
+Move 40: Reward=3.18, Hit Rate=0.28, Epsilon=0.75
+Move 45: Reward=-0.10, Hit Rate=0.24, Epsilon=0.75
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.75
+Move 55: Reward=3.17, Hit Rate=0.24, Epsilon=0.75
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.75
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.75
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.74
+Move 75: Reward=-0.10, Hit Rate=0.24, Epsilon=0.74
+Move 80: Reward=-0.10, Hit Rate=0.24, Epsilon=0.74
 
 Episode Summary:
-Total Reward: -2.95
-Hit Rate: 0.00
-Moves Made: 12
-Epsilon: 0.80
+Total Reward: 49.12
+Hit Rate: 0.24
+Total Shots: 83
+Epsilon: 0.74
 
-========================= Episode 14/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.79
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.78
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.70
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.78
-
-========================= Episode 15/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.77
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.77
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.67
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.76
-
-========================= Episode 16/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.76
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.75
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 8/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.74
+Move 10: Reward=-0.10, Hit Rate=0.00, Epsilon=0.74
+Move 15: Reward=-0.10, Hit Rate=0.07, Epsilon=0.73
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.73
+Move 25: Reward=-0.10, Hit Rate=0.20, Epsilon=0.73
+Move 30: Reward=-0.10, Hit Rate=0.20, Epsilon=0.73
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.73
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.72
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.72
+Move 50: Reward=-0.10, Hit Rate=0.22, Epsilon=0.72
+Move 55: Reward=3.20, Hit Rate=0.22, Epsilon=0.72
+Move 60: Reward=-0.10, Hit Rate=0.20, Epsilon=0.72
+Move 65: Reward=-0.10, Hit Rate=0.18, Epsilon=0.72
+Move 70: Reward=3.17, Hit Rate=0.19, Epsilon=0.71
+Move 75: Reward=-0.10, Hit Rate=0.17, Epsilon=0.71
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.71
+Move 85: Reward=3.18, Hit Rate=0.19, Epsilon=0.71
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.71
+Move 95: Reward=-0.10, Hit Rate=0.17, Epsilon=0.70
 
 Episode Summary:
-Total Reward: 1.62
+Total Reward: 46.59
 Hit Rate: 0.17
-Moves Made: 12
-Epsilon: 0.75
+Total Shots: 97
+Epsilon: 0.70
 
-========================= Episode 17/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.74
-Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.73
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.30
-Hit Rate: 0.23
-Moves Made: 13
-Epsilon: 0.73
-
-========================= Episode 18/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.72
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.71
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -2.95
-Hit Rate: 0.00
-Moves Made: 12
-Epsilon: 0.71
-
-========================= Episode 19/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.40, Epsilon=0.70
-Move 10: Reward=2.00, Hit Rate=0.30, Epsilon=0.69
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 9/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.80, Epsilon=0.70
+Move 10: Reward=-0.10, Hit Rate=0.60, Epsilon=0.70
+Move 15: Reward=-0.10, Hit Rate=0.40, Epsilon=0.70
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.70
+Move 25: Reward=-0.10, Hit Rate=0.32, Epsilon=0.70
+Move 30: Reward=3.21, Hit Rate=0.37, Epsilon=0.69
+Move 35: Reward=-0.10, Hit Rate=0.34, Epsilon=0.69
+Move 40: Reward=-0.10, Hit Rate=0.33, Epsilon=0.69
+Move 45: Reward=-0.10, Hit Rate=0.29, Epsilon=0.69
+Move 50: Reward=-0.10, Hit Rate=0.28, Epsilon=0.69
+Move 55: Reward=-0.10, Hit Rate=0.27, Epsilon=0.68
+Move 60: Reward=-0.10, Hit Rate=0.25, Epsilon=0.68
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.68
+Move 70: Reward=-0.10, Hit Rate=0.23, Epsilon=0.68
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.68
+Move 80: Reward=-0.10, Hit Rate=0.23, Epsilon=0.68
+Move 85: Reward=-0.10, Hit Rate=0.21, Epsilon=0.67
+Move 90: Reward=-0.10, Hit Rate=0.20, Epsilon=0.67
+Move 95: Reward=3.17, Hit Rate=0.22, Epsilon=0.67
 
 Episode Summary:
-Total Reward: 4.76
-Hit Rate: 0.33
-Moves Made: 12
-Epsilon: 0.69
+Total Reward: 47.89
+Hit Rate: 0.22
+Total Shots: 96
+Epsilon: 0.67
 
-========================= Episode 20/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.68
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.68
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.67
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.68
-
-========================= Episode 21/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.67
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.66
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 1.59
-Hit Rate: 0.17
-Moves Made: 12
-Epsilon: 0.66
-
-========================= Episode 22/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.65
-Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.65
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 10/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.60, Epsilon=0.67
+Move 10: Reward=0.07, Hit Rate=0.70, Epsilon=0.67
+Move 15: Reward=-0.10, Hit Rate=0.47, Epsilon=0.67
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.66
+Move 25: Reward=-0.10, Hit Rate=0.32, Epsilon=0.66
+Move 30: Reward=-0.10, Hit Rate=0.30, Epsilon=0.66
+Move 35: Reward=-0.10, Hit Rate=0.31, Epsilon=0.66
+Move 40: Reward=-0.10, Hit Rate=0.28, Epsilon=0.66
+Move 45: Reward=-0.10, Hit Rate=0.24, Epsilon=0.66
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.65
+Move 55: Reward=3.17, Hit Rate=0.25, Epsilon=0.65
+Move 60: Reward=-0.10, Hit Rate=0.25, Epsilon=0.65
+Move 65: Reward=3.17, Hit Rate=0.25, Epsilon=0.65
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.65
+Move 75: Reward=-0.10, Hit Rate=0.25, Epsilon=0.65
+Move 80: Reward=-0.10, Hit Rate=0.24, Epsilon=0.64
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.64
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.64
+Move 95: Reward=-0.10, Hit Rate=0.21, Epsilon=0.64
+Move 100: Reward=3.16, Hit Rate=0.21, Epsilon=0.64
 
 Episode Summary:
-Total Reward: 1.71
-Hit Rate: 0.17
-Moves Made: 12
+Total Reward: 46.27
+Hit Rate: 0.21
+Total Shots: 100
 Epsilon: 0.64
 
-========================= Episode 23/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.64
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.63
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 11/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.64
+Move 10: Reward=-0.10, Hit Rate=0.00, Epsilon=0.64
+Move 15: Reward=-0.10, Hit Rate=0.00, Epsilon=0.63
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.63
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.63
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.63
+Move 35: Reward=-0.10, Hit Rate=0.14, Epsilon=0.63
+Move 40: Reward=-0.10, Hit Rate=0.15, Epsilon=0.63
+Move 45: Reward=-0.10, Hit Rate=0.13, Epsilon=0.62
+Move 50: Reward=-0.10, Hit Rate=0.12, Epsilon=0.62
+Move 55: Reward=-0.10, Hit Rate=0.11, Epsilon=0.62
+Move 60: Reward=3.14, Hit Rate=0.15, Epsilon=0.62
+Move 65: Reward=-0.10, Hit Rate=0.14, Epsilon=0.62
+Move 70: Reward=-0.10, Hit Rate=0.14, Epsilon=0.62
+Move 75: Reward=-0.10, Hit Rate=0.13, Epsilon=0.61
+Move 80: Reward=-0.10, Hit Rate=0.12, Epsilon=0.61
+Move 85: Reward=-0.10, Hit Rate=0.12, Epsilon=0.61
+Move 90: Reward=3.13, Hit Rate=0.14, Epsilon=0.61
+Move 95: Reward=-0.10, Hit Rate=0.16, Epsilon=0.61
 
 Episode Summary:
-Total Reward: -2.95
-Hit Rate: 0.00
-Moves Made: 12
-Epsilon: 0.63
-
-========================= Episode 24/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.62
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.62
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 1.61
-Hit Rate: 0.17
-Moves Made: 12
+Total Reward: 45.87
+Hit Rate: 0.16
+Total Shots: 98
 Epsilon: 0.61
 
-========================= Episode 25/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.61
-Move 10: Reward=-0.27, Hit Rate=0.20, Epsilon=0.60
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 12/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.61
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.60
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.60
+Move 20: Reward=-0.10, Hit Rate=0.20, Epsilon=0.60
+Move 25: Reward=3.17, Hit Rate=0.24, Epsilon=0.60
+Move 30: Reward=-0.10, Hit Rate=0.20, Epsilon=0.60
+Move 35: Reward=3.15, Hit Rate=0.20, Epsilon=0.60
+Move 40: Reward=3.18, Hit Rate=0.23, Epsilon=0.60
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.59
+Move 50: Reward=3.16, Hit Rate=0.20, Epsilon=0.59
+Move 55: Reward=-0.10, Hit Rate=0.20, Epsilon=0.59
+Move 60: Reward=-0.10, Hit Rate=0.20, Epsilon=0.59
+Move 65: Reward=3.17, Hit Rate=0.20, Epsilon=0.59
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=0.59
+Move 75: Reward=3.18, Hit Rate=0.20, Epsilon=0.59
+Move 80: Reward=-0.10, Hit Rate=0.19, Epsilon=0.58
+Move 85: Reward=3.17, Hit Rate=0.19, Epsilon=0.58
+Move 90: Reward=3.17, Hit Rate=0.19, Epsilon=0.58
+Move 95: Reward=0.80, Hit Rate=0.20, Epsilon=0.58
 
 Episode Summary:
-Total Reward: 4.14
-Hit Rate: 0.23
-Moves Made: 13
-Epsilon: 0.60
-
-========================= Episode 26/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.59
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.59
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.70
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 46.95
+Hit Rate: 0.20
+Total Shots: 95
 Epsilon: 0.58
 
-========================= Episode 27/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.40, Epsilon=0.58
-Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.57
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 13/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.58
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.58
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.58
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.57
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.57
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.57
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.57
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.57
+Move 45: Reward=-0.10, Hit Rate=0.18, Epsilon=0.57
+Move 50: Reward=3.16, Hit Rate=0.18, Epsilon=0.57
+Move 55: Reward=3.19, Hit Rate=0.20, Epsilon=0.56
+Move 60: Reward=-0.10, Hit Rate=0.20, Epsilon=0.56
+Move 65: Reward=-0.10, Hit Rate=0.20, Epsilon=0.56
+Move 70: Reward=-0.10, Hit Rate=0.19, Epsilon=0.56
+Move 75: Reward=-0.10, Hit Rate=0.17, Epsilon=0.56
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.56
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.56
+Move 90: Reward=-0.10, Hit Rate=0.17, Epsilon=0.55
+Move 95: Reward=3.16, Hit Rate=0.17, Epsilon=0.55
+Move 100: Reward=0.76, Hit Rate=0.18, Epsilon=0.55
 
 Episode Summary:
-Total Reward: 4.06
-Hit Rate: 0.21
-Moves Made: 14
-Epsilon: 0.57
-
-========================= Episode 28/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.56
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.56
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 1.73
-Hit Rate: 0.17
-Moves Made: 12
+Total Reward: 46.11
+Hit Rate: 0.18
+Total Shots: 100
 Epsilon: 0.55
 
-========================= Episode 29/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.55
-Move 10: Reward=2.00, Hit Rate=0.10, Epsilon=0.54
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 14/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.40, Epsilon=0.55
+Move 10: Reward=-0.10, Hit Rate=0.40, Epsilon=0.55
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.55
+Move 20: Reward=-0.10, Hit Rate=0.30, Epsilon=0.55
+Move 25: Reward=-0.10, Hit Rate=0.24, Epsilon=0.54
+Move 30: Reward=-0.10, Hit Rate=0.20, Epsilon=0.54
+Move 35: Reward=-0.10, Hit Rate=0.17, Epsilon=0.54
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.54
+Move 45: Reward=-0.10, Hit Rate=0.16, Epsilon=0.54
+Move 50: Reward=-0.10, Hit Rate=0.14, Epsilon=0.54
+Move 55: Reward=-0.10, Hit Rate=0.13, Epsilon=0.54
+Move 60: Reward=3.08, Hit Rate=0.13, Epsilon=0.53
+Move 65: Reward=-0.10, Hit Rate=0.12, Epsilon=0.53
+Move 70: Reward=-0.10, Hit Rate=0.11, Epsilon=0.53
+Move 75: Reward=-0.10, Hit Rate=0.13, Epsilon=0.53
+Move 80: Reward=-0.10, Hit Rate=0.15, Epsilon=0.53
+Move 85: Reward=3.14, Hit Rate=0.18, Epsilon=0.53
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.53
+Move 95: Reward=3.16, Hit Rate=0.19, Epsilon=0.53
+Move 100: Reward=3.16, Hit Rate=0.19, Epsilon=0.52
 
 Episode Summary:
-Total Reward: -0.68
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.54
+Total Reward: 45.34
+Hit Rate: 0.19
+Total Shots: 100
+Epsilon: 0.52
 
-========================= Episode 30/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.54
-Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.53
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.05
-Hit Rate: 0.21
-Moves Made: 14
-Epsilon: 0.53
-
-========================= Episode 31/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.52
-Move 10: Reward=2.17, Hit Rate=0.30, Epsilon=0.52
-Move 15: Reward=-0.11, Hit Rate=0.33, Epsilon=0.51
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 8.30
-Hit Rate: 0.29
-Moves Made: 17
-Epsilon: 0.51
-
-========================= Episode 32/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.50
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.50
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 15/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.52
+Move 10: Reward=0.07, Hit Rate=0.40, Epsilon=0.52
+Move 15: Reward=3.54, Hit Rate=0.47, Epsilon=0.52
+Move 20: Reward=0.06, Hit Rate=0.60, Epsilon=0.52
+Move 25: Reward=-0.10, Hit Rate=0.52, Epsilon=0.52
+Move 30: Reward=-0.10, Hit Rate=0.43, Epsilon=0.52
+Move 35: Reward=-0.10, Hit Rate=0.37, Epsilon=0.52
+Move 40: Reward=3.18, Hit Rate=0.35, Epsilon=0.51
+Move 45: Reward=-0.10, Hit Rate=0.31, Epsilon=0.51
+Move 50: Reward=-0.10, Hit Rate=0.30, Epsilon=0.51
+Move 55: Reward=3.17, Hit Rate=0.29, Epsilon=0.51
+Move 60: Reward=-0.10, Hit Rate=0.27, Epsilon=0.51
+Move 65: Reward=3.16, Hit Rate=0.26, Epsilon=0.51
+Move 70: Reward=-0.10, Hit Rate=0.26, Epsilon=0.51
+Move 75: Reward=-0.10, Hit Rate=0.24, Epsilon=0.51
+Move 80: Reward=-0.10, Hit Rate=0.24, Epsilon=0.50
+Move 85: Reward=-0.10, Hit Rate=0.25, Epsilon=0.50
+Move 90: Reward=-0.10, Hit Rate=0.24, Epsilon=0.50
+Move 95: Reward=0.80, Hit Rate=0.25, Epsilon=0.50
 
 Episode Summary:
-Total Reward: -0.65
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 48.74
+Hit Rate: 0.25
+Total Shots: 95
 Epsilon: 0.50
 
-========================= Episode 33/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.49
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.49
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 16/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.50
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.50
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.50
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.50
+Move 25: Reward=-0.10, Hit Rate=0.08, Epsilon=0.49
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.49
+Move 35: Reward=3.12, Hit Rate=0.17, Epsilon=0.49
+Move 40: Reward=3.15, Hit Rate=0.20, Epsilon=0.49
+Move 45: Reward=3.18, Hit Rate=0.22, Epsilon=0.49
+Move 50: Reward=-0.10, Hit Rate=0.26, Epsilon=0.49
+Move 55: Reward=-0.10, Hit Rate=0.25, Epsilon=0.49
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.49
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.48
+Move 70: Reward=-0.10, Hit Rate=0.23, Epsilon=0.48
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.48
+Move 80: Reward=-0.10, Hit Rate=0.21, Epsilon=0.48
+Move 85: Reward=-0.10, Hit Rate=0.20, Epsilon=0.48
+Move 90: Reward=-0.10, Hit Rate=0.19, Epsilon=0.48
+Move 95: Reward=0.80, Hit Rate=0.20, Epsilon=0.48
 
 Episode Summary:
-Total Reward: -0.66
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 46.92
+Hit Rate: 0.20
+Total Shots: 95
 Epsilon: 0.48
 
-========================= Episode 34/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.48
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.47
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 17/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.48
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.47
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.47
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.47
+Move 25: Reward=-0.10, Hit Rate=0.12, Epsilon=0.47
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.47
+Move 35: Reward=3.21, Hit Rate=0.23, Epsilon=0.47
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.47
+Move 45: Reward=-0.10, Hit Rate=0.18, Epsilon=0.47
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=0.47
+Move 55: Reward=-0.10, Hit Rate=0.22, Epsilon=0.46
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.46
+Move 65: Reward=-0.10, Hit Rate=0.20, Epsilon=0.46
+Move 70: Reward=-0.10, Hit Rate=0.19, Epsilon=0.46
+Move 75: Reward=-0.10, Hit Rate=0.19, Epsilon=0.46
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.46
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.46
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.46
 
 Episode Summary:
-Total Reward: -0.72
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.47
-
-========================= Episode 35/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.47
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.46
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -0.56
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 47.17
+Hit Rate: 0.18
+Total Shots: 92
 Epsilon: 0.46
 
-========================= Episode 36/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.46
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.45
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 18/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.80, Epsilon=0.45
+Move 10: Reward=-0.10, Hit Rate=0.60, Epsilon=0.45
+Move 15: Reward=-0.10, Hit Rate=0.40, Epsilon=0.45
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.45
+Move 25: Reward=-0.10, Hit Rate=0.32, Epsilon=0.45
+Move 30: Reward=-0.10, Hit Rate=0.30, Epsilon=0.45
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.45
+Move 40: Reward=3.15, Hit Rate=0.28, Epsilon=0.45
+Move 45: Reward=3.18, Hit Rate=0.29, Epsilon=0.45
+Move 50: Reward=-0.10, Hit Rate=0.28, Epsilon=0.44
+Move 55: Reward=-0.10, Hit Rate=0.27, Epsilon=0.44
+Move 60: Reward=-0.10, Hit Rate=0.25, Epsilon=0.44
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.44
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.44
+Move 75: Reward=-0.10, Hit Rate=0.25, Epsilon=0.44
+Move 80: Reward=-0.10, Hit Rate=0.25, Epsilon=0.44
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.44
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.44
 
 Episode Summary:
-Total Reward: -0.67
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.45
-
-========================= Episode 37/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.45
-Move 10: Reward=-0.28, Hit Rate=0.30, Epsilon=0.44
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.21
-Hit Rate: 0.25
-Moves Made: 12
-Epsilon: 0.44
-
-========================= Episode 38/50 =========================
-Move 5: Reward=0.02, Hit Rate=0.80, Epsilon=0.44
-Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.43
-Move 15: Reward=-0.28, Hit Rate=0.33, Epsilon=0.43
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.33
-Hit Rate: 0.29
-Moves Made: 17
+Total Reward: 48.00
+Hit Rate: 0.22
+Total Shots: 92
 Epsilon: 0.43
 
-========================= Episode 39/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.42
-Move 10: Reward=2.00, Hit Rate=0.10, Epsilon=0.42
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 19/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.43
+Move 10: Reward=3.00, Hit Rate=0.10, Epsilon=0.43
+Move 15: Reward=3.21, Hit Rate=0.27, Epsilon=0.43
+Move 20: Reward=-0.10, Hit Rate=0.20, Epsilon=0.43
+Move 25: Reward=-0.10, Hit Rate=0.20, Epsilon=0.43
+Move 30: Reward=-0.10, Hit Rate=0.20, Epsilon=0.43
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.43
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.43
+Move 45: Reward=-0.10, Hit Rate=0.18, Epsilon=0.43
+Move 50: Reward=-0.10, Hit Rate=0.18, Epsilon=0.42
+Move 55: Reward=-0.10, Hit Rate=0.20, Epsilon=0.42
+Move 60: Reward=-0.10, Hit Rate=0.20, Epsilon=0.42
+Move 65: Reward=3.19, Hit Rate=0.20, Epsilon=0.42
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=0.42
+Move 75: Reward=-0.10, Hit Rate=0.21, Epsilon=0.42
+Move 80: Reward=-0.10, Hit Rate=0.20, Epsilon=0.42
 
 Episode Summary:
-Total Reward: -0.66
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 48.45
+Hit Rate: 0.20
+Total Shots: 82
 Epsilon: 0.42
 
-========================= Episode 40/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.41
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.41
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 20/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.60, Epsilon=0.42
+Move 10: Reward=3.22, Hit Rate=0.50, Epsilon=0.42
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.41
+Move 20: Reward=-0.10, Hit Rate=0.25, Epsilon=0.41
+Move 25: Reward=3.17, Hit Rate=0.28, Epsilon=0.41
+Move 30: Reward=3.17, Hit Rate=0.27, Epsilon=0.41
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.41
+Move 40: Reward=-0.10, Hit Rate=0.25, Epsilon=0.41
+Move 45: Reward=-0.10, Hit Rate=0.24, Epsilon=0.41
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.41
+Move 55: Reward=-0.10, Hit Rate=0.22, Epsilon=0.41
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.41
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.40
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.40
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.40
+Move 80: Reward=-0.10, Hit Rate=0.21, Epsilon=0.40
+Move 85: Reward=-0.10, Hit Rate=0.20, Epsilon=0.40
+Move 90: Reward=3.17, Hit Rate=0.20, Epsilon=0.40
+Move 95: Reward=-0.10, Hit Rate=0.19, Epsilon=0.40
 
 Episode Summary:
-Total Reward: -0.56
-Hit Rate: 0.08
-Moves Made: 12
-Epsilon: 0.41
-
-========================= Episode 41/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.40, Epsilon=0.40
-Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.40
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.49
-Hit Rate: 0.25
-Moves Made: 12
+Total Reward: 47.01
+Hit Rate: 0.19
+Total Shots: 99
 Epsilon: 0.40
 
-========================= Episode 42/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.39
-Move 10: Reward=-0.09, Hit Rate=0.30, Epsilon=0.39
-Move 15: Reward=-0.29, Hit Rate=0.20, Epsilon=0.38
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 21/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.40
+Move 10: Reward=3.11, Hit Rate=0.30, Epsilon=0.40
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 20: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 25: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 30: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 45: Reward=3.16, Hit Rate=0.20, Epsilon=0.39
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=0.39
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.39
+Move 60: Reward=3.15, Hit Rate=0.18, Epsilon=0.39
+Move 65: Reward=-0.10, Hit Rate=0.18, Epsilon=0.38
+Move 70: Reward=-0.10, Hit Rate=0.20, Epsilon=0.38
+Move 75: Reward=-0.10, Hit Rate=0.19, Epsilon=0.38
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.38
+Move 85: Reward=-0.10, Hit Rate=0.16, Epsilon=0.38
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.38
+Move 95: Reward=-0.10, Hit Rate=0.18, Epsilon=0.38
+Move 100: Reward=3.16, Hit Rate=0.18, Epsilon=0.38
 
 Episode Summary:
-Total Reward: 4.08
-Hit Rate: 0.20
-Moves Made: 15
+Total Reward: 45.33
+Hit Rate: 0.18
+Total Shots: 100
 Epsilon: 0.38
 
-========================= Episode 43/50 =========================
-Move 5: Reward=0.15, Hit Rate=1.00, Epsilon=0.38
-Move 10: Reward=-0.03, Hit Rate=0.90, Epsilon=0.38
-Move 15: Reward=-0.10, Hit Rate=0.67, Epsilon=0.37
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 22/50 =========================
+Move 5: Reward=3.00, Hit Rate=0.20, Epsilon=0.38
+Move 10: Reward=3.11, Hit Rate=0.20, Epsilon=0.38
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.38
+Move 20: Reward=0.06, Hit Rate=0.40, Epsilon=0.37
+Move 25: Reward=-0.10, Hit Rate=0.32, Epsilon=0.37
+Move 30: Reward=3.21, Hit Rate=0.30, Epsilon=0.37
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.37
+Move 40: Reward=-0.10, Hit Rate=0.28, Epsilon=0.37
+Move 45: Reward=3.23, Hit Rate=0.29, Epsilon=0.37
+Move 50: Reward=-0.10, Hit Rate=0.30, Epsilon=0.37
+Move 55: Reward=-0.10, Hit Rate=0.27, Epsilon=0.37
+Move 60: Reward=-0.10, Hit Rate=0.25, Epsilon=0.37
+Move 65: Reward=-0.10, Hit Rate=0.25, Epsilon=0.37
+Move 70: Reward=3.20, Hit Rate=0.24, Epsilon=0.36
+Move 75: Reward=3.20, Hit Rate=0.24, Epsilon=0.36
+Move 80: Reward=-0.10, Hit Rate=0.23, Epsilon=0.36
+Move 85: Reward=-0.10, Hit Rate=0.21, Epsilon=0.36
+Move 90: Reward=-0.10, Hit Rate=0.20, Epsilon=0.36
 
 Episode Summary:
-Total Reward: 11.23
-Hit Rate: 0.56
-Moves Made: 18
-Epsilon: 0.37
-
-========================= Episode 44/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.37
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.36
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -2.93
-Hit Rate: 0.00
-Moves Made: 12
+Total Reward: 47.96
+Hit Rate: 0.20
+Total Shots: 94
 Epsilon: 0.36
 
-========================= Episode 45/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.36
-Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.35
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 23/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.60, Epsilon=0.36
+Move 10: Reward=3.22, Hit Rate=0.50, Epsilon=0.36
+Move 15: Reward=-0.10, Hit Rate=0.40, Epsilon=0.36
+Move 20: Reward=-0.10, Hit Rate=0.30, Epsilon=0.36
+Move 25: Reward=3.21, Hit Rate=0.32, Epsilon=0.36
+Move 30: Reward=-0.10, Hit Rate=0.27, Epsilon=0.36
+Move 35: Reward=-0.10, Hit Rate=0.23, Epsilon=0.35
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.35
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.35
+Move 50: Reward=3.20, Hit Rate=0.26, Epsilon=0.35
+Move 55: Reward=-0.10, Hit Rate=0.24, Epsilon=0.35
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.35
+Move 65: Reward=3.19, Hit Rate=0.23, Epsilon=0.35
+Move 70: Reward=-0.10, Hit Rate=0.23, Epsilon=0.35
+Move 75: Reward=-0.10, Hit Rate=0.24, Epsilon=0.35
 
 Episode Summary:
-Total Reward: -0.67
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 49.31
+Hit Rate: 0.24
+Total Shots: 79
 Epsilon: 0.35
 
-========================= Episode 46/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.35
-Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.35
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 24/50 =========================
+Move 5: Reward=0.15, Hit Rate=0.80, Epsilon=0.35
+Move 10: Reward=0.07, Hit Rate=0.90, Epsilon=0.34
+Move 15: Reward=3.21, Hit Rate=0.67, Epsilon=0.34
+Move 20: Reward=0.06, Hit Rate=0.65, Epsilon=0.34
+Move 25: Reward=-0.10, Hit Rate=0.52, Epsilon=0.34
+Move 30: Reward=-0.10, Hit Rate=0.47, Epsilon=0.34
+Move 35: Reward=-0.10, Hit Rate=0.40, Epsilon=0.34
+Move 40: Reward=3.23, Hit Rate=0.42, Epsilon=0.34
+Move 45: Reward=-0.10, Hit Rate=0.38, Epsilon=0.34
+Move 50: Reward=-0.10, Hit Rate=0.36, Epsilon=0.34
+Move 55: Reward=-0.10, Hit Rate=0.35, Epsilon=0.34
+Move 60: Reward=-0.10, Hit Rate=0.33, Epsilon=0.34
+Move 65: Reward=-0.10, Hit Rate=0.32, Epsilon=0.34
+Move 70: Reward=-0.10, Hit Rate=0.30, Epsilon=0.33
+Move 75: Reward=-0.10, Hit Rate=0.28, Epsilon=0.33
+Move 80: Reward=-0.10, Hit Rate=0.28, Epsilon=0.33
+Move 85: Reward=-0.10, Hit Rate=0.27, Epsilon=0.33
 
 Episode Summary:
-Total Reward: 4.64
-Hit Rate: 0.38
-Moves Made: 13
-Epsilon: 0.34
-
-========================= Episode 47/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.34
-Move 10: Reward=-0.27, Hit Rate=0.30, Epsilon=0.34
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.24
-Hit Rate: 0.25
-Moves Made: 12
-Epsilon: 0.34
-
-========================= Episode 48/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.33
-Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.33
-Move 15: Reward=-0.29, Hit Rate=0.33, Epsilon=0.33
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.18
-Hit Rate: 0.31
-Moves Made: 16
+Total Reward: 50.27
+Hit Rate: 0.27
+Total Shots: 89
 Epsilon: 0.33
 
-========================= Episode 49/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.32
-Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.32
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 25/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.33
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.33
+Move 15: Reward=-0.10, Hit Rate=0.40, Epsilon=0.33
+Move 20: Reward=3.55, Hit Rate=0.50, Epsilon=0.33
+Move 25: Reward=0.09, Hit Rate=0.60, Epsilon=0.33
+Move 30: Reward=0.06, Hit Rate=0.67, Epsilon=0.33
+Move 35: Reward=0.06, Hit Rate=0.71, Epsilon=0.33
+Move 40: Reward=-0.10, Hit Rate=0.68, Epsilon=0.32
+Move 45: Reward=-0.10, Hit Rate=0.60, Epsilon=0.32
+Move 50: Reward=-0.10, Hit Rate=0.54, Epsilon=0.32
+Move 55: Reward=-0.10, Hit Rate=0.51, Epsilon=0.32
+Move 60: Reward=-0.10, Hit Rate=0.47, Epsilon=0.32
+Move 65: Reward=-0.10, Hit Rate=0.45, Epsilon=0.32
+Move 70: Reward=-0.10, Hit Rate=0.43, Epsilon=0.32
+Move 75: Reward=-0.10, Hit Rate=0.40, Epsilon=0.32
+Move 80: Reward=-0.10, Hit Rate=0.38, Epsilon=0.32
+Move 85: Reward=-0.10, Hit Rate=0.36, Epsilon=0.32
+Move 90: Reward=-0.10, Hit Rate=0.36, Epsilon=0.32
 
 Episode Summary:
-Total Reward: -0.70
-Hit Rate: 0.08
-Moves Made: 12
+Total Reward: 51.65
+Hit Rate: 0.36
+Total Shots: 93
 Epsilon: 0.32
 
-========================= Episode 50/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.31
-Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.31
-[ERROR] Step error: Exceeded maximum moves
+========================= Episode 26/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.32
+Move 10: Reward=0.07, Hit Rate=0.50, Epsilon=0.31
+Move 15: Reward=3.29, Hit Rate=0.53, Epsilon=0.31
+Move 20: Reward=-0.10, Hit Rate=0.50, Epsilon=0.31
+Move 25: Reward=3.25, Hit Rate=0.48, Epsilon=0.31
+Move 30: Reward=-0.10, Hit Rate=0.40, Epsilon=0.31
+Move 35: Reward=-0.10, Hit Rate=0.34, Epsilon=0.31
+Move 40: Reward=-0.10, Hit Rate=0.30, Epsilon=0.31
+Move 45: Reward=-0.10, Hit Rate=0.27, Epsilon=0.31
+Move 50: Reward=-0.10, Hit Rate=0.26, Epsilon=0.31
+Move 55: Reward=-0.10, Hit Rate=0.25, Epsilon=0.31
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.31
+Move 65: Reward=-0.10, Hit Rate=0.22, Epsilon=0.31
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.31
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.30
+Move 80: Reward=-0.10, Hit Rate=0.23, Epsilon=0.30
+Move 85: Reward=3.15, Hit Rate=0.22, Epsilon=0.30
+Move 90: Reward=3.16, Hit Rate=0.22, Epsilon=0.30
+Move 95: Reward=-0.10, Hit Rate=0.22, Epsilon=0.30
+Move 100: Reward=3.16, Hit Rate=0.22, Epsilon=0.30
 
 Episode Summary:
-Total Reward: 1.57
+Total Reward: 46.56
+Hit Rate: 0.22
+Total Shots: 100
+Epsilon: 0.30
+
+========================= Episode 27/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.30
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.30
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.30
+Move 20: Reward=-0.10, Hit Rate=0.30, Epsilon=0.30
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.30
+Move 30: Reward=-0.10, Hit Rate=0.23, Epsilon=0.30
+Move 35: Reward=-0.10, Hit Rate=0.23, Epsilon=0.30
+Move 40: Reward=-0.10, Hit Rate=0.23, Epsilon=0.29
+Move 45: Reward=-0.10, Hit Rate=0.22, Epsilon=0.29
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=0.29
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.29
+Move 60: Reward=-0.10, Hit Rate=0.17, Epsilon=0.29
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.29
+Move 70: Reward=-0.10, Hit Rate=0.17, Epsilon=0.29
+Move 75: Reward=-0.10, Hit Rate=0.17, Epsilon=0.29
+Move 80: Reward=3.16, Hit Rate=0.19, Epsilon=0.29
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.29
+Move 90: Reward=-0.10, Hit Rate=0.17, Epsilon=0.29
+Move 95: Reward=3.15, Hit Rate=0.17, Epsilon=0.29
+Move 100: Reward=3.16, Hit Rate=0.18, Epsilon=0.29
+
+Episode Summary:
+Total Reward: 45.72
+Hit Rate: 0.18
+Total Shots: 100
+Epsilon: 0.29
+
+========================= Episode 28/50 =========================
+Move 5: Reward=0.15, Hit Rate=0.60, Epsilon=0.29
+Move 10: Reward=0.07, Hit Rate=0.70, Epsilon=0.28
+Move 15: Reward=-0.10, Hit Rate=0.47, Epsilon=0.28
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.28
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.28
+Move 30: Reward=-0.10, Hit Rate=0.27, Epsilon=0.28
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.28
+Move 40: Reward=-0.10, Hit Rate=0.28, Epsilon=0.28
+Move 45: Reward=-0.10, Hit Rate=0.27, Epsilon=0.28
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.28
+Move 55: Reward=-0.10, Hit Rate=0.24, Epsilon=0.28
+Move 60: Reward=-0.10, Hit Rate=0.23, Epsilon=0.28
+Move 65: Reward=-0.10, Hit Rate=0.23, Epsilon=0.28
+Move 70: Reward=3.17, Hit Rate=0.24, Epsilon=0.28
+Move 75: Reward=3.18, Hit Rate=0.24, Epsilon=0.28
+Move 80: Reward=-0.10, Hit Rate=0.23, Epsilon=0.28
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.27
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.27
+
+Episode Summary:
+Total Reward: 48.07
+Hit Rate: 0.22
+Total Shots: 93
+Epsilon: 0.27
+
+========================= Episode 29/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.40, Epsilon=0.27
+Move 10: Reward=-0.10, Hit Rate=0.40, Epsilon=0.27
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.27
+Move 20: Reward=3.21, Hit Rate=0.35, Epsilon=0.27
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.27
+Move 30: Reward=3.28, Hit Rate=0.37, Epsilon=0.27
+Move 35: Reward=-0.10, Hit Rate=0.43, Epsilon=0.27
+Move 40: Reward=-0.10, Hit Rate=0.38, Epsilon=0.27
+Move 45: Reward=-0.10, Hit Rate=0.33, Epsilon=0.27
+Move 50: Reward=-0.10, Hit Rate=0.32, Epsilon=0.27
+Move 55: Reward=-0.10, Hit Rate=0.31, Epsilon=0.27
+Move 60: Reward=3.22, Hit Rate=0.32, Epsilon=0.27
+Move 65: Reward=-0.10, Hit Rate=0.29, Epsilon=0.26
+Move 70: Reward=-0.10, Hit Rate=0.29, Epsilon=0.26
+Move 75: Reward=-0.10, Hit Rate=0.27, Epsilon=0.26
+Move 80: Reward=-0.10, Hit Rate=0.25, Epsilon=0.26
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.26
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.26
+Move 95: Reward=-0.10, Hit Rate=0.21, Epsilon=0.26
+Move 100: Reward=3.16, Hit Rate=0.22, Epsilon=0.26
+
+Episode Summary:
+Total Reward: 46.99
+Hit Rate: 0.22
+Total Shots: 100
+Epsilon: 0.26
+
+========================= Episode 30/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.26
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.26
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.26
+Move 20: Reward=-0.10, Hit Rate=0.10, Epsilon=0.26
+Move 25: Reward=-0.10, Hit Rate=0.12, Epsilon=0.26
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.26
+Move 35: Reward=-0.10, Hit Rate=0.11, Epsilon=0.26
+Move 40: Reward=-0.10, Hit Rate=0.10, Epsilon=0.25
+Move 45: Reward=-0.10, Hit Rate=0.09, Epsilon=0.25
+Move 50: Reward=-0.10, Hit Rate=0.08, Epsilon=0.25
+Move 55: Reward=-0.10, Hit Rate=0.11, Epsilon=0.25
+Move 60: Reward=-0.10, Hit Rate=0.10, Epsilon=0.25
+Move 65: Reward=-0.10, Hit Rate=0.11, Epsilon=0.25
+Move 70: Reward=3.14, Hit Rate=0.16, Epsilon=0.25
+Move 75: Reward=-0.10, Hit Rate=0.16, Epsilon=0.25
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.25
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.25
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.25
+Move 95: Reward=3.17, Hit Rate=0.18, Epsilon=0.25
+
+Episode Summary:
+Total Reward: 46.04
+Hit Rate: 0.18
+Total Shots: 96
+Epsilon: 0.25
+
+========================= Episode 31/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.25
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.25
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.25
+Move 20: Reward=-0.10, Hit Rate=0.20, Epsilon=0.25
+Move 25: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.24
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 55: Reward=3.17, Hit Rate=0.20, Epsilon=0.24
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.24
+Move 65: Reward=-0.10, Hit Rate=0.23, Epsilon=0.24
+Move 70: Reward=-0.10, Hit Rate=0.21, Epsilon=0.24
+Move 75: Reward=-0.10, Hit Rate=0.20, Epsilon=0.24
+Move 80: Reward=-0.10, Hit Rate=0.19, Epsilon=0.24
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.24
+Move 90: Reward=3.17, Hit Rate=0.19, Epsilon=0.24
+Move 95: Reward=-0.10, Hit Rate=0.18, Epsilon=0.24
+Move 100: Reward=3.16, Hit Rate=0.18, Epsilon=0.24
+
+Episode Summary:
+Total Reward: 45.48
+Hit Rate: 0.18
+Total Shots: 100
+Epsilon: 0.24
+
+========================= Episode 32/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.24
+Move 10: Reward=0.07, Hit Rate=0.40, Epsilon=0.23
+Move 15: Reward=3.29, Hit Rate=0.53, Epsilon=0.23
+Move 20: Reward=3.26, Hit Rate=0.55, Epsilon=0.23
+Move 25: Reward=0.07, Hit Rate=0.64, Epsilon=0.23
+Move 30: Reward=0.06, Hit Rate=0.67, Epsilon=0.23
+Move 35: Reward=-0.10, Hit Rate=0.63, Epsilon=0.23
+Move 40: Reward=-0.10, Hit Rate=0.55, Epsilon=0.23
+Move 45: Reward=3.23, Hit Rate=0.51, Epsilon=0.23
+Move 50: Reward=-0.10, Hit Rate=0.46, Epsilon=0.23
+Move 55: Reward=-0.10, Hit Rate=0.44, Epsilon=0.23
+Move 60: Reward=-0.10, Hit Rate=0.42, Epsilon=0.23
+Move 65: Reward=-0.10, Hit Rate=0.38, Epsilon=0.23
+Move 70: Reward=-0.10, Hit Rate=0.37, Epsilon=0.23
+Move 75: Reward=-0.10, Hit Rate=0.35, Epsilon=0.23
+Move 80: Reward=-0.10, Hit Rate=0.34, Epsilon=0.23
+Move 85: Reward=-0.10, Hit Rate=0.32, Epsilon=0.23
+
+Episode Summary:
+Total Reward: 50.81
+Hit Rate: 0.32
+Total Shots: 88
+Epsilon: 0.23
+
+========================= Episode 33/50 =========================
+Move 5: Reward=3.00, Hit Rate=0.20, Epsilon=0.22
+Move 10: Reward=3.22, Hit Rate=0.30, Epsilon=0.22
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.22
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.22
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.22
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.22
+Move 35: Reward=-0.10, Hit Rate=0.17, Epsilon=0.22
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.22
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.22
+Move 50: Reward=-0.10, Hit Rate=0.18, Epsilon=0.22
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.22
+Move 60: Reward=-0.10, Hit Rate=0.18, Epsilon=0.22
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.22
+Move 70: Reward=3.17, Hit Rate=0.19, Epsilon=0.22
+Move 75: Reward=-0.10, Hit Rate=0.19, Epsilon=0.22
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.22
+Move 85: Reward=3.18, Hit Rate=0.19, Epsilon=0.22
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.22
+Move 95: Reward=-0.10, Hit Rate=0.17, Epsilon=0.22
+
+Episode Summary:
+Total Reward: 46.40
 Hit Rate: 0.17
-Moves Made: 12
-Epsilon: 0.31
+Total Shots: 99
+Epsilon: 0.21
+
+========================= Episode 34/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.21
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.21
+Move 15: Reward=-0.10, Hit Rate=0.33, Epsilon=0.21
+Move 20: Reward=-0.10, Hit Rate=0.35, Epsilon=0.21
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.21
+Move 30: Reward=3.21, Hit Rate=0.30, Epsilon=0.21
+Move 35: Reward=3.24, Hit Rate=0.31, Epsilon=0.21
+Move 40: Reward=3.26, Hit Rate=0.33, Epsilon=0.21
+Move 45: Reward=-0.10, Hit Rate=0.29, Epsilon=0.21
+Move 50: Reward=-0.10, Hit Rate=0.26, Epsilon=0.21
+Move 55: Reward=3.24, Hit Rate=0.29, Epsilon=0.21
+Move 60: Reward=-0.10, Hit Rate=0.27, Epsilon=0.21
+Move 65: Reward=-0.10, Hit Rate=0.26, Epsilon=0.21
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.21
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.21
+Move 80: Reward=-0.10, Hit Rate=0.21, Epsilon=0.21
+Move 85: Reward=-0.10, Hit Rate=0.21, Epsilon=0.21
+Move 90: Reward=-0.10, Hit Rate=0.20, Epsilon=0.21
+
+Episode Summary:
+Total Reward: 48.29
+Hit Rate: 0.20
+Total Shots: 92
+Epsilon: 0.20
+
+========================= Episode 35/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.80, Epsilon=0.20
+Move 10: Reward=-0.10, Hit Rate=0.60, Epsilon=0.20
+Move 15: Reward=-0.10, Hit Rate=0.40, Epsilon=0.20
+Move 20: Reward=-0.10, Hit Rate=0.30, Epsilon=0.20
+Move 25: Reward=3.08, Hit Rate=0.28, Epsilon=0.20
+Move 30: Reward=3.14, Hit Rate=0.30, Epsilon=0.20
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.20
+Move 40: Reward=-0.10, Hit Rate=0.23, Epsilon=0.20
+Move 45: Reward=-0.10, Hit Rate=0.20, Epsilon=0.20
+Move 50: Reward=-0.10, Hit Rate=0.20, Epsilon=0.20
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.20
+Move 60: Reward=-0.10, Hit Rate=0.18, Epsilon=0.20
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.20
+Move 70: Reward=-0.10, Hit Rate=0.19, Epsilon=0.20
+Move 75: Reward=3.14, Hit Rate=0.20, Epsilon=0.20
+Move 80: Reward=-0.10, Hit Rate=0.20, Epsilon=0.20
+Move 85: Reward=3.15, Hit Rate=0.21, Epsilon=0.20
+Move 90: Reward=-0.10, Hit Rate=0.21, Epsilon=0.20
+Move 95: Reward=-0.10, Hit Rate=0.20, Epsilon=0.20
+Move 100: Reward=3.16, Hit Rate=0.21, Epsilon=0.19
+
+Episode Summary:
+Total Reward: 45.69
+Hit Rate: 0.21
+Total Shots: 100
+Epsilon: 0.19
+
+========================= Episode 36/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.19
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.19
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.19
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.19
+Move 25: Reward=-0.10, Hit Rate=0.12, Epsilon=0.19
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.19
+Move 35: Reward=-0.10, Hit Rate=0.11, Epsilon=0.19
+Move 40: Reward=-0.10, Hit Rate=0.12, Epsilon=0.19
+Move 45: Reward=-0.10, Hit Rate=0.13, Epsilon=0.19
+Move 50: Reward=-0.10, Hit Rate=0.16, Epsilon=0.19
+Move 55: Reward=-0.10, Hit Rate=0.16, Epsilon=0.19
+Move 60: Reward=-0.10, Hit Rate=0.17, Epsilon=0.19
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.19
+Move 70: Reward=-0.10, Hit Rate=0.16, Epsilon=0.19
+Move 75: Reward=-0.10, Hit Rate=0.17, Epsilon=0.19
+Move 80: Reward=-0.10, Hit Rate=0.16, Epsilon=0.19
+Move 85: Reward=-0.10, Hit Rate=0.19, Epsilon=0.19
+Move 90: Reward=0.86, Hit Rate=0.20, Epsilon=0.19
+
+Episode Summary:
+Total Reward: 47.06
+Hit Rate: 0.20
+Total Shots: 90
+Epsilon: 0.19
+
+========================= Episode 37/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.19
+Move 10: Reward=3.11, Hit Rate=0.20, Epsilon=0.19
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.18
+Move 20: Reward=3.16, Hit Rate=0.20, Epsilon=0.18
+Move 25: Reward=3.25, Hit Rate=0.28, Epsilon=0.18
+Move 30: Reward=0.06, Hit Rate=0.33, Epsilon=0.18
+Move 35: Reward=3.26, Hit Rate=0.31, Epsilon=0.18
+Move 40: Reward=0.05, Hit Rate=0.35, Epsilon=0.18
+Move 45: Reward=-0.10, Hit Rate=0.31, Epsilon=0.18
+Move 50: Reward=-0.10, Hit Rate=0.28, Epsilon=0.18
+Move 55: Reward=-0.10, Hit Rate=0.25, Epsilon=0.18
+Move 60: Reward=-0.10, Hit Rate=0.28, Epsilon=0.18
+Move 65: Reward=-0.10, Hit Rate=0.28, Epsilon=0.18
+Move 70: Reward=-0.10, Hit Rate=0.26, Epsilon=0.18
+
+Episode Summary:
+Total Reward: 50.55
+Hit Rate: 0.26
+Total Shots: 73
+Epsilon: 0.18
+
+========================= Episode 38/50 =========================
+Move 5: Reward=0.15, Hit Rate=0.80, Epsilon=0.18
+Move 10: Reward=3.50, Hit Rate=0.80, Epsilon=0.18
+Move 15: Reward=0.08, Hit Rate=0.87, Epsilon=0.18
+Move 20: Reward=0.06, Hit Rate=0.90, Epsilon=0.18
+Move 25: Reward=-0.10, Hit Rate=0.88, Epsilon=0.18
+Move 30: Reward=-0.10, Hit Rate=0.77, Epsilon=0.18
+Move 35: Reward=-0.10, Hit Rate=0.71, Epsilon=0.18
+Move 40: Reward=-0.10, Hit Rate=0.68, Epsilon=0.18
+Move 45: Reward=-0.10, Hit Rate=0.62, Epsilon=0.18
+Move 50: Reward=-0.10, Hit Rate=0.56, Epsilon=0.18
+Move 55: Reward=-0.10, Hit Rate=0.51, Epsilon=0.17
+Move 60: Reward=-0.10, Hit Rate=0.47, Epsilon=0.17
+Move 65: Reward=-0.10, Hit Rate=0.46, Epsilon=0.17
+Move 70: Reward=-0.10, Hit Rate=0.43, Epsilon=0.17
+Move 75: Reward=-0.10, Hit Rate=0.41, Epsilon=0.17
+Move 80: Reward=-0.10, Hit Rate=0.39, Epsilon=0.17
+Move 85: Reward=-0.10, Hit Rate=0.36, Epsilon=0.17
+Move 90: Reward=-0.10, Hit Rate=0.34, Epsilon=0.17
+Move 95: Reward=-0.10, Hit Rate=0.34, Epsilon=0.17
+
+Episode Summary:
+Total Reward: 51.24
+Hit Rate: 0.34
+Total Shots: 98
+Epsilon: 0.17
+
+========================= Episode 39/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.20, Epsilon=0.17
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.17
+Move 15: Reward=-0.10, Hit Rate=0.27, Epsilon=0.17
+Move 20: Reward=-0.10, Hit Rate=0.25, Epsilon=0.17
+Move 25: Reward=3.21, Hit Rate=0.24, Epsilon=0.17
+Move 30: Reward=3.28, Hit Rate=0.30, Epsilon=0.17
+Move 35: Reward=-0.10, Hit Rate=0.37, Epsilon=0.17
+Move 40: Reward=-0.10, Hit Rate=0.33, Epsilon=0.17
+Move 45: Reward=-0.10, Hit Rate=0.31, Epsilon=0.17
+Move 50: Reward=-0.10, Hit Rate=0.28, Epsilon=0.17
+Move 55: Reward=-0.10, Hit Rate=0.27, Epsilon=0.17
+Move 60: Reward=-0.10, Hit Rate=0.25, Epsilon=0.17
+Move 65: Reward=-0.10, Hit Rate=0.26, Epsilon=0.17
+Move 70: Reward=-0.10, Hit Rate=0.24, Epsilon=0.17
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.16
+Move 80: Reward=-0.10, Hit Rate=0.23, Epsilon=0.16
+Move 85: Reward=-0.10, Hit Rate=0.21, Epsilon=0.16
+Move 90: Reward=-0.10, Hit Rate=0.20, Epsilon=0.16
+Move 95: Reward=-0.10, Hit Rate=0.19, Epsilon=0.16
+Move 100: Reward=0.76, Hit Rate=0.21, Epsilon=0.16
+
+Episode Summary:
+Total Reward: 47.43
+Hit Rate: 0.21
+Total Shots: 100
+Epsilon: 0.16
+
+========================= Episode 40/50 =========================
+Move 5: Reward=0.15, Hit Rate=1.00, Epsilon=0.16
+Move 10: Reward=0.07, Hit Rate=1.00, Epsilon=0.16
+Move 15: Reward=0.08, Hit Rate=1.00, Epsilon=0.16
+Move 20: Reward=0.06, Hit Rate=1.00, Epsilon=0.16
+Move 25: Reward=3.29, Hit Rate=0.92, Epsilon=0.16
+Move 30: Reward=0.06, Hit Rate=0.93, Epsilon=0.16
+Move 35: Reward=0.06, Hit Rate=0.94, Epsilon=0.16
+Move 40: Reward=-0.10, Hit Rate=0.88, Epsilon=0.16
+Move 45: Reward=-0.10, Hit Rate=0.84, Epsilon=0.16
+Move 50: Reward=-0.10, Hit Rate=0.78, Epsilon=0.16
+Move 55: Reward=-0.10, Hit Rate=0.71, Epsilon=0.16
+Move 60: Reward=-0.10, Hit Rate=0.67, Epsilon=0.16
+Move 65: Reward=-0.10, Hit Rate=0.62, Epsilon=0.16
+Move 70: Reward=-0.10, Hit Rate=0.57, Epsilon=0.16
+Move 75: Reward=-0.10, Hit Rate=0.53, Epsilon=0.16
+Move 80: Reward=-0.10, Hit Rate=0.51, Epsilon=0.16
+Move 85: Reward=-0.10, Hit Rate=0.48, Epsilon=0.16
+Move 90: Reward=3.18, Hit Rate=0.47, Epsilon=0.16
+
+Episode Summary:
+Total Reward: 54.96
+Hit Rate: 0.47
+Total Shots: 91
+Epsilon: 0.16
+
+========================= Episode 41/50 =========================
+Move 5: Reward=3.00, Hit Rate=0.20, Epsilon=0.16
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.15
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.15
+Move 20: Reward=-0.10, Hit Rate=0.20, Epsilon=0.15
+Move 25: Reward=3.17, Hit Rate=0.24, Epsilon=0.15
+Move 30: Reward=-0.10, Hit Rate=0.23, Epsilon=0.15
+Move 35: Reward=-0.10, Hit Rate=0.20, Epsilon=0.15
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.15
+Move 45: Reward=3.14, Hit Rate=0.18, Epsilon=0.15
+Move 50: Reward=-0.10, Hit Rate=0.18, Epsilon=0.15
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.15
+Move 60: Reward=-0.10, Hit Rate=0.17, Epsilon=0.15
+Move 65: Reward=-0.10, Hit Rate=0.15, Epsilon=0.15
+Move 70: Reward=-0.10, Hit Rate=0.14, Epsilon=0.15
+Move 75: Reward=-0.10, Hit Rate=0.13, Epsilon=0.15
+Move 80: Reward=-0.10, Hit Rate=0.14, Epsilon=0.15
+Move 85: Reward=-0.10, Hit Rate=0.15, Epsilon=0.15
+Move 90: Reward=-0.10, Hit Rate=0.17, Epsilon=0.15
+Move 95: Reward=-0.10, Hit Rate=0.18, Epsilon=0.15
+
+Episode Summary:
+Total Reward: 46.45
+Hit Rate: 0.18
+Total Shots: 97
+Epsilon: 0.15
+
+========================= Episode 42/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.60, Epsilon=0.15
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.15
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.15
+Move 20: Reward=-0.10, Hit Rate=0.25, Epsilon=0.15
+Move 25: Reward=-0.10, Hit Rate=0.28, Epsilon=0.15
+Move 30: Reward=-0.10, Hit Rate=0.30, Epsilon=0.15
+Move 35: Reward=3.21, Hit Rate=0.29, Epsilon=0.15
+Move 40: Reward=-0.10, Hit Rate=0.25, Epsilon=0.15
+Move 45: Reward=-0.10, Hit Rate=0.27, Epsilon=0.14
+Move 50: Reward=-0.10, Hit Rate=0.24, Epsilon=0.14
+Move 55: Reward=-0.10, Hit Rate=0.22, Epsilon=0.14
+Move 60: Reward=-0.10, Hit Rate=0.22, Epsilon=0.14
+Move 65: Reward=3.19, Hit Rate=0.23, Epsilon=0.14
+Move 70: Reward=-0.10, Hit Rate=0.23, Epsilon=0.14
+Move 75: Reward=-0.10, Hit Rate=0.23, Epsilon=0.14
+Move 80: Reward=-0.10, Hit Rate=0.21, Epsilon=0.14
+Move 85: Reward=-0.10, Hit Rate=0.21, Epsilon=0.14
+Move 90: Reward=-0.10, Hit Rate=0.20, Epsilon=0.14
+Move 95: Reward=-0.10, Hit Rate=0.19, Epsilon=0.14
+Move 100: Reward=3.16, Hit Rate=0.19, Epsilon=0.14
+
+Episode Summary:
+Total Reward: 45.95
+Hit Rate: 0.19
+Total Shots: 100
+Epsilon: 0.14
+
+========================= Episode 43/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.14
+Move 10: Reward=3.11, Hit Rate=0.20, Epsilon=0.14
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.14
+Move 20: Reward=3.16, Hit Rate=0.20, Epsilon=0.14
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.14
+Move 30: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 35: Reward=-0.10, Hit Rate=0.14, Epsilon=0.14
+Move 40: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 45: Reward=3.18, Hit Rate=0.20, Epsilon=0.14
+Move 50: Reward=-0.10, Hit Rate=0.18, Epsilon=0.14
+Move 55: Reward=-0.10, Hit Rate=0.16, Epsilon=0.14
+Move 60: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 70: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 75: Reward=-0.10, Hit Rate=0.17, Epsilon=0.14
+Move 80: Reward=-0.10, Hit Rate=0.16, Epsilon=0.14
+Move 85: Reward=3.15, Hit Rate=0.16, Epsilon=0.14
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.13
+
+Episode Summary:
+Total Reward: 46.95
+Hit Rate: 0.18
+Total Shots: 92
+Epsilon: 0.13
+
+========================= Episode 44/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.13
+Move 10: Reward=-0.10, Hit Rate=0.10, Epsilon=0.13
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.13
+Move 20: Reward=-0.10, Hit Rate=0.25, Epsilon=0.13
+Move 25: Reward=3.25, Hit Rate=0.28, Epsilon=0.13
+Move 30: Reward=3.28, Hit Rate=0.30, Epsilon=0.13
+Move 35: Reward=3.29, Hit Rate=0.37, Epsilon=0.13
+Move 40: Reward=-0.10, Hit Rate=0.38, Epsilon=0.13
+Move 45: Reward=-0.10, Hit Rate=0.36, Epsilon=0.13
+Move 50: Reward=-0.10, Hit Rate=0.32, Epsilon=0.13
+Move 55: Reward=3.24, Hit Rate=0.33, Epsilon=0.13
+Move 60: Reward=-0.10, Hit Rate=0.30, Epsilon=0.13
+Move 65: Reward=3.22, Hit Rate=0.29, Epsilon=0.13
+Move 70: Reward=-0.10, Hit Rate=0.27, Epsilon=0.13
+Move 75: Reward=-0.10, Hit Rate=0.25, Epsilon=0.13
+Move 80: Reward=-0.10, Hit Rate=0.25, Epsilon=0.13
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.13
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.13
+Move 95: Reward=-0.10, Hit Rate=0.21, Epsilon=0.13
+Move 100: Reward=3.16, Hit Rate=0.21, Epsilon=0.13
+
+Episode Summary:
+Total Reward: 46.92
+Hit Rate: 0.21
+Total Shots: 100
+Epsilon: 0.13
+
+========================= Episode 45/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.00, Epsilon=0.13
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.13
+Move 15: Reward=-0.10, Hit Rate=0.13, Epsilon=0.13
+Move 20: Reward=-0.10, Hit Rate=0.15, Epsilon=0.13
+Move 25: Reward=-0.10, Hit Rate=0.16, Epsilon=0.13
+Move 30: Reward=-0.10, Hit Rate=0.13, Epsilon=0.13
+Move 35: Reward=-0.10, Hit Rate=0.17, Epsilon=0.13
+Move 40: Reward=-0.10, Hit Rate=0.20, Epsilon=0.13
+Move 45: Reward=3.18, Hit Rate=0.20, Epsilon=0.13
+Move 50: Reward=-0.10, Hit Rate=0.18, Epsilon=0.12
+Move 55: Reward=-0.10, Hit Rate=0.18, Epsilon=0.12
+Move 60: Reward=-0.10, Hit Rate=0.18, Epsilon=0.12
+Move 65: Reward=-0.10, Hit Rate=0.17, Epsilon=0.12
+Move 70: Reward=-0.10, Hit Rate=0.17, Epsilon=0.12
+Move 75: Reward=3.16, Hit Rate=0.17, Epsilon=0.12
+Move 80: Reward=-0.10, Hit Rate=0.17, Epsilon=0.12
+Move 85: Reward=-0.10, Hit Rate=0.18, Epsilon=0.12
+Move 90: Reward=-0.10, Hit Rate=0.18, Epsilon=0.12
+
+Episode Summary:
+Total Reward: 46.91
+Hit Rate: 0.18
+Total Shots: 93
+Epsilon: 0.12
+
+========================= Episode 46/50 =========================
+Move 5: Reward=3.25, Hit Rate=1.00, Epsilon=0.12
+Move 10: Reward=0.07, Hit Rate=1.00, Epsilon=0.12
+Move 15: Reward=-0.10, Hit Rate=0.67, Epsilon=0.12
+Move 20: Reward=-0.10, Hit Rate=0.55, Epsilon=0.12
+Move 25: Reward=-0.10, Hit Rate=0.48, Epsilon=0.12
+Move 30: Reward=-0.10, Hit Rate=0.47, Epsilon=0.12
+Move 35: Reward=-0.10, Hit Rate=0.43, Epsilon=0.12
+Move 40: Reward=-0.10, Hit Rate=0.38, Epsilon=0.12
+Move 45: Reward=-0.10, Hit Rate=0.33, Epsilon=0.12
+Move 50: Reward=-0.10, Hit Rate=0.32, Epsilon=0.12
+Move 55: Reward=-0.10, Hit Rate=0.29, Epsilon=0.12
+Move 60: Reward=3.15, Hit Rate=0.28, Epsilon=0.12
+Move 65: Reward=-0.10, Hit Rate=0.26, Epsilon=0.12
+Move 70: Reward=-0.10, Hit Rate=0.27, Epsilon=0.12
+Move 75: Reward=3.16, Hit Rate=0.27, Epsilon=0.12
+Move 80: Reward=3.18, Hit Rate=0.28, Epsilon=0.12
+Move 85: Reward=-0.10, Hit Rate=0.26, Epsilon=0.12
+Move 90: Reward=-0.10, Hit Rate=0.26, Epsilon=0.12
+Move 95: Reward=-0.10, Hit Rate=0.24, Epsilon=0.12
+Move 100: Reward=0.76, Hit Rate=0.25, Epsilon=0.12
+
+Episode Summary:
+Total Reward: 48.22
+Hit Rate: 0.25
+Total Shots: 100
+Epsilon: 0.12
+
+========================= Episode 47/50 =========================
+Move 5: Reward=0.15, Hit Rate=1.00, Epsilon=0.12
+Move 10: Reward=3.22, Hit Rate=0.80, Epsilon=0.12
+Move 15: Reward=-0.10, Hit Rate=0.60, Epsilon=0.12
+Move 20: Reward=-0.10, Hit Rate=0.45, Epsilon=0.12
+Move 25: Reward=3.25, Hit Rate=0.48, Epsilon=0.11
+Move 30: Reward=-0.10, Hit Rate=0.43, Epsilon=0.11
+Move 35: Reward=-0.10, Hit Rate=0.40, Epsilon=0.11
+Move 40: Reward=-0.10, Hit Rate=0.40, Epsilon=0.11
+Move 45: Reward=3.25, Hit Rate=0.38, Epsilon=0.11
+Move 50: Reward=-0.10, Hit Rate=0.34, Epsilon=0.11
+Move 55: Reward=-0.10, Hit Rate=0.33, Epsilon=0.11
+Move 60: Reward=-0.10, Hit Rate=0.32, Epsilon=0.11
+Move 65: Reward=-0.10, Hit Rate=0.29, Epsilon=0.11
+Move 70: Reward=-0.10, Hit Rate=0.27, Epsilon=0.11
+Move 75: Reward=-0.10, Hit Rate=0.28, Epsilon=0.11
+Move 80: Reward=-0.10, Hit Rate=0.26, Epsilon=0.11
+
+Episode Summary:
+Total Reward: 51.07
+Hit Rate: 0.26
+Total Shots: 83
+Epsilon: 0.11
+
+========================= Episode 48/50 =========================
+Move 5: Reward=0.15, Hit Rate=0.60, Epsilon=0.11
+Move 10: Reward=3.67, Hit Rate=0.80, Epsilon=0.11
+Move 15: Reward=0.08, Hit Rate=0.87, Epsilon=0.11
+Move 20: Reward=0.06, Hit Rate=0.85, Epsilon=0.11
+Move 25: Reward=-0.10, Hit Rate=0.68, Epsilon=0.11
+Move 30: Reward=-0.10, Hit Rate=0.60, Epsilon=0.11
+Move 35: Reward=-0.10, Hit Rate=0.54, Epsilon=0.11
+Move 40: Reward=-0.10, Hit Rate=0.50, Epsilon=0.11
+Move 45: Reward=-0.10, Hit Rate=0.44, Epsilon=0.11
+Move 50: Reward=-0.10, Hit Rate=0.42, Epsilon=0.11
+Move 55: Reward=-0.10, Hit Rate=0.38, Epsilon=0.11
+Move 60: Reward=-0.10, Hit Rate=0.35, Epsilon=0.11
+Move 65: Reward=3.16, Hit Rate=0.34, Epsilon=0.11
+Move 70: Reward=-0.10, Hit Rate=0.31, Epsilon=0.11
+Move 75: Reward=-0.10, Hit Rate=0.29, Epsilon=0.11
+Move 80: Reward=-0.10, Hit Rate=0.29, Epsilon=0.11
+Move 85: Reward=-0.10, Hit Rate=0.28, Epsilon=0.11
+Move 90: Reward=-0.10, Hit Rate=0.27, Epsilon=0.11
+Move 95: Reward=-0.10, Hit Rate=0.27, Epsilon=0.11
+
+Episode Summary:
+Total Reward: 50.14
+Hit Rate: 0.27
+Total Shots: 98
+Epsilon: 0.11
+
+========================= Episode 49/50 =========================
+Move 5: Reward=3.25, Hit Rate=0.60, Epsilon=0.11
+Move 10: Reward=0.07, Hit Rate=0.80, Epsilon=0.11
+Move 15: Reward=-0.10, Hit Rate=0.53, Epsilon=0.11
+Move 20: Reward=3.21, Hit Rate=0.50, Epsilon=0.11
+Move 25: Reward=-0.10, Hit Rate=0.44, Epsilon=0.10
+Move 30: Reward=-0.10, Hit Rate=0.37, Epsilon=0.10
+Move 35: Reward=-0.10, Hit Rate=0.37, Epsilon=0.10
+Move 40: Reward=-0.10, Hit Rate=0.35, Epsilon=0.10
+Move 45: Reward=-0.10, Hit Rate=0.33, Epsilon=0.10
+Move 50: Reward=-0.10, Hit Rate=0.30, Epsilon=0.10
+Move 55: Reward=3.20, Hit Rate=0.31, Epsilon=0.10
+Move 60: Reward=-0.10, Hit Rate=0.28, Epsilon=0.10
+Move 65: Reward=-0.10, Hit Rate=0.28, Epsilon=0.10
+Move 70: Reward=-0.10, Hit Rate=0.26, Epsilon=0.10
+Move 75: Reward=3.18, Hit Rate=0.25, Epsilon=0.10
+Move 80: Reward=3.18, Hit Rate=0.25, Epsilon=0.10
+Move 85: Reward=-0.10, Hit Rate=0.24, Epsilon=0.10
+Move 90: Reward=-0.10, Hit Rate=0.22, Epsilon=0.10
+Move 95: Reward=-0.10, Hit Rate=0.22, Epsilon=0.10
+
+Episode Summary:
+Total Reward: 48.21
+Hit Rate: 0.22
+Total Shots: 99
+Epsilon: 0.10
+
+========================= Episode 50/50 =========================
+Move 5: Reward=-0.10, Hit Rate=0.40, Epsilon=0.10
+Move 10: Reward=-0.10, Hit Rate=0.20, Epsilon=0.10
+Move 15: Reward=-0.10, Hit Rate=0.20, Epsilon=0.10
+Move 20: Reward=3.21, Hit Rate=0.30, Epsilon=0.10
+Move 25: Reward=-0.10, Hit Rate=0.24, Epsilon=0.10
+Move 30: Reward=3.21, Hit Rate=0.27, Epsilon=0.10
+Move 35: Reward=-0.10, Hit Rate=0.26, Epsilon=0.10
+Move 40: Reward=-0.10, Hit Rate=0.25, Epsilon=0.10
+Move 45: Reward=-0.10, Hit Rate=0.24, Epsilon=0.10
+Move 50: Reward=3.22, Hit Rate=0.26, Epsilon=0.10
+Move 55: Reward=-0.10, Hit Rate=0.29, Epsilon=0.10
+Move 60: Reward=-0.10, Hit Rate=0.27, Epsilon=0.10
+Move 65: Reward=-0.10, Hit Rate=0.26, Epsilon=0.10
+Move 70: Reward=3.23, Hit Rate=0.26, Epsilon=0.10
+
+Episode Summary:
+Total Reward: 50.32
+Hit Rate: 0.26
+Total Shots: 71
+Epsilon: 0.10

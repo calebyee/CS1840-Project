@@ -11,14 +11,13 @@ class ActionPatternTracker:
     def __init__(self):
         self.successful_patterns = []
         self.current_sequence = []
-        self.max_patterns = 1000
+        self.max_patterns = 5000
+        self.pattern_success_count = defaultdict(int)
         
     def add_action(self, action, hit):
         self.current_sequence.append((action, hit))
         if hit and len(self.current_sequence) > 1:
             # Store successful sequences
-            if len(self.successful_patterns) >= self.max_patterns:
-                self.successful_patterns.pop(0)  # Remove oldest pattern
             self.successful_patterns.append(self.current_sequence.copy())
         if not hit:
             self.current_sequence = []
@@ -242,7 +241,8 @@ class DQNAgent:
         self.q_value_threshold = 1.0  # Threshold for considering an action high-value
         
         # Reward normalization
-        self.reward_deque = deque(maxlen=1000)
+        self.reward_deque = deque(maxlen=5000)  # Remember more rewards
+        self.successful_sequences = deque(maxlen=1000)  # Store successful game sequences
         self.reward_mean = 0
         self.reward_std = 1
         
@@ -302,7 +302,7 @@ class DQNAgent:
         
         # Check pattern tracker for suggested action
         suggested_action = self.pattern_tracker.get_suggested_action(valid_actions, state.cpu().numpy().squeeze())
-        if suggested_action is not None and random.random() < 0.7:  # 70% chance to use suggested action
+        if suggested_action is not None and random.random() < 0.85:  # Increase pattern usage
             return suggested_action
         
         # Adaptive exploration based on Q-values
@@ -336,7 +336,7 @@ class DQNAgent:
         # Normalize reward
         normalized_reward = self.normalize_reward(reward)
         
-        # Increase priority for transitions that led to hits
+        # Store transition with priority
         if hit:
             priority_multiplier = 2.0
         else:
