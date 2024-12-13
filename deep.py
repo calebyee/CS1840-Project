@@ -8,6 +8,7 @@ from gymnasium import spaces
 import matplotlib.pyplot as plt
 from dqn import DQNAgent
 import torch
+from collections import deque
 
 # BattleshipPlacementEnv
 class BattleshipPlacementEnv(gym.Env):
@@ -89,113 +90,34 @@ class BattleshipAttackEnv(gym.Env):
 
     def __init__(self, board_size=10):
         super(BattleshipAttackEnv, self).__init__()
-        self.max_board_size = board_size
-        self.curr_board_size = 6  # Start with smaller board
-        self.curr_ship_sizes = [5, 4]  # Start with only large ships
-        self.curriculum_phase = 0
-        self.episodes_per_phase = 15
-        self.max_phases = 4
-        self.min_phase_performance = 0.2
-        self.phase_hit_rates = []
+        self.board_size = board_size
+        self.ship_sizes = [5, 4, 3, 3, 2]  # All standard Battleship ships
         
-        # Dynamic move limit calculation
-        self.base_moves = {  # Base moves per phase
-            0: 14,  # Phase 0: (5+4)*1.5 ≈ 14 moves
-            1: 18,  # Phase 1: (5+4+3)*1.5 ≈ 18 moves
-            2: 22,  # Phase 2: (5+4+3+3)*1.5 ≈ 22 moves
-            3: 26,  # Phase 3: (5+4+3+3+2)*1.5 ≈ 26 moves
-        }
-        self.efficiency_bonus = 0  # Additional moves based on performance
-        self.max_efficiency_bonus = 8  # Maximum additional moves
-        
-        self.action_space = spaces.Discrete(self.max_board_size * self.max_board_size)
-        self.observation_space = spaces.Box(low=-1, high=1, shape=(self.max_board_size, self.max_board_size), dtype=np.int8)
+        self.action_space = spaces.Discrete(self.board_size * self.board_size)
+        self.observation_space = spaces.Box(low=-1, high=1, shape=(self.board_size, self.board_size), dtype=np.int8)
         self.reset()
-
-    def get_move_limit(self):
-        """Calculate dynamic move limit based on phase and performance"""
-        base_moves = self.base_moves[self.curriculum_phase]
-        return base_moves + self.efficiency_bonus
-
-    def update_move_limit(self, hit_rate):
-        """Update move limit based on performance"""
-        if hit_rate > 0.3:  # Good performance
-            self.efficiency_bonus = min(self.max_efficiency_bonus, self.efficiency_bonus + 1)
-        elif hit_rate < 0.15:  # Poor performance
-            self.efficiency_bonus = max(0, self.efficiency_bonus - 1)
-
-    def update_curriculum(self, hit_rate):
-        """Update curriculum difficulty based on performance"""
-        self.phase_hit_rates.append(hit_rate)
-        
-        # Only consider advancing phase after minimum episodes
-        if len(self.phase_hit_rates) >= self.episodes_per_phase:
-            avg_hit_rate = np.mean(self.phase_hit_rates[-self.episodes_per_phase:])
-            
-            if avg_hit_rate >= self.min_phase_performance:
-                old_phase = self.curriculum_phase
-                self.curriculum_phase = min(self.max_phases, self.curriculum_phase + 1)
-                
-                if old_phase != self.curriculum_phase:
-                    # Update board size
-                    self.curr_board_size = min(self.max_board_size, 6 + self.curriculum_phase)
-                    
-                    # Update ship sizes
-                    if self.curriculum_phase == 1:
-                        self.curr_ship_sizes = [5, 4, 3]  # Add cruiser
-                    elif self.curriculum_phase == 2:
-                        self.curr_ship_sizes = [5, 4, 3, 3]  # Add second cruiser
-                    elif self.curriculum_phase == 3:
-                        self.curr_ship_sizes = [5, 4, 3, 3, 2]  # Add destroyer
-                    
-                    # Reset hit rates for new phase
-                    self.phase_hit_rates = []
-                    return True
-        return False
-
-    def _get_valid_actions(self):
-        """Get valid actions for current curriculum phase"""
-        valid_actions = set()
-        
-        # Calculate the actual playable area based on current phase
-        for i in range(self.curr_board_size):
-            for j in range(self.curr_board_size):
-                # Map to full board coordinates
-                scaled_i = int(i * (self.max_board_size / self.curr_board_size))
-                scaled_j = int(j * (self.max_board_size / self.curr_board_size))
-                action = scaled_i * self.max_board_size + scaled_j
-                valid_actions.add(action)
-        
-        return valid_actions
-
+    
     def reset(self):
-        # Initialize full-size boards
-        self.agent_board = np.zeros((self.max_board_size, self.max_board_size), dtype=np.int8)
-        self.opponent_board = np.zeros((self.max_board_size, self.max_board_size), dtype=np.int8)
-        self.agent_shots = np.zeros((self.max_board_size, self.max_board_size), dtype=np.int8)
+        self.agent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.opponent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.agent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         
-        # Place ships according to current curriculum
-        self._place_curriculum_ships()
+        self._place_ships()
         
         return self.agent_shots
 
-    def _place_curriculum_ships(self):
-        """Place ships based on current curriculum phase"""
-        # Clear existing ships
+    def _place_ships(self):
+        """Place ships on the board"""
         self.opponent_board.fill(0)
         
-        # Calculate scaling factor for ship placement
-        scale = self.max_board_size / self.curr_board_size
-        
-        for ship_size in self.curr_ship_sizes:
+        for ship_size in self.ship_sizes:
             placed = False
             max_attempts = 100
             attempts = 0
             
             while not placed and attempts < max_attempts:
-                # Scale coordinates to current board size
-                row = int(np.random.randint(0, self.curr_board_size) * scale)
-                col = int(np.random.randint(0, self.curr_board_size) * scale)
+                row = np.random.randint(0, self.board_size)
+                col = np.random.randint(0, self.board_size)
                 orientation = np.random.randint(0, 2)
                 
                 if self._is_valid_ship_placement(row, col, ship_size, orientation):
@@ -210,11 +132,11 @@ class BattleshipAttackEnv(gym.Env):
     def _is_valid_ship_placement(self, row, col, ship_size, orientation):
         """Check if ship placement is valid"""
         if orientation == 0:  # horizontal
-            if col + ship_size > self.max_board_size:
+            if col + ship_size > self.board_size:
                 return False
             return not np.any(self.opponent_board[row, col:col + ship_size] == 1)
         else:  # vertical
-            if row + ship_size > self.max_board_size:
+            if row + ship_size > self.board_size:
                 return False
             return not np.any(self.opponent_board[row:row + ship_size, col] == 1)
 
@@ -227,37 +149,14 @@ class BattleshipAttackEnv(gym.Env):
 
     def step(self, action):
         # Convert action to coordinates
-        row = action // self.max_board_size
-        col = action % self.max_board_size
+        row = action // self.board_size
+        col = action % self.board_size
         
-        # Check if action is valid for current curriculum
-        valid_actions = self._get_valid_actions()
-        if action not in valid_actions:
-            return self.agent_shots, -1, False, {"error": "Invalid action for current phase"}
-        
-        # Get current move count and limit
-        moves_made = np.sum(np.abs(self.agent_shots))
-        max_moves = self.get_move_limit()
-        
-        # Check if exceeded max moves
-        if moves_made >= max_moves:
-            return self.agent_shots, -2, True, {"error": "Exceeded maximum moves"}
-        
-        # Rest of the step function...
+        # Process the shot
         shots = self.agent_shots
         if shots[row, col] != 0:
             return shots, -1, False, {"error": "Position already shot"}
-            
-        # Record shot and check hit
-        if self.opponent_board[row, col] == 1:
-            shots[row, col] = 1
-            reward = 2.0  # Increased reward for hits
-        else:
-            shots[row, col] = -1
-            # Penalty increases with number of misses
-            miss_count = np.sum(shots == -1)
-            reward = -0.2 - (0.1 * (miss_count / max_moves))  # Progressive penalty
-            
+        
         # Update game state
         total_ship_cells = np.sum(self.opponent_board == 1)
         hit_ship_cells = np.sum((self.opponent_board == 1) & (shots == 1))
@@ -265,37 +164,33 @@ class BattleshipAttackEnv(gym.Env):
         # Calculate hit rate and efficiency
         total_shots = np.sum(np.abs(shots))
         hit_rate = hit_ship_cells / total_shots if total_shots > 0 else 0
-        efficiency = hit_ship_cells / moves_made if moves_made > 0 else 0
+        efficiency = hit_ship_cells / total_shots if total_shots > 0 else 0
         
-        # Update move limit based on performance
-        self.update_move_limit(hit_rate)
+        # Record shot and check hit
+        if self.opponent_board[row, col] == 1:
+            shots[row, col] = 1
+            streak_bonus = 1.0 * (hit_ship_cells / total_shots if total_shots > 0 else 0)
+            reward = 3.0 + streak_bonus
+        else:
+            shots[row, col] = -1
+            base_penalty = -0.1
+            reward = base_penalty
         
-        # Add efficiency bonus/penalty
-        if efficiency > 0.3:  # Reward high efficiency
+        # Add efficiency bonus
+        if efficiency > 0.3:
             reward += 0.5 * efficiency
         
-        # Check if game is done
-        done = hit_ship_cells == total_ship_cells or moves_made >= max_moves
+        # Game ends only when all ships are sunk
+        done = hit_ship_cells == total_ship_cells
         
         if done:
-            # Add final reward based on efficiency
-            if hit_ship_cells == total_ship_cells:
-                moves_remaining = max_moves - moves_made
-                reward += 2.0 + (moves_remaining / max_moves) * 3.0  # Bonus for finishing early
-            
-            # Update curriculum based on performance
-            phase_changed = self.update_curriculum(hit_rate)
-            if phase_changed:
-                reward += 5.0
+            reward += 5.0 * efficiency
         
         return shots, reward, done, {
             "total_ships": total_ship_cells,
             "hits": hit_ship_cells,
             "hit_rate": hit_rate,
             "efficiency": efficiency,
-            "moves_made": moves_made,
-            "max_moves": max_moves,
-            "curriculum_phase": self.curriculum_phase
         }
 
     def render(self, mode='human'):
@@ -346,7 +241,6 @@ def get_valid_placement_actions(env):
     return valid_actions
 
 def train_nested_mdp(init_env, active_env, num_episodes=50):
-    """Train the agents with a simplified training loop"""
     # Setup device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
@@ -360,7 +254,7 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
     )
     
     inner_agent = DQNAgent(
-        state_size=active_env.max_board_size,
+        state_size=active_env.board_size,
         action_size=active_env.action_space.n,
         device=device,
         is_placement_agent=False
@@ -392,9 +286,8 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
         # Play the game
         episode_reward = 0
         done = False
-        moves_made = 0
-        hits = 0
         total_shots = 0
+        hits = 0
         
         while not done:
             # Create 2-channel state
@@ -404,13 +297,9 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
             
             # Get valid actions
             valid_actions = set(range(active_env.action_space.n))
-            curr_valid = active_env._get_valid_actions()
-            valid_actions = valid_actions.intersection(curr_valid)
-            
-            # Remove already shot positions
-            for i in range(active_env.max_board_size):
-                for j in range(active_env.max_board_size):
-                    action_idx = i * active_env.max_board_size + j
+            for i in range(active_env.board_size):
+                for j in range(active_env.board_size):
+                    action_idx = i * active_env.board_size + j
                     if active_state[i, j] != 0:
                         valid_actions.discard(action_idx)
             
@@ -429,7 +318,6 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
                 continue
             
             # Update statistics
-            moves_made += 1
             total_shots += 1
             if reward > 0:
                 hits += 1
@@ -450,10 +338,10 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
                 curriculum_info=info
             )
             
-            # Print progress
-            hit_rate = hits / total_shots if total_shots > 0 else 0
-            if moves_made % 5 == 0:  # Print every 5 moves
-                print(f"Move {moves_made}: Reward={reward:.2f}, Hit Rate={hit_rate:.2f}, Epsilon={inner_agent.epsilon:.2f}")
+            # Print progress every 5 moves
+            if total_shots % 5 == 0:
+                hit_rate = hits / total_shots if total_shots > 0 else 0
+                print(f"Move {total_shots}: Reward={reward:.2f}, Hit Rate={hit_rate:.2f}, Epsilon={inner_agent.epsilon:.2f}")
             
             active_state = next_state
             episode_reward += reward
@@ -472,10 +360,8 @@ def train_nested_mdp(init_env, active_env, num_episodes=50):
         print(f"\nEpisode Summary:")
         print(f"Total Reward: {episode_reward:.2f}")
         print(f"Hit Rate: {hit_rate:.2f}")
-        print(f"Moves Made: {moves_made}")
+        print(f"Total Shots: {total_shots}")
         print(f"Epsilon: {inner_agent.epsilon:.2f}")
-        if 'curriculum_phase' in info:
-            print(f"Curriculum Phase: {info['curriculum_phase']}")
     
     # Plot training metrics
     metrics = inner_agent.get_metrics()

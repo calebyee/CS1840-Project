@@ -1,601 +1,559 @@
 Using device: cpu
 
 ========================= Episode 1/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=1.00
+Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=1.00
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
+Total Reward: 1.78
+Hit Rate: 0.14
+Moves Made: 14
 Epsilon: 1.00
 
 ========================= Episode 2/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=1.00
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.12
-Hit Rate: 0.17
-Moves Made: 18
+Total Reward: -2.95
+Hit Rate: 0.00
+Moves Made: 12
 Epsilon: 1.00
 
 ========================= Episode 3/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=2.17, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=0.02, Hit Rate=0.80, Epsilon=1.00
+Move 10: Reward=-0.08, Hit Rate=0.50, Epsilon=1.00
+Move 15: Reward=-0.28, Hit Rate=0.33, Epsilon=1.00
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.67
-Hit Rate: 0.17
+Total Reward: 4.25
+Hit Rate: 0.28
 Moves Made: 18
 Epsilon: 1.00
 
 ========================= Episode 4/50 =========================
 Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=1.00
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
+Total Reward: -0.69
+Hit Rate: 0.08
+Moves Made: 12
 Epsilon: 1.00
 
 ========================= Episode 5/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
+Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.99
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 1.71
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.99
 
 ========================= Episode 6/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.98
+Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=0.97
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.12
+Total Reward: 1.57
 Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Moves Made: 12
+Epsilon: 0.97
 
 ========================= Episode 7/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=2.00, Hit Rate=0.40, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.33, Epsilon=1.00
+Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.96
+Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=0.95
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.25
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 1.56
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.94
 
 ========================= Episode 8/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.33, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.93
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.92
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 5.53
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.71
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.92
 
 ========================= Episode 9/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.40, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.33, Epsilon=1.00
+Move 5: Reward=0.02, Hit Rate=1.00, Epsilon=0.91
+Move 10: Reward=-0.08, Hit Rate=0.60, Epsilon=0.90
+Move 15: Reward=-0.28, Hit Rate=0.40, Epsilon=0.89
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.62
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 10/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.62
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 11/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 12/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 13/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 14/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.26, Hit Rate=0.00, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 15/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.62
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 16/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.41
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 17/50 =========================
-Move 5: Reward=0.03, Hit Rate=0.80, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.40, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.33, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 8.59
-Hit Rate: 0.39
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 18/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.27, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.96
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 19/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=2.00, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 20/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=2.17, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 3.28
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 21/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 22/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 23/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.27, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 6.15
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 24/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.26, Hit Rate=0.27, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 5.30
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 25/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.07, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 6.05
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 26/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.40, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.33, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 3.42
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 27/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: -2.08
-Hit Rate: 0.06
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 28/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 29/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.27, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 4.62
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
-
-========================= Episode 30/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.07, Hit Rate=0.50, Epsilon=1.00
-Move 15: Reward=-0.26, Hit Rate=0.40, Epsilon=1.00
-[ERROR] Step error: Exceeded maximum moves
-
-Episode Summary:
-Total Reward: 6.71
+Total Reward: 4.46
 Hit Rate: 0.33
 Moves Made: 18
-Epsilon: 1.00
+Epsilon: 0.89
+
+========================= Episode 10/50 =========================
+Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=0.88
+Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.87
+Move 15: Reward=-0.29, Hit Rate=0.20, Epsilon=0.86
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 3.19
+Hit Rate: 0.19
+Moves Made: 16
+Epsilon: 0.86
+
+========================= Episode 11/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.85
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.84
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.69
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.84
+
+========================= Episode 12/50 =========================
+Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.83
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.82
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.72
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.82
+
+========================= Episode 13/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.81
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.80
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -2.95
+Hit Rate: 0.00
+Moves Made: 12
+Epsilon: 0.80
+
+========================= Episode 14/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.79
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.78
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.70
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.78
+
+========================= Episode 15/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.77
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.77
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.67
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.76
+
+========================= Episode 16/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.76
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.75
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 1.62
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.75
+
+========================= Episode 17/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.74
+Move 10: Reward=-0.10, Hit Rate=0.30, Epsilon=0.73
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 4.30
+Hit Rate: 0.23
+Moves Made: 13
+Epsilon: 0.73
+
+========================= Episode 18/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.72
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.71
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -2.95
+Hit Rate: 0.00
+Moves Made: 12
+Epsilon: 0.71
+
+========================= Episode 19/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.40, Epsilon=0.70
+Move 10: Reward=2.00, Hit Rate=0.30, Epsilon=0.69
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 4.76
+Hit Rate: 0.33
+Moves Made: 12
+Epsilon: 0.69
+
+========================= Episode 20/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.68
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.68
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.67
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.68
+
+========================= Episode 21/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.67
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.66
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 1.59
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.66
+
+========================= Episode 22/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.65
+Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.65
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 1.71
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.64
+
+========================= Episode 23/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.64
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.63
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -2.95
+Hit Rate: 0.00
+Moves Made: 12
+Epsilon: 0.63
+
+========================= Episode 24/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.62
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.62
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 1.61
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.61
+
+========================= Episode 25/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.61
+Move 10: Reward=-0.27, Hit Rate=0.20, Epsilon=0.60
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 4.14
+Hit Rate: 0.23
+Moves Made: 13
+Epsilon: 0.60
+
+========================= Episode 26/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.59
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.59
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.70
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.58
+
+========================= Episode 27/50 =========================
+Move 5: Reward=2.25, Hit Rate=0.40, Epsilon=0.58
+Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.57
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 4.06
+Hit Rate: 0.21
+Moves Made: 14
+Epsilon: 0.57
+
+========================= Episode 28/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.56
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.56
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 1.73
+Hit Rate: 0.17
+Moves Made: 12
+Epsilon: 0.55
+
+========================= Episode 29/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.55
+Move 10: Reward=2.00, Hit Rate=0.10, Epsilon=0.54
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: -0.68
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.54
+
+========================= Episode 30/50 =========================
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.54
+Move 10: Reward=-0.26, Hit Rate=0.20, Epsilon=0.53
+[ERROR] Step error: Exceeded maximum moves
+
+Episode Summary:
+Total Reward: 4.05
+Hit Rate: 0.21
+Moves Made: 14
+Epsilon: 0.53
 
 ========================= Episode 31/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.52
+Move 10: Reward=2.17, Hit Rate=0.30, Epsilon=0.52
+Move 15: Reward=-0.11, Hit Rate=0.33, Epsilon=0.51
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 0.46
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 8.30
+Hit Rate: 0.29
+Moves Made: 17
+Epsilon: 0.51
 
 ========================= Episode 32/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.26, Hit Rate=0.00, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.50
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.50
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.65
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.50
 
 ========================= Episode 33/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.08, Hit Rate=0.33, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.49
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.49
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 8.17
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.66
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.48
 
 ========================= Episode 34/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=0.48
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.47
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 4.62
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.72
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.47
 
 ========================= Episode 35/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.47
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.46
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.25
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.56
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.46
 
 ========================= Episode 36/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.46
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.45
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 4.78
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.67
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.45
 
 ========================= Episode 37/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.45
+Move 10: Reward=-0.28, Hit Rate=0.30, Epsilon=0.44
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 0.21
+Hit Rate: 0.25
+Moves Made: 12
+Epsilon: 0.44
 
 ========================= Episode 38/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=0.02, Hit Rate=0.80, Epsilon=0.44
+Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.43
+Move 15: Reward=-0.28, Hit Rate=0.33, Epsilon=0.43
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 1.08
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 4.33
+Hit Rate: 0.29
+Moves Made: 17
+Epsilon: 0.43
 
 ========================= Episode 39/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.42
+Move 10: Reward=2.00, Hit Rate=0.10, Epsilon=0.42
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.66
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.42
 
 ========================= Episode 40/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.41
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.41
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.75
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.56
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.41
 
 ========================= Episode 41/50 =========================
-Move 5: Reward=0.03, Hit Rate=1.00, Epsilon=1.00
-Move 10: Reward=-0.07, Hit Rate=0.60, Epsilon=1.00
-Move 15: Reward=-0.26, Hit Rate=0.47, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.40, Epsilon=0.40
+Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.40
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 7.29
-Hit Rate: 0.39
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 2.49
+Hit Rate: 0.25
+Moves Made: 12
+Epsilon: 0.40
 
 ========================= Episode 42/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.40, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.20, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.27, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.20, Epsilon=0.39
+Move 10: Reward=-0.09, Hit Rate=0.30, Epsilon=0.39
+Move 15: Reward=-0.29, Hit Rate=0.20, Epsilon=0.38
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 3.25
-Hit Rate: 0.22
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 4.08
+Hit Rate: 0.20
+Moves Made: 15
+Epsilon: 0.38
 
 ========================= Episode 43/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.26, Hit Rate=0.00, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
+Move 5: Reward=0.15, Hit Rate=1.00, Epsilon=0.38
+Move 10: Reward=-0.03, Hit Rate=0.90, Epsilon=0.38
+Move 15: Reward=-0.10, Hit Rate=0.67, Epsilon=0.37
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 0.04
-Hit Rate: 0.11
+Total Reward: 11.23
+Hit Rate: 0.56
 Moves Made: 18
-Epsilon: 1.00
+Epsilon: 0.37
 
 ========================= Episode 44/50 =========================
-Move 5: Reward=-0.22, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.37
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.36
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 0.46
-Hit Rate: 0.11
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -2.93
+Hit Rate: 0.00
+Moves Made: 12
+Epsilon: 0.36
 
 ========================= Episode 45/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.13, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.36
+Move 10: Reward=-0.28, Hit Rate=0.00, Epsilon=0.35
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.67
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.35
 
 ========================= Episode 46/50 =========================
-Move 5: Reward=2.25, Hit Rate=0.60, Epsilon=1.00
-Move 10: Reward=-0.24, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.27, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.35
+Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.35
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 6.15
-Hit Rate: 0.28
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 4.64
+Hit Rate: 0.38
+Moves Made: 13
+Epsilon: 0.34
 
 ========================= Episode 47/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.26, Hit Rate=0.00, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.34
+Move 10: Reward=-0.27, Hit Rate=0.30, Epsilon=0.34
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.33
-Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 0.24
+Hit Rate: 0.25
+Moves Made: 12
+Epsilon: 0.34
 
 ========================= Episode 48/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.60, Epsilon=0.33
+Move 10: Reward=2.17, Hit Rate=0.50, Epsilon=0.33
+Move 15: Reward=-0.29, Hit Rate=0.33, Epsilon=0.33
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: -2.25
-Hit Rate: 0.06
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: 4.18
+Hit Rate: 0.31
+Moves Made: 16
+Epsilon: 0.33
 
 ========================= Episode 49/50 =========================
-Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=1.00
-Move 10: Reward=-0.25, Hit Rate=0.10, Epsilon=1.00
-Move 15: Reward=-0.28, Hit Rate=0.07, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.32
+Move 10: Reward=-0.28, Hit Rate=0.10, Epsilon=0.32
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: -2.25
-Hit Rate: 0.06
-Moves Made: 18
-Epsilon: 1.00
+Total Reward: -0.70
+Hit Rate: 0.08
+Moves Made: 12
+Epsilon: 0.32
 
 ========================= Episode 50/50 =========================
-Move 5: Reward=2.00, Hit Rate=0.20, Epsilon=1.00
-Move 10: Reward=2.17, Hit Rate=0.30, Epsilon=1.00
-Move 15: Reward=-0.27, Hit Rate=0.20, Epsilon=1.00
+Move 5: Reward=-0.23, Hit Rate=0.00, Epsilon=0.31
+Move 10: Reward=-0.28, Hit Rate=0.20, Epsilon=0.31
 [ERROR] Step error: Exceeded maximum moves
 
 Episode Summary:
-Total Reward: 2.67
+Total Reward: 1.57
 Hit Rate: 0.17
-Moves Made: 18
-Epsilon: 1.00
+Moves Made: 12
+Epsilon: 0.31

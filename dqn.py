@@ -7,48 +7,141 @@ import numpy as np
 import torch.nn.functional as F
 import math
 
-class BattleshipMemory:
-    def __init__(self, max_patterns=1000):
+class ActionPatternTracker:
+    def __init__(self):
         self.successful_patterns = []
-        self.max_patterns = max_patterns
+        self.current_sequence = []
+        self.max_patterns = 1000
         
-    def add_pattern(self, hit_sequence):
-        if len(hit_sequence) > 1:
+    def add_action(self, action, hit):
+        self.current_sequence.append((action, hit))
+        if hit and len(self.current_sequence) > 1:
+            # Store successful sequences
             if len(self.successful_patterns) >= self.max_patterns:
-                self.successful_patterns.pop(0)
-            self.successful_patterns.append(hit_sequence)
-    
-    def get_suggested_action(self, current_state, valid_actions):
+                self.successful_patterns.pop(0)  # Remove oldest pattern
+            self.successful_patterns.append(self.current_sequence.copy())
+        if not hit:
+            self.current_sequence = []
+            
+    def get_suggested_action(self, valid_actions, state):
         if not self.successful_patterns or not valid_actions:
             return None
             
-        # Find recent hits in current state
-        hits = [(i, j) for i in range(10) for j in range(10) if current_state[i,j] == 1]
+        # Get current hits from state
+        state_array = np.asarray(state)
+        if len(state_array.shape) > 2:
+            state_array = state_array.squeeze()  # Remove extra dimensions
+            
+        # Ensure state array is 2D
+        if len(state_array.shape) != 2:
+            return None
+            
+        # Get hits from the 2D state array
+        hits = [(i, j) for i in range(state_array.shape[0]) for j in range(state_array.shape[1]) 
+                if np.any(state_array[i,j] == 1)]
+        
         if not hits:
             return None
             
-        # Look for similar patterns
-        last_hit = hits[-1]
+        # Look for patterns similar to current sequence
         for pattern in reversed(self.successful_patterns):  # Check recent patterns first
             if len(pattern) > len(hits):
                 # Check if current hits match start of pattern
                 pattern_start = pattern[:len(hits)]
                 if self._matches_pattern(hits, pattern_start):
-                    next_pos = pattern[len(hits)]
-                    action = next_pos[0] * 10 + next_pos[1]
-                    if action in valid_actions:
-                        return action
+                    next_action = pattern[len(hits)][0]
+                    if next_action in valid_actions:
+                        return next_action
         return None
     
     def _matches_pattern(self, hits, pattern):
-        # Normalize positions relative to first hit
-        hit_offset = hits[0]
-        pattern_offset = pattern[0]
+        # Convert hits to action sequence
+        hit_actions = [h[0] * 10 + h[1] for h in hits]
+        pattern_actions = [p[0] for p in pattern if p[1]]  # Only consider hits
         
-        normalized_hits = [(h[0] - hit_offset[0], h[1] - hit_offset[1]) for h in hits]
-        normalized_pattern = [(p[0] - pattern_offset[0], p[1] - pattern_offset[1]) for p in pattern]
+        if len(hit_actions) != len(pattern_actions):
+            return False
+            
+        # Check if the sequences match after normalizing positions
+        offset = pattern_actions[0] - hit_actions[0]
+        return all((ha + offset) % 100 == pa for ha, pa in zip(hit_actions[1:], pattern_actions[1:]))
+
+class PrioritizedReplayBuffer:
+    def __init__(self, capacity, alpha):
+        self.capacity = capacity
+        self.alpha = alpha  # How much prioritization to use (0 = none, 1 = full)
+        self.memory = []
+        self.priorities = np.zeros((capacity,), dtype=np.float32)
+        self.success_flags = np.zeros((capacity,), dtype=bool)  # Track successful moves
+        self.position = 0
+        self.size = 0
         
-        return normalized_hits == normalized_pattern
+    def push(self, state, action, reward, next_state, done, hit=False):
+        """Save a transition with success tracking"""
+        max_priority = max(self.priorities) if self.memory else 1.0
+        
+        if len(self.memory) < self.capacity:
+            self.memory.append(None)
+        
+        # Store transition
+        self.memory[self.position] = (state, action, reward, next_state, done)
+        
+        # Increase priority for successful actions
+        if hit:
+            max_priority *= 2.0
+            self.success_flags[self.position] = True
+        else:
+            self.success_flags[self.position] = False
+        
+        self.priorities[self.position] = max_priority
+        
+        # Update position and size
+        self.position = (self.position + 1) % self.capacity
+        self.size = min(self.size + 1, self.capacity)
+    
+    def sample(self, batch_size, beta):
+        """Sample a batch of transitions with success bonus"""
+        if len(self.memory) == 0:
+            return None
+            
+        # Calculate probabilities with success bonus
+        priorities = self.priorities[:self.size]
+        success_bonus = np.where(self.success_flags[:self.size], 2.0, 1.0)
+        probs = (priorities * success_bonus) ** self.alpha
+        probs = probs / probs.sum()
+        
+        # Sample indices based on probabilities
+        indices = np.random.choice(self.size, batch_size, p=probs)
+        
+        # Calculate importance sampling weights
+        weights = (self.size * probs[indices]) ** (-beta)
+        weights = weights / weights.max()  # Normalize weights
+        
+        # Get samples
+        batch = [self.memory[idx] for idx in indices]
+        states, actions, rewards, next_states, dones = zip(*batch)
+        
+        return (
+            np.array(states),
+            np.array(actions),
+            np.array(rewards),
+            np.array(next_states),
+            np.array(dones),
+            indices,
+            weights
+        )
+    
+    def update_priorities(self, indices, priorities):
+        """Update priorities of sampled transitions"""
+        for idx, priority in zip(indices, priorities.flatten()):
+            self.priorities[idx] = priority + 1e-5  # Small constant to ensure non-zero probabilities
+            # Maintain success bonus
+            if self.success_flags[idx]:
+                self.priorities[idx] *= 2.0
+    
+    def __len__(self):
+        """Return the current size of memory"""
+        return self.size
 
 class DQN(nn.Module):
     def __init__(self, input_channels, action_size, is_placement_agent=False):
@@ -111,8 +204,8 @@ class DQNAgent:
         # Hyperparameters
         self.gamma = 0.99  # discount factor
         self.epsilon = 1.0  # exploration rate
-        self.epsilon_min = 0.01
-        self.epsilon_decay = 0.995
+        self.epsilon_min = 0.05  # Reduced minimum epsilon
+        self.epsilon_decay = 0.997  # Faster decay
         self.batch_size = 64
         self.learning_rate = 0.001
         self.tau = 0.001  # soft update parameter
@@ -131,6 +224,9 @@ class DQNAgent:
         self.optimizer = optim.Adam(self.policy_net.parameters(), lr=self.learning_rate)
         self.memory = PrioritizedReplayBuffer(10000, self.alpha)
         
+        # Pattern tracking
+        self.pattern_tracker = ActionPatternTracker()
+        
         # Training metrics
         self.total_steps = 0
         self.episode_rewards = []
@@ -142,67 +238,116 @@ class DQNAgent:
         self.exploitation_steps = 0
         self.action_values = {}  # Track Q-values for each action
         
+        # Q-value thresholds for adaptive exploration
+        self.q_value_threshold = 1.0  # Threshold for considering an action high-value
+        
+        # Reward normalization
+        self.reward_deque = deque(maxlen=1000)
+        self.reward_mean = 0
+        self.reward_std = 1
+        
+        # Performance tracking
+        self.recent_hit_rates = deque(maxlen=100)
+        self.recent_rewards = deque(maxlen=100)
+        
         # For epsilon decay
         self.epsilon_start = 1.0
-        self.epsilon_end = 0.01
+        self.epsilon_end = 0.05
+    
+    def update_reward_stats(self, reward):
+        """Update running statistics for reward normalization"""
+        self.reward_deque.append(reward)
+        if len(self.reward_deque) > 1:
+            self.reward_mean = np.mean(self.reward_deque)
+            self.reward_std = np.std(self.reward_deque) + 1e-8
+    
+    def normalize_reward(self, reward):
+        """Normalize reward using running statistics"""
+        self.update_reward_stats(reward)
+        if len(self.reward_deque) > 1:
+            normalized = (reward - self.reward_mean) / self.reward_std
+            return np.clip(normalized, -10, 10)  # Clip normalized rewards for stability
+        return reward
     
     def update_epsilon(self):
-        """Update epsilon value with decay"""
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
+        """Update epsilon value with much slower decay"""
+        avg_q = np.mean(self.q_value_history[-100:]) if self.q_value_history else 0
+        avg_hit_rate = np.mean(self.recent_hit_rates) if self.recent_hit_rates else 0
+        
+        if avg_q > self.q_value_threshold and avg_hit_rate > 0.3:
+            self.epsilon = max(self.epsilon_min, self.epsilon * 0.999)  # Even slower decay
+        else:
+            self.epsilon = max(self.epsilon_min, self.epsilon * 0.9995)  # Very slow decay
+        
         self.epsilons.append(self.epsilon)
     
     def choose_action(self, state, valid_actions):
-        """Choose an action using epsilon-greedy policy"""
+        """Choose action using smart exploration and pattern matching"""
         if not valid_actions:
             return None
-            
-        # Get Q-values for metrics tracking
+        
+        # Get Q-values and update tracking
         with torch.no_grad():
             q_values = self.policy_net(state)
-            if len(valid_actions) > 0:
-                valid_q_values = q_values.squeeze()[list(valid_actions)]
-                self.q_value_history.append(float(valid_q_values.max()))
-                
-                # Track Q-values for each action
-                for action in valid_actions:
-                    q_val = float(q_values.squeeze()[action])
-                    if action not in self.action_values:
-                        self.action_values[action] = []
-                    self.action_values[action].append(q_val)
+            valid_q_values = q_values.squeeze()[list(valid_actions)]
+            max_q = float(valid_q_values.max())
+            self.q_value_history.append(max_q)
             
-        if random.random() < self.epsilon:
+            # Track Q-values for each action
+            for action in valid_actions:
+                q_val = float(q_values.squeeze()[action])
+                if action not in self.action_values:
+                    self.action_values[action] = []
+                self.action_values[action].append(q_val)
+        
+        # Check pattern tracker for suggested action
+        suggested_action = self.pattern_tracker.get_suggested_action(valid_actions, state.cpu().numpy().squeeze())
+        if suggested_action is not None and random.random() < 0.7:  # 70% chance to use suggested action
+            return suggested_action
+        
+        # Adaptive exploration based on Q-values
+        if max_q > self.q_value_threshold:
+            explore_prob = self.epsilon * 0.5  # Reduce exploration for high-value states
+        else:
+            explore_prob = self.epsilon
+        
+        if random.random() < explore_prob:
             self.exploration_steps += 1
-            return random.choice(list(valid_actions))
-            
+            # Smart exploration using softmax over Q-values
+            temperature = 0.5  # Lower temperature = more exploitation
+            probs = F.softmax(valid_q_values / temperature, dim=0).cpu().numpy()
+            return np.random.choice(list(valid_actions), p=probs)
+        
         self.exploitation_steps += 1
-        
-        # Mask invalid actions with large negative values
-        mask = torch.ones(self.action_size) * float('-inf')
-        mask = mask.to(self.device)
-        for action in valid_actions:
-            mask[action] = 0
-        
-        q_values = q_values + mask
-        return int(q_values.argmax().item())
+        return list(valid_actions)[valid_q_values.argmax().item()]
     
     def update(self, state, action, reward, next_state, done, hit=False, curriculum_info=None):
-        """Update the agent's policy"""
+        """Update agent with improved learning from successful actions"""
         # Track metrics
         self.episode_rewards.append(reward)
         if curriculum_info and 'hit_rate' in curriculum_info:
-            self.hit_rates.append(curriculum_info['hit_rate'])
+            hit_rate = curriculum_info['hit_rate']
+            self.hit_rates.append(hit_rate)
+            self.recent_hit_rates.append(hit_rate)
         
-        # Clip rewards for stability
-        reward = np.clip(reward, -10, 10)
+        # Update pattern tracker
+        self.pattern_tracker.add_action(action, hit)
         
-        # Store transition in memory
-        self.memory.push(state, action, reward, next_state, done)
+        # Normalize reward
+        normalized_reward = self.normalize_reward(reward)
         
-        # Only train if we have enough samples
+        # Increase priority for transitions that led to hits
+        if hit:
+            priority_multiplier = 2.0
+        else:
+            priority_multiplier = 1.0
+        
+        self.memory.push(state, action, normalized_reward, next_state, done, priority_multiplier)
+        
         if len(self.memory) < self.batch_size:
             return 0.0
         
-        # Sample a batch and train
+        # Rest of the update function remains the same...
         batch = self.memory.sample(self.batch_size, self.beta)
         if batch is None:
             return 0.0
@@ -217,50 +362,36 @@ class DQNAgent:
         dones = torch.FloatTensor(dones).to(self.device)
         weights = torch.FloatTensor(weights).to(self.device)
         
-        # Handle state shapes
-        if len(states.shape) == 5:  # [batch, 1, channels, height, width]
+        if len(states.shape) == 5:
             states = states.squeeze(1)
         if len(next_states.shape) == 5:
             next_states = next_states.squeeze(1)
         
-        # Get current Q values
         current_Q = self.policy_net(states).gather(1, actions.unsqueeze(1))
         
-        # Compute target Q values with Double DQN
         with torch.no_grad():
-            # Get actions from policy network
             next_actions = self.policy_net(next_states).argmax(1, keepdim=True)
-            # Get Q-values from target network
             next_Q = self.target_net(next_states).gather(1, next_actions)
             target_Q = rewards.unsqueeze(1) + (self.gamma * next_Q * (1 - dones.unsqueeze(1)))
         
-        # Clip Q-values for stability
         current_Q = torch.clamp(current_Q, -100, 100)
         target_Q = torch.clamp(target_Q, -100, 100)
         
-        # Compute TD errors for updating priorities
         td_errors = torch.abs(current_Q - target_Q).detach().cpu().numpy()
-        
-        # Update priorities in buffer
         self.memory.update_priorities(indices, td_errors + 1e-6)
         
-        # Compute loss with importance sampling weights
         loss = (weights * F.smooth_l1_loss(current_Q, target_Q, reduction='none')).mean()
         
-        # Track loss
         self.losses.append(float(loss.item()))
         
-        # Optimize
         self.optimizer.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(self.policy_net.parameters(), max_norm=1.0)
         self.optimizer.step()
         
-        # Soft update target network
         for target_param, policy_param in zip(self.target_net.parameters(), self.policy_net.parameters()):
             target_param.data.copy_(self.tau * policy_param.data + (1.0 - self.tau) * target_param.data)
         
-        # Update epsilon and beta
         self.update_epsilon()
         self.beta = min(1.0, self.beta + self.beta_increment)
         
@@ -328,39 +459,6 @@ class DQNAgent:
         if hit:
             return 20
         return -1
-
-    def choose_action(self, state, valid_actions):
-        if len(valid_actions) == 0:
-            return None
-            
-        # Get Q-values before decision
-        with torch.no_grad():
-            if not torch.is_tensor(state):
-                state = torch.FloatTensor(state).to(self.device)
-            q_values = self.policy_net(state)
-            valid_q_values = q_values.squeeze()[list(valid_actions)]
-            max_q = valid_q_values.max().item()
-            self.q_value_history.append(max_q)
-            
-            # Track action values
-            for action in valid_actions:
-                q_val = q_values.squeeze()[action].item()
-                if action not in self.action_values:
-                    self.action_values[action] = []
-                self.action_values[action].append(q_val)
-            
-        if random.random() < self.epsilon:
-            self.exploration_steps += 1
-            action = random.choice(list(valid_actions))
-            return action
-        
-        self.exploitation_steps += 1
-        action = int(q_values.squeeze().argmax().item())
-        if action in valid_actions:
-            return action
-        else:
-            self.exploration_steps += 1
-            return random.choice(list(valid_actions))
 
     def save(self, path):
         """Save the agent's networks and training state"""
@@ -504,70 +602,6 @@ class DQNAgent:
     def update_beta(self):
         """Update beta value for importance sampling"""
         self.beta = min(self.beta_end, self.beta + self.beta_increment)
-
-class PrioritizedReplayBuffer:
-    def __init__(self, capacity, alpha):
-        self.capacity = capacity
-        self.alpha = alpha  # How much prioritization to use (0 = none, 1 = full)
-        self.memory = []
-        self.priorities = np.zeros((capacity,), dtype=np.float32)
-        self.position = 0
-        self.size = 0
-    
-    def push(self, state, action, reward, next_state, done):
-        """Save a transition"""
-        max_priority = max(self.priorities) if self.memory else 1.0
-        
-        if len(self.memory) < self.capacity:
-            self.memory.append(None)
-        
-        # Store transition
-        self.memory[self.position] = (state, action, reward, next_state, done)
-        self.priorities[self.position] = max_priority
-        
-        # Update position
-        self.position = (self.position + 1) % self.capacity
-        self.size = min(self.size + 1, self.capacity)
-    
-    def sample(self, batch_size, beta):
-        """Sample a batch of transitions"""
-        if len(self.memory) == 0:
-            return None
-            
-        # Calculate probabilities
-        priorities = self.priorities[:self.size]
-        probs = priorities ** self.alpha
-        probs = probs / probs.sum()
-        
-        # Sample indices based on probabilities
-        indices = np.random.choice(self.size, batch_size, p=probs)
-        
-        # Calculate importance sampling weights
-        weights = (self.size * probs[indices]) ** (-beta)
-        weights = weights / weights.max()  # Normalize weights
-        
-        # Get samples
-        batch = [self.memory[idx] for idx in indices]
-        states, actions, rewards, next_states, dones = zip(*batch)
-        
-        return (
-            np.array(states),
-            np.array(actions),
-            np.array(rewards),
-            np.array(next_states),
-            np.array(dones),
-            indices,
-            weights
-        )
-    
-    def update_priorities(self, indices, priorities):
-        """Update priorities of sampled transitions"""
-        for idx, priority in zip(indices, priorities.flatten()):
-            self.priorities[idx] = priority + 1e-5  # Small constant to ensure non-zero probabilities
-    
-    def __len__(self):
-        """Return the current size of memory"""
-        return self.size
 
 def train_nested_mdp(init_env, active_env, num_episodes=50):
     """Train the placement agent for the nested MDP.
