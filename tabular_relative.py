@@ -6,142 +6,9 @@ import matplotlib.pyplot as plt
 import os
 import pickle
 import random
+from tabular import BattleshipPlacementEnv
 
-# QLearningAgent
-class QLearningAgent:
-    def __init__(self, state_size, action_size, learning_rate=0.1, discount_factor=0.95, 
-                 exploration_rate=1.0, exploration_decay=0.995, min_exploration=0.01):
-        self.state_size = state_size
-        self.action_size = action_size
-        self.lr = learning_rate
-        self.gamma = discount_factor
-        self.epsilon = exploration_rate
-        self.epsilon_decay = exploration_decay
-        self.min_epsilon = min_exploration
-        
-        # Initialize Q-table with small random values
-        self.q_table = {}
-
-    def _get_state_key(self, state):
-        """Convert state dictionary to a hashable key"""
-        if isinstance(state, dict):
-            board = state['board']
-            last_hit = state['last_hit']
-            shot_history = state['shot_history']
-            
-            # Convert board to tuple for hashing
-            board_tuple = tuple(map(tuple, board))
-            
-            # Convert shot history to tuple of tuples
-            history_tuple = tuple((pos, hit) for pos, hit in shot_history)
-            
-            # Create hashable state representation
-            return (board_tuple, last_hit, history_tuple)
-        else:
-            # Handle flat state arrays (for placement phase)
-            return tuple(state.flatten())
-
-    def choose_action(self, state, valid_actions):
-        state_key = self._get_state_key(state)
-        
-        # Initialize state in Q-table if not seen before
-        if state_key not in self.q_table:
-            self.q_table[state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
-        
-        # Epsilon-greedy action selection
-        if random.random() < self.epsilon:
-            return random.choice(valid_actions)
-        else:
-            # Choose best valid action
-            valid_q_values = [(action, self.q_table[state_key][action]) for action in valid_actions]
-            return max(valid_q_values, key=lambda x: x[1])[0]
-
-    def update(self, state, action, reward, next_state, valid_next_actions, hit=None):
-        state_key = self._get_state_key(state)
-        next_state_key = self._get_state_key(next_state)
-        
-        # Initialize states in Q-table if not seen before
-        if state_key not in self.q_table:
-            self.q_table[state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
-        if next_state_key not in self.q_table:
-            self.q_table[next_state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
-        
-        # Get maximum Q-value for valid next actions only
-        next_q_values = [self.q_table[next_state_key][a] for a in valid_next_actions]
-        best_next_value = max(next_q_values) if next_q_values else 0
-        
-        # Q-learning update
-        current_q = self.q_table[state_key][action]
-        td_target = reward + self.gamma * best_next_value
-        td_error = td_target - current_q
-        self.q_table[state_key][action] += self.lr * td_error
-
-    def decay_exploration(self):
-        self.epsilon = max(self.min_epsilon, self.epsilon * self.epsilon_decay)
-
-# BattleshipPlacementEnv
-class BattleshipPlacementEnv(gym.Env):
-    metadata = {'render.modes': ['human']}
-
-    def __init__(self, board_size=10, ship_sizes=[5, 4, 3, 3, 2]):
-        super(BattleshipPlacementEnv, self).__init__()
-        self.board_size = board_size
-        self.ship_sizes = ship_sizes
-        self.current_ship_index = 0
-
-        self.action_space = spaces.MultiDiscrete([board_size, board_size, 2])
-        self.observation_space = spaces.Box(low=0, high=1, shape=(board_size, board_size), dtype=np.int8)
-
-        self.reset()
-
-    def reset(self):
-        self.board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
-        self.current_ship_index = 0
-        self.done = False
-        self.ship_positions = []  # Store ship positions and sizes for reward calculation
-        return self.board
-
-    def step(self, action):
-        row, col, orientation = action
-        ship_size = self.ship_sizes[self.current_ship_index]
-
-        if not self._is_valid_placement(row, col, ship_size, orientation):
-            return self.board, -1, False, {"error": "Invalid placement"}
-
-        self._place_ship(row, col, ship_size, orientation)
-        self.ship_positions.append((row, col, orientation, ship_size))
-        self.current_ship_index += 1
-
-        if self.current_ship_index >= len(self.ship_sizes):
-            self.done = True
-            reward = 0
-        else:
-            reward = 0
-
-        return self.board, reward, self.done, {}
-
-    def _is_valid_placement(self, row, col, ship_size, orientation):
-        if orientation == 0:
-            if col + ship_size > self.board_size or np.any(self.board[row, col:col + ship_size] == 1):
-                return False
-        else:
-            if row + ship_size > self.board_size or np.any(self.board[row:row + ship_size, col] == 1):
-                return False
-        return True
-
-    def _place_ship(self, row, col, ship_size, orientation):
-        if orientation == 0:
-            self.board[row, col:col + ship_size] = 1
-        else:
-            self.board[row:row + ship_size, col] = 1
-
-    def render(self, mode='human'):
-        print(self.board)
-
-# BattleshipAttackEnv
 class BattleshipAttackEnv(gym.Env):
-    metadata = {'render.modes': ['human']}
-
     def __init__(self, board_size=10):
         super(BattleshipAttackEnv, self).__init__()
         self.board_size = board_size
@@ -159,7 +26,7 @@ class BattleshipAttackEnv(gym.Env):
         self.relative_actions.append(None)  # Random action
         
         self.action_space = spaces.Discrete(len(self.relative_actions))
-        self.observation_space = spaces.Box(low=0, high=1, shape=(board_size, board_size), dtype=np.int8)
+        self.observation_space = spaces.Box(low=-1, high=1, shape=(board_size, board_size), dtype=np.int8)
         
         # Shot history for each player
         self.agent_shot_history = []  # List of (pos, hit) tuples
@@ -180,7 +47,7 @@ class BattleshipAttackEnv(gym.Env):
         self.opponent_shot_history = []
         self.agent_last_hit = None
         self.opponent_last_hit = None
-        return self.agent_shots
+        return self.get_state_representation()
 
     def get_valid_relative_actions(self, is_opponent=False):
         """Get valid relative actions based on last hit and board state"""
@@ -209,13 +76,13 @@ class BattleshipAttackEnv(gym.Env):
         valid_actions.append(len(self.relative_actions) - 1)
         return valid_actions
 
-    def relative_to_absolute(self, action, last_hit):
+    def relative_to_absolute(self, action, last_hit, shots):
         """Convert relative action to absolute board position"""
         if action == len(self.relative_actions) - 1:  # Random action
             valid_positions = []
             for i in range(self.board_size):
                 for j in range(self.board_size):
-                    if self.agent_shots[i, j] == 0:
+                    if shots[i, j] == 0:
                         valid_positions.append((i, j))
             if not valid_positions:
                 return None
@@ -226,7 +93,7 @@ class BattleshipAttackEnv(gym.Env):
             valid_positions = []
             for i in range(self.board_size):
                 for j in range(self.board_size):
-                    if self.agent_shots[i, j] == 0:
+                    if shots[i, j] == 0:
                         valid_positions.append((i, j))
             if not valid_positions:
                 return None
@@ -237,7 +104,8 @@ class BattleshipAttackEnv(gym.Env):
         new_y = last_hit[1] + dy
         
         if (0 <= new_x < self.board_size and 
-            0 <= new_y < self.board_size):
+            0 <= new_y < self.board_size and
+            shots[new_x, new_y] == 0):
             return (new_x, new_y)
         return None
 
@@ -249,13 +117,13 @@ class BattleshipAttackEnv(gym.Env):
         last_hit = self.opponent_last_hit if is_opponent else self.agent_last_hit
         
         # Convert relative action to absolute position
-        position = self.relative_to_absolute(action, last_hit)
+        position = self.relative_to_absolute(action, last_hit, shots)
         if position is None:
-            return shots, -1, False, {'error': 'Invalid position'}
+            return self.get_state_representation(is_opponent), -1, False, {'error': 'Invalid position'}
         
         row, col = position
         if shots[row, col] != 0:  # Position already shot
-            return shots, -1, False, {'error': 'Position already shot'}
+            return self.get_state_representation(is_opponent), -1, False, {'error': 'Position already shot'}
 
         # Process the shot
         hit = target_board[row, col] == 1
@@ -271,9 +139,9 @@ class BattleshipAttackEnv(gym.Env):
         
         # Check if all ships are sunk
         if np.sum(target_board == 1) == np.sum((shots == 1) & (target_board == 1)):
-            return shots, 10, True, {'game_over': True}
+            return self.get_state_representation(is_opponent), 10, True, {'game_over': True}
         
-        return shots, 1 if hit else -1, False, {}
+        return self.get_state_representation(is_opponent), 1 if hit else -1, False, {}
 
     def get_state_representation(self, is_opponent=False):
         """Get a state representation that includes shot history"""
@@ -299,18 +167,101 @@ class BattleshipAttackEnv(gym.Env):
         print("\nAgent's Shots:")
         print(self.agent_shots)
         print("\nOpponent's Shots:")
-        print(self.opponent_shots)
+        print(self.opponent_shots) 
 
-def get_valid_actions(env, shots):
-    """Helper function to get valid actions (unshot positions)"""
-    valid_actions = []
-    for i in range(env.board_size):
-        for j in range(env.board_size):
-            if shots[i, j] == 0:  # Position hasn't been shot at
-                action = i * env.board_size + j
-                valid_actions.append(action)
-    return valid_actions
+class QLearningAgent:
+    def __init__(self, state_size, action_size, learning_rate=0.1, discount_factor=0.95, 
+                 exploration_rate=1.0, exploration_decay=0.995, min_exploration=0.01):
+        self.state_size = state_size
+        self.action_size = action_size
+        self.lr = learning_rate
+        self.gamma = discount_factor
+        self.epsilon = exploration_rate
+        self.epsilon_decay = exploration_decay
+        self.min_epsilon = min_exploration
+        
+        # Initialize Q-table with dictionary for sparse state representation
+        self.q_table = {}
 
+    def _get_state_key(self, state):
+        """Convert state dictionary to a hashable key"""
+        if isinstance(state, dict):
+            board = state['board']
+            last_hit = state['last_hit']
+            shot_history = state['shot_history']
+            
+            # Convert board to tuple for hashing
+            board_tuple = tuple(map(tuple, board))
+            
+            # Convert shot history to tuple of tuples
+            history_tuple = tuple((tuple(pos), hit) for pos, hit in shot_history)
+            
+            # Create hashable state representation
+            return (board_tuple, last_hit, history_tuple)
+        else:
+            # Handle flat state arrays (for placement phase)
+            return tuple(state.flatten())
+
+    def choose_action(self, state, valid_actions):
+        state_key = self._get_state_key(state)
+        
+        # Initialize state in Q-table if not seen before
+        if state_key not in self.q_table:
+            self.q_table[state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
+        
+        # Epsilon-greedy action selection
+        if random.random() < self.epsilon:
+            return random.choice(valid_actions)
+        else:
+            # Choose best valid action
+            valid_q_values = [(action, self.q_table[state_key][action]) for action in valid_actions]
+            return max(valid_q_values, key=lambda x: x[1])[0]
+
+    def update(self, state, action, reward, next_state, valid_next_actions):
+        state_key = self._get_state_key(state)
+        next_state_key = self._get_state_key(next_state)
+        
+        # Initialize states in Q-table if not seen before
+        if state_key not in self.q_table:
+            self.q_table[state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
+        if next_state_key not in self.q_table:
+            self.q_table[next_state_key] = np.random.uniform(low=0, high=0.1, size=self.action_size)
+        
+        # Get maximum Q-value for valid next actions only
+        next_q_values = [self.q_table[next_state_key][a] for a in valid_next_actions]
+        best_next_value = max(next_q_values) if next_q_values else 0
+        
+        # Q-learning update
+        current_q = self.q_table[state_key][action]
+        td_target = reward + self.gamma * best_next_value
+        td_error = td_target - current_q
+        self.q_table[state_key][action] += self.lr * td_error
+
+    def decay_exploration(self):
+        self.epsilon = max(self.min_epsilon, self.epsilon * self.epsilon_decay)
+
+def hunt_and_target_shot(env, last_hit=None):
+    """
+    Implements a hunt-and-target strategy:
+    - If there's a hit, try adjacent squares
+    - Otherwise, shoot randomly at unshot squares
+    """
+    # If we have a last hit, try adjacent squares first
+    if last_hit is not None:
+        x, y = last_hit
+        # Try adjacent squares (North, South, East, West)
+        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            new_x, new_y = x + dx, y + dy
+            if (0 <= new_x < env.board_size and 
+                0 <= new_y < env.board_size and 
+                env.opponent_shots[new_x, new_y] == 0):
+                # Convert to relative action index
+                for i, action in enumerate(env.relative_actions[:-1]):  # Exclude random action
+                    if action == (dx, dy):
+                        return i
+                
+    # If no last hit or no valid adjacent squares, use random action
+    return len(env.relative_actions) - 1  # Random action index
 
 def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes=100):
     # Initialize agent
@@ -325,6 +276,9 @@ def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes
 
     turns_per_game = []
     agent_wins = []  # 1 for win, 0 for loss
+    
+    # Create checkpoints directory if it doesn't exist
+    os.makedirs("checkpoints_relative", exist_ok=True)
     
     for episode in range(outer_episodes):
         print(f"\nStarting episode {episode + 1}/{outer_episodes}")
@@ -353,7 +307,6 @@ def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes
             agent_state = next_state
 
         # Random opponent placement
-        opponent_env = BattleshipPlacementEnv()
         opponent_board = np.zeros((init_env.board_size, init_env.board_size))
         for ship_size in init_env.ship_sizes:
             placed = False
@@ -397,15 +350,14 @@ def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes
                     print(f"Turn {agent_turns + opponent_turns}: Agent shot - {'Hit!' if hit else 'Miss'}")
                     
                     valid_next_actions = active_env.get_valid_relative_actions()
-                    next_state_rep = active_env.get_state_representation()
-                    agent_inner.update(inner_state, inner_action, reward, next_state_rep, valid_next_actions, hit)
+                    agent_inner.update(inner_state, inner_action, reward, next_state, valid_next_actions)
                     
                     if inner_done:
                         print(f"Agent wins! All opponent ships sunk in {agent_turns} shots!")
                         agent_wins.append(1)
                         break
 
-                    inner_state = next_state_rep
+                    inner_state = next_state
                 current_player = 2  # Switch to opponent's turn
             
             else:
@@ -439,6 +391,14 @@ def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes
                     valid_next_actions.append(next_action)
             agent_outer.update(state.flatten(), action, 1.0, next_state.flatten(), valid_next_actions)
 
+        # Save checkpoints every 50 episodes
+        if episode % 50 == 0:
+            print(f"Saving checkpoint at episode {episode}")
+            with open(f"checkpoints_relative/agent1_placement_{episode}.pkl", 'wb') as f:
+                pickle.dump(agent_outer, f)
+            with open(f"checkpoints_relative/agent1_attack_{episode}.pkl", 'wb') as f:
+                pickle.dump(agent_inner, f)
+
         # Decay exploration rates
         agent_outer.decay_exploration()
         agent_inner.decay_exploration()
@@ -447,30 +407,13 @@ def train_against_random(init_env, active_env, outer_episodes=20, inner_episodes
         print(f"Agent shots: {agent_turns}, Opponent shots: {opponent_turns}")
         print("-" * 50)
 
-    return agent_outer, agent_inner, turns_per_game, agent_wins
+    # Save final checkpoint
+    with open(f"checkpoints_relative/agent1_placement_final.pkl", 'wb') as f:
+        pickle.dump(agent_outer, f)
+    with open(f"checkpoints_relative/agent1_attack_final.pkl", 'wb') as f:
+        pickle.dump(agent_inner, f)
 
-def hunt_and_target_shot(env, last_hit=None):
-    """
-    Implements a hunt-and-target strategy:
-    - If there's a hit, try adjacent squares
-    - Otherwise, shoot randomly at unshot squares
-    """
-    # If we have a last hit, try adjacent squares first
-    if last_hit is not None:
-        x, y = last_hit
-        # Try adjacent squares (North, South, East, West)
-        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            new_x, new_y = x + dx, y + dy
-            if (0 <= new_x < env.board_size and 
-                0 <= new_y < env.board_size and 
-                env.opponent_shots[new_x, new_y] == 0):
-                # Convert to relative action index
-                for i, action in enumerate(env.relative_actions[:-1]):  # Exclude random action
-                    if action == (dx, dy):
-                        return i
-                
-    # If no last hit or no valid adjacent squares, use random action
-    return len(env.relative_actions) - 1  # Random action index
+    return agent_outer, agent_inner, turns_per_game, agent_wins
 
 if __name__ == "__main__":
     # Create instances of the environments
@@ -482,8 +425,6 @@ if __name__ == "__main__":
     
     # Plot training results
     plt.figure(figsize=(10, 6))
-    
-    # Plot turns per game with color-coded points
     episodes = range(1, len(turns_per_game) + 1)
     
     # Create scatter plot with different colors for wins/losses
@@ -508,4 +449,4 @@ if __name__ == "__main__":
     print(f"Average turns per game: {np.mean(turns_per_game):.1f}")
     
     plt.tight_layout()
-    plt.show()
+    plt.show() 

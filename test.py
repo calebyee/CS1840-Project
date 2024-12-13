@@ -4,7 +4,9 @@ import random
 import pickle
 import os
 import glob
-from tabular import BattleshipPlacementEnv, BattleshipAttackEnv, QLearningAgent, get_valid_actions
+from tabular_relative import BattleshipAttackEnv, QLearningAgent
+from tabular import BattleshipPlacementEnv
+from dqn_relative import DQNAgent
 
 def random_shot(env, shots):
     """Generate a random valid shot"""
@@ -18,7 +20,7 @@ def random_shot(env, shots):
         return random.choice(valid_positions)
     return None
 
-def evaluate_agent(placement_agent, attack_agent, num_games=20):
+def evaluate_agent(placement_agent, attack_agent, num_games=10):
     """Evaluate agent against random opponent"""
     wins = 0
     total_moves = []
@@ -38,7 +40,14 @@ def evaluate_agent(placement_agent, attack_agent, num_games=20):
                 if init_env._is_valid_placement(row, col, init_env.ship_sizes[init_env.current_ship_index], orientation):
                     valid_actions.append(action)
             
-            action = placement_agent.choose_action(state.flatten(), valid_actions)
+            # Convert state to dictionary format for DQN
+            state_dict = {
+                'board': state,
+                'last_hit': None,
+                'shot_history': []
+            }
+            
+            action = placement_agent.choose_action(state_dict, valid_actions)
             row, col, orientation = np.unravel_index(action, init_env.action_space.nvec)
             state, _, done, _ = init_env.step((row, col, orientation))
         
@@ -68,41 +77,34 @@ def evaluate_agent(placement_agent, attack_agent, num_games=20):
         active_env.opponent_board = opponent_board
         
         # Battle phase
-        state = active_env.agent_shots
+        state = active_env.get_state_representation()  # Get dictionary state
         done = False
         moves = 0
         
         while not done and moves < 200:  # Add move limit to prevent infinite games
             # Agent's turn
-            valid_actions = []
-            for i in range(active_env.board_size):
-                for j in range(active_env.board_size):
-                    if active_env.agent_shots[i, j] == 0:
-                        valid_actions.append(i * active_env.board_size + j)
+            valid_actions = active_env.get_valid_relative_actions()
+            action = attack_agent.choose_action(state, valid_actions)
             
-            action = attack_agent.choose_action(state.flatten(), valid_actions)
-            if action is None:
-                break
-                
-            row, col = np.unravel_index(action, (active_env.board_size, active_env.board_size))
-            state, _, agent_done, _ = active_env.step((row, col))
+            next_state, reward, agent_done, info = active_env.step(action)
             moves += 1
             
+            if 'error' in info:
+                continue
+                
             if agent_done:
                 wins += 1
                 break
             
             # Random opponent's turn
-            opponent_action = random_shot(active_env, active_env.opponent_shots)
-            if opponent_action is None:
-                break
-                
-            opp_row, opp_col = opponent_action
-            _, _, opponent_done, _ = active_env.step((opp_row, opp_col), is_opponent=True)
+            opponent_action = len(active_env.relative_actions) - 1  # Random action
+            _, _, opponent_done, _ = active_env.step(opponent_action, is_opponent=True)
             moves += 1
             
             if opponent_done:
                 break
+            
+            state = next_state
             
         total_moves.append(moves)
     
@@ -110,14 +112,18 @@ def evaluate_agent(placement_agent, attack_agent, num_games=20):
 
 def find_checkpoints(checkpoint_dir):
     """Find all available checkpoint pairs and their episode numbers"""
-    placement_files = glob.glob(os.path.join(checkpoint_dir, "placement_agent_*.pkl"))
-    attack_files = glob.glob(os.path.join(checkpoint_dir, "attack_agent_*.pkl"))
+    agent_placement_files = glob.glob(os.path.join(checkpoint_dir, "agent_placement_*.pt"))
     
-    # Extract episode numbers and ensure both placement and attack checkpoints exist
+    # Extract episode numbers and ensure all necessary files exist
     episodes = []
-    for p_file in placement_files:
-        episode = int(p_file.split("_")[-1].split(".")[0])
-        if os.path.exists(os.path.join(checkpoint_dir, f"attack_agent_{episode}.pkl")):
+    for p_file in agent_placement_files:
+        episode_str = p_file.split("_")[-1].split(".")[0]
+        if episode_str == "final":
+            continue  # Skip the final checkpoint
+        
+        episode = int(episode_str)
+        if all(os.path.exists(os.path.join(checkpoint_dir, f"agent_{prefix}_{episode}.pt")) 
+               for prefix in ["placement", "attack"]):
             episodes.append(episode)
     
     return sorted(episodes)
@@ -130,47 +136,57 @@ def test_and_plot(checkpoint_dir):
         print("No checkpoint pairs found in directory:", checkpoint_dir)
         return
     
-    win_rates = []
-    avg_moves = []
+    agent_win_rates = []
+    agent_avg_moves = []
     
     print(f"Found checkpoints for episodes: {episodes}")
     
     for episode in episodes:
-        # Load agents at this checkpoint
-        placement_path = f"{checkpoint_dir}/placement_agent_{episode}.pkl"
-        attack_path = f"{checkpoint_dir}/attack_agent_{episode}.pkl"
-        
         print(f"\nEvaluating checkpoint from episode {episode}...")
         
-        # Load the agents
-        with open(placement_path, 'rb') as f:
-            placement_agent = pickle.load(f)
-        with open(attack_path, 'rb') as f:
-            attack_agent = pickle.load(f)
+        # Initialize agents with correct number of actions
+        init_env = BattleshipPlacementEnv()
+        active_env = BattleshipAttackEnv()
         
-        # Evaluate
-        win_rate, moves = evaluate_agent(placement_agent, attack_agent)
-        win_rates.append(win_rate)
-        avg_moves.append(moves)
-        print(f"Episode {episode}: Win Rate = {win_rate:.2%}, Avg Moves = {moves:.1f}")
+        placement_action_size = np.prod(init_env.action_space.nvec)
+        attack_action_size = len(active_env.relative_actions)
+        
+        # Create and load agents
+        placement_agent = DQNAgent(board_size=init_env.board_size, 
+                                 num_actions=placement_action_size)
+        attack_agent = DQNAgent(board_size=active_env.board_size, 
+                              num_actions=attack_action_size)
+        
+        placement_agent.load(f"{checkpoint_dir}/agent_placement_{episode}.pt")
+        attack_agent.load(f"{checkpoint_dir}/agent_attack_{episode}.pt")
+        
+        # Evaluate agents
+        win_rate, avg_moves = evaluate_agent(placement_agent, attack_agent)
+        
+        agent_win_rates.append(win_rate)
+        agent_avg_moves.append(avg_moves)
+        
+        print(f"Episode {episode}: Win Rate = {win_rate:.2%}, Avg Moves = {avg_moves:.1f}")
     
     # Plot results
     plt.figure(figsize=(12, 5))
     
     # Win rate plot
     plt.subplot(1, 2, 1)
-    plt.plot(episodes, win_rates, 'b-', label='Win Rate')
+    plt.plot(episodes, agent_win_rates, 'b-', label='Agent')
     plt.xlabel('Training Episodes')
-    plt.ylabel('Win Rate')
-    plt.title('Agent Win Rate vs Random Opponent')
+    plt.ylabel('Win Rate vs Random')
+    plt.title('Agent Win Rates vs Random Opponent')
+    plt.legend()
     plt.grid(True)
     
     # Average moves plot
     plt.subplot(1, 2, 2)
-    plt.plot(episodes, avg_moves, 'r-', label='Avg Moves')
+    plt.plot(episodes, agent_avg_moves, 'b-', label='Agent')
     plt.xlabel('Training Episodes')
     plt.ylabel('Average Moves per Game')
-    plt.title('Average Game Length')
+    plt.title('Average Game Length vs Random')
+    plt.legend()
     plt.grid(True)
     
     plt.tight_layout()
@@ -178,5 +194,5 @@ def test_and_plot(checkpoint_dir):
 
 if __name__ == "__main__":
     # Specify the path where agent checkpoints are saved
-    checkpoint_dir = "checkpoints"
+    checkpoint_dir = "checkpoints_deep_relative"
     test_and_plot(checkpoint_dir) 

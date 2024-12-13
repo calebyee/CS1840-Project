@@ -5,6 +5,96 @@ from collections import deque, defaultdict
 import random
 import numpy as np
 
+def hunt_and_target_shot(env, shots):
+    """
+    Enhanced hunt and target strategy:
+    1. Random shots until a hit is found (hunt mode)
+    2. Try adjacent squares after a hit (target mode)
+    3. When multiple hits are found, try to follow the line
+    4. Continue until ship is sunk, then return to hunt mode
+    """
+    board_size = env.board_size
+    
+    # Find all hits and analyze their patterns
+    hits = []
+    hit_lines = []  # Store lines of consecutive hits
+    
+    # First pass: collect all hits
+    for i in range(board_size):
+        for j in range(board_size):
+            if shots[i, j] == 1:
+                hits.append((i, j))
+    
+    # If we have multiple hits, look for lines and patterns
+    if len(hits) >= 2:
+        # Group hits into lines
+        visited = set()
+        for hit in hits:
+            if hit in visited:
+                continue
+                
+            current_line = [hit]
+            visited.add(hit)
+            
+            # Check horizontal and vertical directions
+            for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                r, c = hit[0] + dr, hit[1] + dc
+                while (r, c) in hits and (r, c) not in visited:
+                    current_line.append((r, c))
+                    visited.add((r, c))
+                    r, c = r + dr, c + dc
+            
+            if len(current_line) > 1:
+                hit_lines.append(sorted(current_line))
+    
+    # If we have a line of hits, try to extend it
+    for line in hit_lines:
+        if len(line) >= 2:
+            # Get direction of the line
+            is_horizontal = line[0][0] == line[1][0]
+            
+            # Try both ends of the line
+            for end in [line[0], line[-1]]:
+                # Check both directions perpendicular to the line
+                if is_horizontal:
+                    # Check left and right of the line
+                    for dc in [-1, 1]:
+                        r, c = end[0], end[1] + dc
+                        if (0 <= r < board_size and 0 <= c < board_size and 
+                            shots[r, c] == 0):
+                            return (r, c)
+                else:
+                    # Check up and down of the line
+                    for dr in [-1, 1]:
+                        r, c = end[0] + dr, end[1]
+                        if (0 <= r < board_size and 0 <= c < board_size and 
+                            shots[r, c] == 0):
+                            return (r, c)
+    
+    # If we have single hits, try adjacent squares
+    for hit in hits:
+        # Check if this hit has any unexplored adjacent squares
+        adjacents = []
+        for dr, dc in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            r, c = hit[0] + dr, hit[1] + dc
+            if (0 <= r < board_size and 0 <= c < board_size and 
+                shots[r, c] == 0):
+                adjacents.append((r, c))
+        
+        if adjacents:
+            return random.choice(adjacents)
+    
+    # Hunt mode: random shot in unexplored squares
+    valid_positions = []
+    for i in range(board_size):
+        for j in range(board_size):
+            if shots[i, j] == 0:  # Position hasn't been shot at
+                valid_positions.append((i, j))
+    
+    if valid_positions:
+        return random.choice(valid_positions)
+    return None
+
 class BattleshipMemory:
     def __init__(self, max_patterns=1000):
         self.successful_patterns = []
@@ -167,6 +257,25 @@ class DQN(nn.Module):
         x = self.conv(state.float())
         return self.fc(x)
 
+class ReplayBuffer:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.buffer = []
+        self.position = 0
+    
+    def push(self, *args):
+        """Save a transition"""
+        if len(self.buffer) < self.capacity:
+            self.buffer.append(None)
+        self.buffer[self.position] = args
+        self.position = (self.position + 1) % self.capacity
+    
+    def sample(self, batch_size):
+        return random.sample(self.buffer, batch_size)
+    
+    def __len__(self):
+        return len(self.buffer)
+
 class DQNAgent:
     def __init__(self, state_size, action_size, device="cpu", is_placement_agent=False):
         self.state_size = state_size
@@ -182,7 +291,7 @@ class DQNAgent:
         self.episode_epsilon = self.initial_epsilon  # Current episode's starting epsilon
         self.epsilon = self.initial_epsilon
         self.epsilon_min = 0.1
-        self.epsilon_decay = 0.95  # In-game decay
+        self.epsilon_decay = 0.975  # In-game decay
         self.episode_epsilon_decay = 0.995  # Decay between episodes
         self.learning_rate = 0.0005
         self.batch_size = 32
@@ -197,6 +306,11 @@ class DQNAgent:
         self.pattern_memory = BattleshipMemory()
         self.current_hit_sequence = []
         self.steps = 0
+        
+        self.use_hunt_target = True  # Start with hunt-target strategy
+        self.hunt_target_probability = 1.0  # Initially always use hunt-target
+        self.hunt_target_decay = 0.995  # Gradually reduce reliance on hunt-target
+        self.min_hunt_target_probability = 0.1  # Minimum probability to use hunt-target
     
     def reset_epsilon(self):
         """Reset epsilon to the current episode's starting value"""
@@ -247,14 +361,51 @@ class DQNAgent:
         if len(valid_actions) == 0:
             return None
         
-        # Check pattern memory first
+        # First check pattern memory for suggestions
+        pattern_suggestion = None
         if not self.is_placement_agent:
-            pattern_action = self.pattern_memory.get_suggested_action(state[0], valid_actions)
-            if pattern_action is not None:
-                return pattern_action
+            pattern_suggestion = self.pattern_memory.get_suggested_action(state, valid_actions)
         
-        # Epsilon-greedy strategy
+        # Decide whether to use hunt-target or pattern suggestion or Q-learning
+        if (self.use_hunt_target and 
+            not self.is_placement_agent and 
+            random.random() < self.hunt_target_probability):
+            
+            # First try pattern suggestion
+            if pattern_suggestion is not None and random.random() < 0.7:  # 70% chance to use pattern
+                return pattern_suggestion
+            
+            # Otherwise use hunt-target
+            # Convert state tensor to numpy if needed
+            if torch.is_tensor(state):
+                state_np = state.cpu().numpy()
+                if len(state_np.shape) == 4:  # If batched
+                    state_np = state_np[0]
+                if len(state_np.shape) == 3:  # If multi-channel
+                    state_np = state_np[0]  # Use first channel (shots)
+            else:
+                state_np = state[0] if len(state.shape) > 2 else state
+                
+            # Get hunt-target suggestion
+            hunt_target_action = hunt_and_target_shot(
+                type('Environment', (), {
+                    'board_size': int(np.sqrt(self.action_size)),
+                    'opponent_shots': state_np
+                })(),
+                state_np
+            )
+            
+            if hunt_target_action is not None:
+                row, col = hunt_target_action
+                action = row * int(np.sqrt(self.action_size)) + col
+                if action in valid_actions:
+                    return action
+        
+        # Fall back to epsilon-greedy Q-learning if other methods fail or aren't used
         if random.random() < self.epsilon:
+            # Still consider pattern suggestion during exploration
+            if pattern_suggestion is not None and random.random() < 0.3:  # 30% chance during exploration
+                return pattern_suggestion
             return random.choice(list(valid_actions))
         
         with torch.no_grad():
@@ -273,52 +424,44 @@ class DQNAgent:
             # If we're in attack phase, boost Q-values based on heatmap
             if not self.is_placement_agent and len(state.shape) > 2:
                 heatmap = state[1].flatten()  # Get the heatmap channel
-                heatmap_boost = torch.FloatTensor(heatmap * 0.5).to(self.device)  # Scale factor of 0.5
+                heatmap_boost = torch.FloatTensor(heatmap * 0.5).to(self.device)
                 q_values = q_values + heatmap_boost
+                
+                # Boost Q-value for pattern suggestion if available
+                if pattern_suggestion is not None:
+                    q_values[pattern_suggestion] += 0.3  # Small boost for pattern suggestion
             
             return int(q_values.argmax().item())
 
     def update(self, state, action, reward, next_state, done, hit=False):
-        # Update hit sequence
-        if hit:
-            row, col = action // 10, action % 10
-            self.current_hit_sequence.append((row, col))
-        elif self.current_hit_sequence:
-            # Store successful hit sequence when it ends
-            self.pattern_memory.add_pattern(self.current_hit_sequence)
-            self.current_hit_sequence = []
+        # Update hunt-target probability
+        if self.use_hunt_target and not self.is_placement_agent:
+            self.hunt_target_probability = max(
+                self.min_hunt_target_probability,
+                self.hunt_target_probability * self.hunt_target_decay
+            )
         
+        # Regular Q-learning update
+        if len(self.memory) >= self.batch_size:
+            self.replay()
+            self.steps += 1
+            
+            if self.steps % self.target_update_frequency == 0:
+                self.target_net.load_state_dict(self.policy_net.state_dict())
+        
+        # Store transition in memory
+        if not torch.is_tensor(state):
+            state = torch.FloatTensor(state)
+        if not torch.is_tensor(action):
+            action = torch.LongTensor([action])
+        if not torch.is_tensor(next_state):
+            next_state = torch.FloatTensor(next_state)
+        if not torch.is_tensor(reward):
+            reward = torch.FloatTensor([reward])
+        if not torch.is_tensor(done):
+            done = torch.BoolTensor([done])
+            
         self.memory.push(state, action, reward, next_state, done)
-        
-        if len(self.memory) < self.batch_size:
-            return
-        
-        transitions = self.memory.sample(self.batch_size)
-        batch = list(zip(*transitions))
-        
-        state_batch = torch.stack(batch[0]).to(self.device)
-        action_batch = torch.LongTensor(batch[1]).to(self.device)
-        reward_batch = torch.cat(batch[2]).to(self.device)
-        next_state_batch = torch.stack(batch[3]).to(self.device)
-        done_batch = torch.cat(batch[4]).to(self.device)
-        
-        current_q_values = self.policy_net(state_batch).gather(1, action_batch.unsqueeze(1))
-        
-        with torch.no_grad():
-            next_q_values = self.target_net(next_state_batch).max(1)[0]
-            target_q_values = reward_batch + (1 - done_batch.float()) * self.gamma * next_q_values
-        
-        loss = nn.SmoothL1Loss()(current_q_values.squeeze(), target_q_values)
-        
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step()
-        
-        self.steps += 1
-        if self.steps % self.target_update_frequency == 0:
-            self.target_net.load_state_dict(self.policy_net.state_dict())
-        
-        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
 
     def save(self, path):
         """Save the agent's networks and training state"""
@@ -341,24 +484,43 @@ class DQNAgent:
         self.steps = checkpoint['steps']
         self.is_placement_agent = checkpoint['is_placement_agent']
 
-class ReplayBuffer:
-    def __init__(self, capacity=10000):
-        self.buffer = deque(maxlen=capacity)
-    
-    def push(self, state, action, reward, next_state, done):
-        if not torch.is_tensor(state):
-            state = torch.FloatTensor(state)
-        if not torch.is_tensor(next_state):
-            next_state = torch.FloatTensor(next_state)
-        if not torch.is_tensor(reward):
-            reward = torch.FloatTensor([reward])
-        if not torch.is_tensor(done):
-            done = torch.BoolTensor([done])
+    def replay(self):
+        """Sample from memory and perform batch updates"""
+        if len(self.memory) < self.batch_size:
+            return
             
-        self.buffer.append((state, action, reward, next_state, done))
-    
-    def sample(self, batch_size):
-        return random.sample(self.buffer, batch_size)
-    
-    def __len__(self):
-        return len(self.buffer)
+        transitions = self.memory.sample(self.batch_size)
+        
+        # Transpose the batch (see https://stackoverflow.com/a/19343/3343043 for detailed explanation)
+        batch = list(zip(*transitions))
+        
+        # Convert to PyTorch tensors
+        state_batch = torch.cat([s.unsqueeze(0) for s in batch[0]]).to(self.device)
+        action_batch = torch.cat([a.unsqueeze(0) for a in batch[1]]).to(self.device)
+        reward_batch = torch.cat([r.unsqueeze(0) for r in batch[2]]).to(self.device)
+        next_state_batch = torch.cat([s.unsqueeze(0) for s in batch[3]]).to(self.device)
+        done_batch = torch.cat([d.unsqueeze(0) for d in batch[4]]).to(self.device)
+        
+        # Compute Q(s_t, a) - the model computes Q(s_t), then we select the columns of actions taken
+        state_action_values = self.policy_net(state_batch).gather(1, action_batch)
+        
+        # Compute V(s_{t+1}) for all next states
+        with torch.no_grad():
+            next_state_values = self.target_net(next_state_batch).max(1)[0].detach()
+        
+        # Compute the expected Q values
+        expected_state_action_values = reward_batch + (self.gamma * next_state_values * (~done_batch))
+        
+        # Compute Huber loss
+        criterion = nn.SmoothL1Loss()
+        loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
+        
+        # Optimize the model
+        self.optimizer.zero_grad()
+        loss.backward()
+        # Clip gradients to help with training stability
+        torch.nn.utils.clip_grad_value_(self.policy_net.parameters(), 100)
+        self.optimizer.step()
+        
+        # Decay epsilon
+        self.epsilon = max(self.epsilon_min, self.epsilon * self.epsilon_decay)
