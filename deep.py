@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from dqn import DQNAgent
 import torch
 from collections import deque
+import random
 
 # BattleshipPlacementEnv
 class BattleshipPlacementEnv(gym.Env):
@@ -84,6 +85,226 @@ class BattleshipPlacementEnv(gym.Env):
     def render(self, mode='human'):
         print(self.board)
 
+# StandardBattleshipStrategy
+class StandardBattleshipStrategy:
+    def __init__(self, board_size=10):
+        self.board_size = board_size
+        self.last_hit = None
+        self.hits_to_investigate = []  # Stack of hits we need to check around
+        self.direction = None  # Once we find two hits, we know ship direction
+        self.tried_positions = set()
+        self.current_ship_hits = []  # Track hits on current ship
+        self.sunk_ships = []  # Track positions of sunk ships
+
+    def get_next_position_in_direction(self, hit_pos, direction, board_state):
+        x, y = hit_pos
+        if direction == 'horizontal':
+            next_pos = [(x, y + 1), (x, y - 1)]
+        else:  # vertical
+            next_pos = [(x + 1, y), (x - 1, y)]
+            
+        # Filter valid positions not yet tried
+        valid_next = [(x, y) for x, y in next_pos 
+                      if self.is_valid_position(x, y, board_state)]
+        
+        return valid_next[0] if valid_next else None
+
+    def get_opposite_direction(self):
+        return 'vertical' if self.direction == 'horizontal' else 'horizontal'
+
+    def handle_ship_sunk(self):
+        """Reset tracking when a ship is sunk"""
+        self.sunk_ships.append(self.current_ship_hits)
+        self.current_ship_hits = []
+        self.hits_to_investigate = []
+        self.direction = None
+
+    def choose_action(self, board_state):
+        if board_state is None:
+            return random.randint(0, self.board_size * self.board_size - 1)
+        
+        # If we have hits to investigate, prioritize checking around them
+        if self.hits_to_investigate:
+            hit_pos = self.hits_to_investigate[-1]
+            
+            # If we know direction, keep going that direction
+            if self.direction:
+                next_pos = self.get_next_position_in_direction(hit_pos, self.direction, board_state)
+                if next_pos:
+                    x, y = next_pos
+                    return x * self.board_size + y
+                else:
+                    # Hit end of ship, try other direction
+                    self.direction = self.get_opposite_direction()
+                    self.hits_to_investigate.pop()
+                    return self.choose_action(board_state)
+            
+            # Try adjacent positions
+            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
+                new_x = hit_pos[0] + dx
+                new_y = hit_pos[1] + dy
+                action = new_x * self.board_size + new_y
+                
+                if self.is_valid_position(new_x, new_y, board_state):
+                    return action
+            
+            # If no adjacent positions available, pop this hit and try next
+            self.hits_to_investigate.pop()
+            return self.choose_action(board_state)
+
+        # No hits to investigate, choose random untried position
+        action = self.random_untried_position(board_state)
+        if action is None:
+            # If no valid positions, return a random action
+            return random.randint(0, self.board_size * self.board_size - 1)
+        return action
+
+    def update(self, action, hit, board_state):
+        """
+        Update strategy based on the result of the last shot
+        Args:
+            action: The position that was fired at
+            hit: Whether the shot was a hit
+            board_state: Current state of the board
+        """
+        x = action // self.board_size
+        y = action % self.board_size
+        self.tried_positions.add((x, y))
+
+        if hit:
+            self.hits_to_investigate.append((x, y))
+            
+            # If we have multiple hits, try to determine direction
+            if len(self.hits_to_investigate) >= 2:
+                hit1 = self.hits_to_investigate[-2]
+                hit2 = self.hits_to_investigate[-1]
+                if hit1[0] == hit2[0]:  # Same row
+                    self.direction = 'horizontal'
+                else:  # Same column
+                    self.direction = 'vertical'
+
+    def is_valid_position(self, x, y, board_state):
+        return (0 <= x < self.board_size and 
+                0 <= y < self.board_size and 
+                (x, y) not in self.tried_positions and
+                board_state[x, y] == 0)  # Check if position hasn't been shot at
+
+    def random_untried_position(self, board_state):
+        valid_positions = [
+            (x, y) for x in range(self.board_size) 
+            for y in range(self.board_size) 
+            if self.is_valid_position(x, y, board_state)
+        ]
+        if valid_positions:
+            x, y = random.choice(valid_positions)
+            return x * self.board_size + y
+        return None
+
+# ImprovedBattleshipStrategy
+class ImprovedBattleshipStrategy:
+    def __init__(self, board_size=10):
+        self.board_size = board_size
+        self.reset()
+        
+    def reset(self):
+        """Reset all strategy state"""
+        self.probability_map = np.ones((self.board_size, self.board_size))
+        self.hits = set()
+        self.misses = set()
+        self.current_targets = []
+        self.ship_sizes = [5, 4, 3, 3, 2]
+        self.remaining_ships = self.ship_sizes.copy()
+        self.mode = 'hunt'  # 'hunt' or 'target'
+        
+    def choose_action(self, board_state):
+        """Choose next shot using probability density"""
+        # Update probability map based on board state
+        self.update_probability_map(board_state)
+        
+        if self.mode == 'target' and self.current_targets:
+            # Target mode: Check around hits
+            return self.get_target_shot()
+        else:
+            # Hunt mode: Use probability density
+            return self.get_hunt_shot()
+            
+    def update_probability_map(self, board_state):
+        """Update probability density based on game state"""
+        # Reset probability map
+        self.probability_map.fill(0)
+        
+        # Calculate probabilities for each remaining ship
+        for ship_size in self.remaining_ships:
+            for row in range(self.board_size):
+                for col in range(self.board_size):
+                    # Check horizontal placement
+                    if self.can_place_ship(row, col, ship_size, 'horizontal', board_state):
+                        self.probability_map[row, col:col+ship_size] += 1
+                    # Check vertical placement
+                    if self.can_place_ship(row, col, ship_size, 'vertical', board_state):
+                        self.probability_map[row:row+ship_size, col] += 1
+                        
+        # Zero out known positions
+        for x, y in self.hits | self.misses:
+            self.probability_map[x, y] = 0
+            
+    def can_place_ship(self, row, col, size, orientation, board_state):
+        """Check if ship can be placed at position"""
+        if orientation == 'horizontal':
+            if col + size > self.board_size:
+                return False
+            for c in range(col, col + size):
+                if (row, c) in self.misses or board_state[row, c] == -1:
+                    return False
+        else:
+            if row + size > self.board_size:
+                return False
+            for r in range(row, row + size):
+                if (r, col) in self.misses or board_state[r, col] == -1:
+                    return False
+        return True
+        
+    def get_target_shot(self):
+        """Choose shot in target mode"""
+        for x, y in self.current_targets:
+            # Check cardinal directions
+            for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
+                new_x, new_y = x + dx, y + dy
+                if (self.is_valid_position(new_x, new_y) and 
+                    (new_x, new_y) not in self.hits | self.misses):
+                    return new_x * self.board_size + new_y
+        # No valid targets, switch to hunt mode
+        self.mode = 'hunt'
+        return self.get_hunt_shot()
+        
+    def get_hunt_shot(self):
+        """Choose shot in hunt mode using probability density"""
+        # Get position with highest probability
+        valid_positions = np.where(self.probability_map > 0)
+        if len(valid_positions[0]) == 0:
+            return None
+            
+        probabilities = self.probability_map[valid_positions]
+        max_prob_idx = np.argmax(probabilities)
+        x, y = valid_positions[0][max_prob_idx], valid_positions[1][max_prob_idx]
+        return x * self.board_size + y
+        
+    def update(self, action, hit, board_state):
+        """Update strategy based on shot result"""
+        x = action // self.board_size
+        y = action % self.board_size
+        
+        if hit:
+            self.hits.add((x, y))
+            self.current_targets.append((x, y))
+            self.mode = 'target'
+        else:
+            self.misses.add((x, y))
+            
+    def is_valid_position(self, x, y):
+        """Check if position is within board"""
+        return 0 <= x < self.board_size and 0 <= y < self.board_size
+
 # BattleshipAttackEnv
 class BattleshipAttackEnv(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -91,31 +312,41 @@ class BattleshipAttackEnv(gym.Env):
     def __init__(self, board_size=10):
         super(BattleshipAttackEnv, self).__init__()
         self.board_size = board_size
-        self.ship_sizes = [5, 4, 3, 3, 2]  # All standard Battleship ships
+        self.ship_sizes = [5, 4, 3, 3, 2]
+        self.ship_positions = []  # List of (start_pos, orientation, size) for each ship
+        self.sunk_ships = set()  # Track which ships have been sunk
         
         self.action_space = spaces.Discrete(self.board_size * self.board_size)
         self.observation_space = spaces.Box(low=-1, high=1, shape=(self.board_size, self.board_size), dtype=np.int8)
+        self.opponent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.agent_ships_remaining = 17  # 5 + 4 + 3 + 3 + 2
+        self.opponent_ships_remaining = 17
+        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=board_size)
+        
         self.reset()
     
     def reset(self):
         self.agent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.opponent_board = np.zeros((self.board_size, self.board_size), dtype=np.int8)
         self.agent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.opponent_shots = np.zeros((self.board_size, self.board_size), dtype=np.int8)
+        self.agent_ships_remaining = 17
+        self.opponent_ships_remaining = 17
+        self.opponent_strategy = ImprovedBattleshipStrategy(board_size=self.board_size)  # Reset opponent strategy
         
-        self._place_ships()
+        self._place_ships()  # Place opponent's ships
+        self._place_agent_ships()  # Place agent's ships
         
         return self.agent_shots
 
     def _place_ships(self):
         """Place ships on the board"""
         self.opponent_board.fill(0)
+        self.ship_positions = []  # Reset ship positions
         
         for ship_size in self.ship_sizes:
             placed = False
-            max_attempts = 100
-            attempts = 0
-            
-            while not placed and attempts < max_attempts:
+            while not placed:
                 row = np.random.randint(0, self.board_size)
                 col = np.random.randint(0, self.board_size)
                 orientation = np.random.randint(0, 2)
@@ -123,75 +354,141 @@ class BattleshipAttackEnv(gym.Env):
                 if self._is_valid_ship_placement(row, col, ship_size, orientation):
                     self._place_ship(row, col, ship_size, orientation)
                     placed = True
-                attempts += 1
-            
-            if not placed:
-                # Silently continue if ship placement fails
-                pass
 
     def _is_valid_ship_placement(self, row, col, ship_size, orientation):
         """Check if ship placement is valid"""
-        if orientation == 0:  # horizontal
-            if col + ship_size > self.board_size:
-                return False
-            return not np.any(self.opponent_board[row, col:col + ship_size] == 1)
-        else:  # vertical
-            if row + ship_size > self.board_size:
-                return False
-            return not np.any(self.opponent_board[row:row + ship_size, col] == 1)
+        # Add board parameter to check against
+        def check_placement(board):
+            if orientation == 0:  # horizontal
+                if col + ship_size > self.board_size:
+                    return False
+                return not np.any(board[row, col:col + ship_size] == 1)
+            else:  # vertical
+                if row + ship_size > self.board_size:
+                    return False
+                return not np.any(board[row:row + ship_size, col] == 1)
+        
+        # Use opponent_board by default if no board specified
+        return check_placement(self.opponent_board)
 
     def _place_ship(self, row, col, ship_size, orientation):
-        """Place a ship on the board"""
+        """Place a ship and store its position"""
         if orientation == 0:  # horizontal
             self.opponent_board[row, col:col + ship_size] = 1
+            self.ship_positions.append(((row, col), orientation, ship_size))
         else:  # vertical
             self.opponent_board[row:row + ship_size, col] = 1
+            self.ship_positions.append(((row, col), orientation, ship_size))
+
+    def _check_ship_sunk(self, row, col):
+        """Check if hitting this position sunk a ship"""
+        for ship_idx, ((start_row, start_col), orientation, size) in enumerate(self.ship_positions):
+            if ship_idx in self.sunk_ships:
+                continue
+                
+            # Check if hit position is part of this ship
+            ship_coords = []
+            if orientation == 0:  # horizontal
+                ship_coords = [(start_row, start_col + i) for i in range(size)]
+            else:  # vertical
+                ship_coords = [(start_row + i, start_col) for i in range(size)]
+                
+            if (row, col) in ship_coords:
+                # Check if all positions of this ship have been hit
+                all_hit = all(self.agent_shots[r, c] == 1 for r, c in ship_coords)
+                if all_hit:
+                    self.sunk_ships.add(ship_idx)
+                    return True
+        return False
+
+    def _place_agent_ships(self):
+        """Place agent's ships randomly"""
+        self.agent_board.fill(0)
+        for ship_size in self.ship_sizes:
+            placed = False
+            while not placed:
+                row = np.random.randint(0, self.board_size)
+                col = np.random.randint(0, self.board_size)
+                orientation = np.random.randint(0, 2)
+                # Create temporary board for checking placement
+                temp_board = self.agent_board.copy()
+                if self._is_valid_ship_placement(row, col, ship_size, orientation):
+                    if orientation == 0:  # horizontal
+                        self.agent_board[row, col:col + ship_size] = 1
+                    else:  # vertical
+                        self.agent_board[row:row + ship_size, col] = 1
+                    placed = True
 
     def step(self, action):
-        # Convert action to coordinates
+        if action is None:
+            return self.agent_shots, -1, True, {"error": "Invalid action"}
+        
+        # Agent's turn
+        action = int(action)
         row = action // self.board_size
         col = action % self.board_size
         
-        # Process the shot
-        shots = self.agent_shots
-        if shots[row, col] != 0:
-            return shots, -1, False, {"error": "Position already shot"}
+        if self.agent_shots[row, col] != 0:
+            return self.agent_shots, -1, True, {"error": "Invalid move - position already shot"}
         
-        # Update game state
-        total_ship_cells = np.sum(self.opponent_board == 1)
-        hit_ship_cells = np.sum((self.opponent_board == 1) & (shots == 1))
-        
-        # Calculate hit rate and efficiency
-        total_shots = np.sum(np.abs(shots))
-        hit_rate = hit_ship_cells / total_shots if total_shots > 0 else 0
-        efficiency = hit_ship_cells / total_shots if total_shots > 0 else 0
-        
-        # Record shot and check hit
+        # Process agent's shot
+        agent_hit = False
         if self.opponent_board[row, col] == 1:
-            shots[row, col] = 1
-            streak_bonus = 1.0 * (hit_ship_cells / total_shots if total_shots > 0 else 0)
-            reward = 3.0 + streak_bonus
+            self.agent_shots[row, col] = 1
+            self.opponent_ships_remaining -= 1
+            reward = 3.0
+            agent_hit = True
+            if self._check_ship_sunk(row, col):
+                reward = 5.0
         else:
-            shots[row, col] = -1
-            base_penalty = -0.1
-            reward = base_penalty
+            self.agent_shots[row, col] = -1
+            reward = -0.1
+
+        # Opponent's turn
+        opponent_action = self.opponent_strategy.choose_action(self.opponent_shots.copy())
+        if opponent_action is None:  # If no valid moves, pick random unshot position
+            valid_positions = [(r, c) for r in range(self.board_size) 
+                             for c in range(self.board_size) 
+                             if self.opponent_shots[r, c] == 0]
+            if valid_positions:
+                opp_row, opp_col = random.choice(valid_positions)
+                opponent_action = opp_row * self.board_size + opp_col
+            else:
+                # No valid moves left, game should end
+                return self.agent_shots, reward, True, {
+                    "agent_ships_remaining": self.agent_ships_remaining,
+                    "opponent_ships_remaining": self.opponent_ships_remaining,
+                    "agent_hit": agent_hit,
+                    "opponent_hit": False,
+                    "winner": "agent" if self.opponent_ships_remaining <= 0 else "opponent" if self.agent_ships_remaining <= 0 else None
+                }
+
+        opp_row = opponent_action // self.board_size
+        opp_col = opponent_action % self.board_size
         
-        # Add efficiency bonus
-        if efficiency > 0.3:
-            reward += 0.5 * efficiency
+        opponent_hit = False
+        if self.agent_board[opp_row, opp_col] == 1:
+            self.opponent_shots[opp_row, opp_col] = 1
+            self.agent_ships_remaining -= 1
+            opponent_hit = True
+        else:
+            self.opponent_shots[opp_row, opp_col] = -1
         
-        # Game ends only when all ships are sunk
-        done = hit_ship_cells == total_ship_cells
+        # Update opponent's strategy
+        self.opponent_strategy.update(opponent_action, opponent_hit, self.opponent_shots.copy())
+
+        # Check if game is over
+        done = (self.opponent_ships_remaining <= 0) or (self.agent_ships_remaining <= 0)
         
-        if done:
-            reward += 5.0 * efficiency
-        
-        return shots, reward, done, {
-            "total_ships": total_ship_cells,
-            "hits": hit_ship_cells,
-            "hit_rate": hit_rate,
-            "efficiency": efficiency,
+        info = {
+            "agent_ships_remaining": self.agent_ships_remaining,
+            "opponent_ships_remaining": self.opponent_ships_remaining,
+            "agent_hit": agent_hit,
+            "opponent_hit": opponent_hit,
+            "winner": "agent" if self.opponent_ships_remaining <= 0 else "opponent" if self.agent_ships_remaining <= 0 else None
         }
+
+        return self.agent_shots, reward, done, info
 
     def render(self, mode='human'):
         print("Agent's Board (our ships):")
@@ -240,181 +537,159 @@ def get_valid_placement_actions(env):
     # print(f"[DEBUG] Sample actions: {valid_actions[:5]}")
     return valid_actions
 
-def train_nested_mdp(init_env, active_env, num_episodes=50):
-    # Setup device
+def prepare_state_tensor(state):
+    """
+    Prepare the state for input to the neural network.
+    Creates a 2-channel input: one for shots and one for hits
+    """
+    # First channel: shots (-1 for misses, 1 for hits, 0 for no shot)
+    shots = state.copy()
+    
+    # Second channel: binary mask of hits (1 where hits occurred, 0 elsewhere)
+    hits = (state == 1).astype(np.float32)
+    
+    # Stack channels and convert to tensor
+    state_tensor = torch.FloatTensor(np.stack([shots, hits])).unsqueeze(0)
+    
+    return state_tensor
+
+def train_nested_mdp(init_env, active_env, num_episodes=100):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
     
     # Initialize agents
-    outer_agent = DQNAgent(
-        state_size=init_env.board_size,
-        action_size=init_env.action_space.n,
-        device=device,
-        is_placement_agent=True
-    )
-    
     inner_agent = DQNAgent(
-        state_size=active_env.board_size,
+        state_size=active_env.board_size * 2,
         action_size=active_env.action_space.n,
         device=device,
         is_placement_agent=False
     )
     
-    # Training loop
+    # Track statistics
+    wins = 0
+    total_games = 0
+    
     for episode in range(num_episodes):
         print(f"\n{'='*25} Episode {episode+1}/{num_episodes} {'='*25}")
         
-        # Reset environments
-        init_state = init_env.reset()
         active_state = active_env.reset()
-        
-        # Place ships first
-        init_state_tensor = torch.FloatTensor(init_state).unsqueeze(0).to(device)
-        valid_init_actions = get_valid_placement_actions(init_env)
-        
-        if not valid_init_actions:
-            print("[ERROR] No valid initialization actions!")
-            continue
-            
-        action = outer_agent.choose_action(init_state_tensor, valid_init_actions)
-        next_init_state, init_reward, init_done, init_info = init_env.step(action)
-        
-        if 'error' in init_info:
-            print(f"[ERROR] Init step error: {init_info['error']}")
-            continue
-        
-        # Play the game
         episode_reward = 0
         done = False
-        total_shots = 0
+        total_moves = 0
         hits = 0
+        shots = 0
         
         while not done:
-            # Create 2-channel state
-            shots = (active_state == -1).astype(np.float32)
-            hits_map = (active_state == 1).astype(np.float32)
-            state_tensor = torch.FloatTensor(np.stack([shots, hits_map])).unsqueeze(0).to(device)
-            
-            # Get valid actions
-            valid_actions = set(range(active_env.action_space.n))
-            for i in range(active_env.board_size):
-                for j in range(active_env.board_size):
-                    action_idx = i * active_env.board_size + j
-                    if active_state[i, j] != 0:
-                        valid_actions.discard(action_idx)
-            
-            if not valid_actions:
-                break
-            
-            # Choose and perform action
-            action = inner_agent.choose_action(state_tensor, list(valid_actions))
-            if action is None:
-                break
-            
+            # Agent's turn
+            valid_actions = get_valid_actions(active_env, active_state)
+            state_tensor = prepare_state_tensor(active_state)
+            action, was_explored = inner_agent.choose_action(state_tensor, valid_actions)
             next_state, reward, done, info = active_env.step(action)
             
-            if 'error' in info:
-                print(f"[ERROR] Step error: {info['error']}")
-                continue
-            
             # Update statistics
-            total_shots += 1
-            if reward > 0:
+            total_moves += 1
+            shots += 1
+            if info["agent_hit"]:
                 hits += 1
             
-            # Create next state tensor
-            next_shots = (next_state == -1).astype(np.float32)
-            next_hits = (next_state == 1).astype(np.float32)
-            next_state_tensor = torch.FloatTensor(np.stack([next_shots, next_hits])).unsqueeze(0).to(device)
-            
-            # Update inner agent
-            loss = inner_agent.update(
-                state_tensor, 
-                action, 
-                reward, 
-                next_state_tensor, 
-                done,
-                hit=(reward > 0),
-                curriculum_info=info
-            )
-            
-            # Print progress every 5 moves
-            if total_shots % 5 == 0:
-                hit_rate = hits / total_shots if total_shots > 0 else 0
-                print(f"Move {total_shots}: Reward={reward:.2f}, Hit Rate={hit_rate:.2f}, Epsilon={inner_agent.epsilon:.2f}")
+            # Update agent
+            inner_agent.update(state_tensor, action, reward, prepare_state_tensor(next_state), 
+                             done, was_explored, info["agent_hit"])
             
             active_state = next_state
             episode_reward += reward
+            
+            # Print progress every 5 moves
+            if total_moves % 5 == 0:
+                print(f"Move {total_moves}: Reward={reward:.2f}, "
+                      f"Hit Rate={hits/shots:.2f}, "
+                      f"Agent Ships={info['agent_ships_remaining']}, "
+                      f"Opponent Ships={info['opponent_ships_remaining']}, "
+                      f"Epsilon={inner_agent.epsilon:.2f}")
         
-        # Update outer agent
-        next_init_state_tensor = torch.FloatTensor(next_init_state).unsqueeze(0).to(device)
-        outer_agent.update(
-            init_state_tensor,
-            action,
-            episode_reward,
-            next_init_state_tensor,
-            init_done
-        )
+        # Update statistics
+        total_games += 1
+        if info['winner'] == 'agent':
+            wins += 1
         
         # Print episode summary
-        print(f"\nEpisode Summary:")
-        print(f"Total Reward: {episode_reward:.2f}")
-        print(f"Hit Rate: {hit_rate:.2f}")
-        print(f"Total Shots: {total_shots}")
-        print(f"Epsilon: {inner_agent.epsilon:.2f}")
+        winner = info['winner']
+        print(f"\nGame Over!")
+        print(f"Winner: {winner}")
+        print(f"Total Moves: {total_moves}")
+        print(f"Final Hit Rate: {hits/shots:.2f}")
+        print(f"Agent Ships Remaining: {info['agent_ships_remaining']}/17")
+        print(f"Opponent Ships Remaining: {info['opponent_ships_remaining']}/17")
+        print(f"Win Rate: {wins/total_games:.2f}")
     
     # Plot training metrics
     metrics = inner_agent.get_metrics()
     
     plt.figure(figsize=(15, 10))
     
-    # Plot rewards
-    plt.subplot(2, 3, 1)
-    plt.plot(metrics['episode_rewards'])
+    # Plot rewards (now in 2x4 grid)
+    plt.subplot(2, 4, 1)
+    num_completed_episodes = len(metrics['episode_rewards'])
+    episodes = list(range(1, num_completed_episodes + 1))
+    episode_rewards = metrics['episode_rewards']
+    plt.plot(episodes, episode_rewards, '-o', markersize=2)
     plt.title('Episode Rewards')
     plt.xlabel('Episode')
     plt.ylabel('Total Reward')
     
     # Plot hit rates
-    plt.subplot(2, 3, 2)
-    plt.plot(metrics['hit_rates'])
+    plt.subplot(2, 4, 2)
+    hit_rates = metrics['hit_rates']
+    if len(hit_rates) > num_completed_episodes:
+        hit_rates = hit_rates[:num_completed_episodes]
+    elif len(hit_rates) < num_completed_episodes:
+        hit_rates.extend([0] * (num_completed_episodes - len(hit_rates)))
+    plt.plot(episodes, hit_rates, '-o', markersize=2)
     plt.title('Hit Rates')
     plt.xlabel('Episode')
     plt.ylabel('Hit Rate')
     
     # Plot losses
-    plt.subplot(2, 3, 3)
+    plt.subplot(2, 4, 3)
     plt.plot(metrics['losses'])
     plt.title('Training Loss')
     plt.xlabel('Step')
     plt.ylabel('Loss')
     
     # Plot Q-values
-    plt.subplot(2, 3, 4)
+    plt.subplot(2, 4, 4)
     plt.plot(metrics['q_values'])
     plt.title('Average Q-Values')
     plt.xlabel('Step')
     plt.ylabel('Q-Value')
     
     # Plot epsilon decay
-    plt.subplot(2, 3, 5)
+    plt.subplot(2, 4, 5)
     plt.plot(metrics['epsilons'])
     plt.title('Epsilon Decay')
     plt.xlabel('Step')
     plt.ylabel('Epsilon')
     
     # Plot exploration ratio
-    plt.subplot(2, 3, 6)
+    plt.subplot(2, 4, 6)
     plt.axhline(y=metrics['exploration_ratio'], color='r', linestyle='-')
     plt.title('Exploration Ratio')
     plt.xlabel('Step')
     plt.ylabel('Ratio')
     
+    # Add game length plot
+    plt.subplot(2, 4, 8)
+    game_lengths = metrics['game_lengths']
+    plt.plot(episodes, game_lengths, '-o', markersize=2)
+    plt.title('Game Length')
+    plt.xlabel('Episode')
+    plt.ylabel('Number of Moves')
+    
     plt.tight_layout()
     plt.savefig('training_metrics.png')
     plt.close()
     
-    return outer_agent, inner_agent
+    return inner_agent
 
 # Create and train the environments
 if __name__ == "__main__":

@@ -68,33 +68,29 @@ class ActionPatternTracker:
 class PrioritizedReplayBuffer:
     def __init__(self, capacity, alpha):
         self.capacity = capacity
-        self.alpha = alpha  # How much prioritization to use (0 = none, 1 = full)
+        self.alpha = alpha
         self.memory = []
         self.priorities = np.zeros((capacity,), dtype=np.float32)
-        self.success_flags = np.zeros((capacity,), dtype=bool)  # Track successful moves
+        self.was_explored = np.zeros((capacity,), dtype=bool)  # Track if action was from exploration
         self.position = 0
         self.size = 0
         
-    def push(self, state, action, reward, next_state, done, hit=False):
-        """Save a transition with success tracking"""
+    def push(self, state, action, reward, next_state, done, was_explored=False):
+        """Save a transition with exploration flag"""
         max_priority = max(self.priorities) if self.memory else 1.0
         
         if len(self.memory) < self.capacity:
             self.memory.append(None)
         
-        # Store transition
+        # Store transition and exploration flag
         self.memory[self.position] = (state, action, reward, next_state, done)
+        self.was_explored[self.position] = was_explored
         
-        # Increase priority for successful actions
-        if hit:
-            max_priority *= 2.0
-            self.success_flags[self.position] = True
-        else:
-            self.success_flags[self.position] = False
+        # Increase priority for exploratory actions that led to rewards
+        if was_explored and reward > 0:
+            max_priority *= 1.5  # Bonus priority for successful exploration
         
         self.priorities[self.position] = max_priority
-        
-        # Update position and size
         self.position = (self.position + 1) % self.capacity
         self.size = min(self.size + 1, self.capacity)
     
@@ -105,7 +101,7 @@ class PrioritizedReplayBuffer:
             
         # Calculate probabilities with success bonus
         priorities = self.priorities[:self.size]
-        success_bonus = np.where(self.success_flags[:self.size], 2.0, 1.0)
+        success_bonus = np.where(self.was_explored[:self.size], 2.0, 1.0)
         probs = (priorities * success_bonus) ** self.alpha
         probs = probs / probs.sum()
         
@@ -120,22 +116,15 @@ class PrioritizedReplayBuffer:
         batch = [self.memory[idx] for idx in indices]
         states, actions, rewards, next_states, dones = zip(*batch)
         
-        return (
-            np.array(states),
-            np.array(actions),
-            np.array(rewards),
-            np.array(next_states),
-            np.array(dones),
-            indices,
-            weights
-        )
+        was_explored = self.was_explored[indices]
+        return states, actions, rewards, next_states, dones, indices, weights, was_explored
     
     def update_priorities(self, indices, priorities):
         """Update priorities of sampled transitions"""
         for idx, priority in zip(indices, priorities.flatten()):
             self.priorities[idx] = priority + 1e-5  # Small constant to ensure non-zero probabilities
             # Maintain success bonus
-            if self.success_flags[idx]:
+            if self.was_explored[idx]:
                 self.priorities[idx] *= 2.0
     
     def __len__(self):
@@ -226,16 +215,26 @@ class DQNAgent:
         # Pattern tracking
         self.pattern_tracker = ActionPatternTracker()
         
-        # Training metrics
-        self.total_steps = 0
-        self.episode_rewards = []
-        self.hit_rates = []
-        self.losses = []
-        self.q_value_history = []
-        self.epsilons = []
+        # Consolidated metrics tracking
+        self.metrics = {
+            'episode_rewards': [],  # One total reward per episode
+            'hit_rates': [],       # One hit rate per episode
+            'losses': [],          # Per batch
+            'q_values': [],        # Per step
+            'epsilons': [],        # Per step
+            'exploration_ratio': 0,  # Overall ratio
+            'game_lengths': []     # Length of each game
+        }
+        
+        # Exploration tracking
         self.exploration_steps = 0
         self.exploitation_steps = 0
-        self.action_values = {}  # Track Q-values for each action
+        self.total_steps = 0      # Track total training steps
+        
+        # Episode accumulators
+        self.current_episode_rewards = 0
+        self.current_episode_hits = 0
+        self.current_episode_shots = 0
         
         # Q-value thresholds for adaptive exploration
         self.q_value_threshold = 1.0  # Threshold for considering an action high-value
@@ -253,6 +252,18 @@ class DQNAgent:
         # For epsilon decay
         self.epsilon_start = 1.0
         self.epsilon_end = 0.05
+        
+        # Ship tracking
+        self.current_ship_hits = []  # Track hits on current ship
+        self.sunk_ships = []  # Track positions of sunk ships
+        self.potential_ship_directions = {}  # Track possible ship directions after hits
+        self.last_hit_position = None
+        
+        # Reward shaping
+        self.consecutive_misses = 0
+        self.hit_streak = 0
+        
+        self.action_values = {}  # Track Q-values for each action
     
     def update_reward_stats(self, reward):
         """Update running statistics for reward normalization"""
@@ -271,7 +282,7 @@ class DQNAgent:
     
     def update_epsilon(self):
         """Update epsilon value with much slower decay"""
-        avg_q = np.mean(self.q_value_history[-100:]) if self.q_value_history else 0
+        avg_q = np.mean(self.metrics['q_values'][-100:]) if self.metrics['q_values'] else 0
         avg_hit_rate = np.mean(self.recent_hit_rates) if self.recent_hit_rates else 0
         
         if avg_q > self.q_value_threshold and avg_hit_rate > 0.3:
@@ -279,100 +290,97 @@ class DQNAgent:
         else:
             self.epsilon = max(self.epsilon_min, self.epsilon * 0.9995)  # Very slow decay
         
-        self.epsilons.append(self.epsilon)
+        self.metrics['epsilons'].append(self.epsilon)
     
     def choose_action(self, state, valid_actions):
-        """Choose action using smart exploration and pattern matching"""
         if not valid_actions:
-            return None
+            return None, False
         
-        # Get Q-values and update tracking
         with torch.no_grad():
             q_values = self.policy_net(state)
             valid_q_values = q_values.squeeze()[list(valid_actions)]
             max_q = float(valid_q_values.max())
-            self.q_value_history.append(max_q)
+            self.metrics['q_values'].append(max_q)
             
-            # Track Q-values for each action
-            for action in valid_actions:
-                q_val = float(q_values.squeeze()[action])
-                if action not in self.action_values:
-                    self.action_values[action] = []
-                self.action_values[action].append(q_val)
+            # Boost Q-values for positions adjacent to hits if we haven't sunk the ship
+            if self.current_ship_hits and self.last_hit_position:
+                row, col = self.last_hit_position
+                for dx, dy in [(0,1), (1,0), (0,-1), (-1,0)]:
+                    new_x, new_y = row + dx, col + dy
+                    action = new_x * 10 + new_y
+                    if action in valid_actions:
+                        valid_q_values[valid_actions.index(action)] *= 1.5
         
-        # Check pattern tracker for suggested action
+        # For placement agent, always exploit (no exploration needed)
+        if self.is_placement_agent:
+            return list(valid_actions)[valid_q_values.argmax().item()], False
+        
+        # Attack agent logic with exploration tracking
         suggested_action = self.pattern_tracker.get_suggested_action(valid_actions, state.cpu().numpy().squeeze())
-        if suggested_action is not None and random.random() < 0.85:  # Increase pattern usage
-            return suggested_action
+        if suggested_action is not None and random.random() < 0.85:
+            return suggested_action, False
         
-        # Adaptive exploration based on Q-values
+        # Adaptive exploration
         if max_q > self.q_value_threshold:
-            explore_prob = self.epsilon * 0.5  # Reduce exploration for high-value states
+            explore_prob = self.epsilon * 0.5
         else:
             explore_prob = self.epsilon
         
-        if random.random() < explore_prob:
+        is_exploring = random.random() < explore_prob
+        if is_exploring:
             self.exploration_steps += 1
-            # Smart exploration using softmax over Q-values
-            temperature = 0.5  # Lower temperature = more exploitation
+            temperature = 0.5
             probs = F.softmax(valid_q_values / temperature, dim=0).cpu().numpy()
-            return np.random.choice(list(valid_actions), p=probs)
+            return np.random.choice(list(valid_actions), p=probs), True
         
         self.exploitation_steps += 1
-        return list(valid_actions)[valid_q_values.argmax().item()]
+        return list(valid_actions)[valid_q_values.argmax().item()], False
     
-    def update(self, state, action, reward, next_state, done, hit=False, curriculum_info=None):
-        """Update agent with improved learning from successful actions"""
-        # Track metrics
-        self.episode_rewards.append(reward)
-        if curriculum_info and 'hit_rate' in curriculum_info:
-            hit_rate = curriculum_info['hit_rate']
-            self.hit_rates.append(hit_rate)
-            self.recent_hit_rates.append(hit_rate)
+    def update(self, state, action, reward, next_state, done, was_explored=False, hit=False, info=None):
+        """Update agent's policy network"""
+        # Skip update if action is None
+        if action is None:
+            return 0.0
         
-        # Update pattern tracker
-        self.pattern_tracker.add_action(action, hit)
-        
-        # Normalize reward
-        normalized_reward = self.normalize_reward(reward)
-        
-        # Store transition with priority
-        if hit:
-            priority_multiplier = 2.0
+        # For placement agent, we don't track exploration
+        if self.is_placement_agent:
+            normalized_reward = self.normalize_reward(reward)
+            self.memory.push(state, action, normalized_reward, next_state, done, False)
         else:
-            priority_multiplier = 1.0
-        
-        self.memory.push(state, action, normalized_reward, next_state, done, priority_multiplier)
+            # Rest of the update logic for attack agent
+            self.pattern_tracker.add_action(action, hit)
+            normalized_reward = self.normalize_reward(reward)
+            self.memory.push(state, action, normalized_reward, next_state, done, was_explored)
         
         if len(self.memory) < self.batch_size:
             return 0.0
         
-        # Rest of the update function remains the same...
+        # Sample batch with exploration info
         batch = self.memory.sample(self.batch_size, self.beta)
-        if batch is None:
-            return 0.0
-        
-        states, actions, rewards, next_states, dones, indices, weights = batch
+        states, actions, rewards, next_states, dones, indices, weights, was_explored = batch
         
         # Convert to tensors and ensure proper shapes
-        states = torch.FloatTensor(states).to(self.device)
-        next_states = torch.FloatTensor(next_states).to(self.device)
-        actions = torch.LongTensor(actions).to(self.device)
+        states = torch.stack(states).squeeze(1).to(self.device)
+        next_states = torch.stack(next_states).squeeze(1).to(self.device)
+        actions = torch.LongTensor([a if a is not None else 0 for a in actions]).to(self.device)
         rewards = torch.FloatTensor(rewards).to(self.device)
         dones = torch.FloatTensor(dones).to(self.device)
         weights = torch.FloatTensor(weights).to(self.device)
-        
-        if len(states.shape) == 5:
-            states = states.squeeze(1)
-        if len(next_states.shape) == 5:
-            next_states = next_states.squeeze(1)
+        was_explored = torch.BoolTensor(was_explored).to(self.device)
         
         current_Q = self.policy_net(states).gather(1, actions.unsqueeze(1))
         
         with torch.no_grad():
             next_actions = self.policy_net(next_states).argmax(1, keepdim=True)
             next_Q = self.target_net(next_states).gather(1, next_actions)
-            target_Q = rewards.unsqueeze(1) + (self.gamma * next_Q * (1 - dones.unsqueeze(1)))
+            
+            # Modify learning based on exploration
+            exploration_bonus = torch.where(was_explored, 
+                                          torch.ones_like(rewards) * 0.1,  # Small bonus for explored actions
+                                          torch.zeros_like(rewards))
+            
+            target_Q = (rewards.unsqueeze(1) + exploration_bonus.unsqueeze(1) + 
+                       (self.gamma * next_Q * (1 - dones.unsqueeze(1))))
         
         current_Q = torch.clamp(current_Q, -100, 100)
         target_Q = torch.clamp(target_Q, -100, 100)
@@ -382,7 +390,7 @@ class DQNAgent:
         
         loss = (weights * F.smooth_l1_loss(current_Q, target_Q, reduction='none')).mean()
         
-        self.losses.append(float(loss.item()))
+        self.metrics['losses'].append(float(loss.item()))
         
         self.optimizer.zero_grad()
         loss.backward()
@@ -396,18 +404,76 @@ class DQNAgent:
         self.beta = min(1.0, self.beta + self.beta_increment)
         
         self.total_steps += 1
+        
+        # Track ship hits and update strategy
+        row = action // 10
+        col = action % 10
+        
+        if hit:
+            self.consecutive_misses = 0
+            self.hit_streak += 1
+            self.current_ship_hits.append((row, col))
+            self.last_hit_position = (row, col)
+            
+            # Update potential ship directions
+            if len(self.current_ship_hits) >= 2:
+                hit1, hit2 = self.current_ship_hits[-2:]
+                if hit1[0] == hit2[0]:  # Same row
+                    self.potential_ship_directions[hit1] = 'horizontal'
+                else:  # Same column
+                    self.potential_ship_directions[hit1] = 'vertical'
+        else:
+            self.consecutive_misses += 1
+            self.hit_streak = 0
+        
+        # Handle ship sinking
+        if info and info.get("ship_sunk", False):
+            # Extra reward scaling based on ship size
+            ship_size = info.get("sunk_ship_size", 0)
+            reward *= (1.0 + 0.2 * ship_size)  # Bigger ships = bigger reward multiplier
+            
+            # Update ship tracking
+            self.sunk_ships.append(self.current_ship_hits)
+            self.current_ship_hits = []
+            self.last_hit_position = None
+            self.potential_ship_directions.clear()
+        
+        # Modify reward based on strategy
+        if self.hit_streak > 1:
+            reward *= 1.2  # Bonus for consecutive hits
+        if self.consecutive_misses > 3:
+            reward *= 0.8  # Penalty for too many consecutive misses
+        
+        # Update episode accumulators
+        self.current_episode_rewards += reward
+        self.current_episode_shots += 1
+        if hit:
+            self.current_episode_hits += 1
+
+        if done:
+            # Record episode metrics
+            self.metrics['episode_rewards'].append(self.current_episode_rewards)
+            hit_rate = self.current_episode_hits / self.current_episode_shots if self.current_episode_shots > 0 else 0
+            self.metrics['hit_rates'].append(hit_rate)
+            self.metrics['game_lengths'].append(self.current_episode_shots)  # Add game length
+            
+            # Reset accumulators
+            self.current_episode_rewards = 0
+            self.current_episode_hits = 0
+            self.current_episode_shots = 0
+        
         return float(loss.item())
     
     def get_metrics(self):
         """Return current training metrics"""
         return {
-            'episode_rewards': self.episode_rewards,
-            'hit_rates': self.hit_rates,
-            'losses': self.losses,
-            'q_values': self.q_value_history,
-            'epsilons': self.epsilons,
+            'episode_rewards': self.metrics['episode_rewards'],
+            'hit_rates': self.metrics['hit_rates'],
+            'losses': self.metrics['losses'],
+            'q_values': self.metrics['q_values'],
+            'epsilons': self.metrics['epsilons'],
             'exploration_ratio': self.exploration_steps / (self.exploration_steps + self.exploitation_steps + 1e-6),
-            'action_values': self.action_values
+            'game_lengths': self.metrics['game_lengths']
         }
 
     def get_epsilon(self, steps):
